@@ -1,0 +1,5 @@
+# Stirling-PDF data directory - contains sensitive information
+Stirling-PDF/stirling-data/
+
+# But keep the directory structure
+!Stirling-PDF/stirling-data/.gitkeep
