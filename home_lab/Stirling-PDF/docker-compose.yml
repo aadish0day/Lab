@@ -11,5 +11,5 @@ services:
       - ./stirling-data/pipeline:/pipeline
     environment:
       - SECURITY_ENABLELOGIN=false
-      - LANGS=en_GB
+      - LANGS=en_US
     restart: unless-stopped
