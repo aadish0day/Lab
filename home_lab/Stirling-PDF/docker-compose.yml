@@ -3,7 +3,13 @@ services:
     image: stirlingtools/stirling-pdf:latest-fat
     container_name: stirling-pdf
     ports:
-      - '8080:8080'
+      - '9000:8080'
     volumes:
+      - ./stirling-data/tessdata:/usr/share/tessdata
       - ./stirling-data:/configs
+      - ./stirling-data/logs:/logs
+      - ./stirling-data/pipeline:/pipeline
+    environment:
+      - SECURITY_ENABLELOGIN=false
+      - LANGS=en_GB
     restart: unless-stopped
