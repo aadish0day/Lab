@@ -10,6 +10,9 @@ services:
       - ./stirling-data/logs:/logs
       - ./stirling-data/pipeline:/pipeline
     environment:
+      # ponytail: map container process to host user ID to prevent root-owned files
+      - PUID=1000
+      - PGID=1000
       - SECURITY_ENABLELOGIN=false
       - LANGS=en_US
     restart: unless-stopped
