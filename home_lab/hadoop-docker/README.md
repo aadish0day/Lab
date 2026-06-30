@@ -79,6 +79,8 @@ docker compose down -v       # also wipe HDFS data — next start is a fresh for
 - **Explicit `dfs.namenode.name.dir` / `dfs.datanode.data.dir`** — the image's published example config doesn't set these, so Hadoop falls back to a default under `/tmp` that's keyed to the *current user name*. That default actually changed recently when the image's default user moved from `root` to `hadoop`, which broke restart-persistence for anyone relying on it ([HDFS-17307](https://issues.apache.org/jira/browse/HDFS-17307)). Pointing both at fixed, explicit paths and mounting named volumes there sidesteps that entirely — data survives `docker compose down` / `up` cycles.
 - **`dfs.permissions.enabled=false`** — avoids permission-denied errors when you `hdfs dfs` as whatever user you happen to be. Fine for local dev, turn it back on (and configure real users) before anything resembling production.
 - **Healthcheck on namenode, `depends_on: condition: service_healthy`** — without this, `datanode`/`resourcemanager` can start before the NameNode has finished formatting/coming up, which just means noisier logs while they retry — but waiting for the healthcheck keeps first-boot logs clean.
+- **`ENSURE_NAMENODE_DIR` points to the `current/` subdirectory** — Docker volume mounts create the target directory, so the image's starter.sh skips formatting if the directory already exists (even if empty). By pointing at `current/` (which HDFS creates during format), the fresh-volume check works correctly.
+- **`$$HADOOP_HOME` in the env_file** — docker-compose interpolates `$VARIABLE` in env_files against the host environment. `$$` escapes it so the literal `$HADOOP_HOME` is passed to the container, where it resolves at runtime.
 
 ## Changing the Hadoop version
 
