@@ -1,0 +1,81 @@
+services:
+  namenode:
+    image: apache/hadoop:3.5.0
+    hostname: namenode
+    container_name: namenode
+    user: root
+    command: ["hdfs", "namenode"]
+    ports:
+      - "9870:9870"   # NameNode web UI
+      - "8020:8020"   # HDFS RPC (fs.defaultFS)
+    env_file:
+      - ./config
+    environment:
+      ENSURE_NAMENODE_DIR: "/opt/hadoop/data/nameNode"
+    volumes:
+      - namenode_data:/opt/hadoop/data/nameNode
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9870"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - hadoop_net
+
+  datanode:
+    image: apache/hadoop:3.5.0
+    user: root
+    command: ["hdfs", "datanode"]
+    env_file:
+      - ./config
+    volumes:
+      - datanode_data:/opt/hadoop/data/dataNode
+    depends_on:
+      namenode:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - hadoop_net
+
+  resourcemanager:
+    image: apache/hadoop:3.5.0
+    hostname: resourcemanager
+    container_name: resourcemanager
+    user: root
+    command: ["yarn", "resourcemanager"]
+    ports:
+      - "8088:8088"   # ResourceManager web UI
+    env_file:
+      - ./config
+    depends_on:
+      namenode:
+        condition: service_healthy
+      datanode:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - hadoop_net
+
+  nodemanager:
+    image: apache/hadoop:3.5.0
+    user: root
+    command: ["yarn", "nodemanager"]
+    ports:
+      - "8042:8042"   # NodeManager web UI
+    env_file:
+      - ./config
+    depends_on:
+      - resourcemanager
+    restart: unless-stopped
+    networks:
+      - hadoop_net
+
+volumes:
+  namenode_data:
+  datanode_data:
+
+networks:
+  hadoop_net:
+    driver: bridge
