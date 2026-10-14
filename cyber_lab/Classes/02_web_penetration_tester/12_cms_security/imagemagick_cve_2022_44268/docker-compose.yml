@@ -1,0 +1,8 @@
+services:
+  imagemagick:
+    image: vulhub/imagemagick:7.1.0-49-php
+    container_name: cyberlab_imagemagick_cve_2022_44268
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8627:8080"

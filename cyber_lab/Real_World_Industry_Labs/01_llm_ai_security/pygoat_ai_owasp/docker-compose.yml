@@ -1,6 +1,6 @@
 services:
   pygoat:
-    image: adeoseun/pygoat:latest
+    image: pygoat/pygoat:latest
     container_name: cyberlab_realworld_pygoat_ai
     ports:
       - "8091:8000"

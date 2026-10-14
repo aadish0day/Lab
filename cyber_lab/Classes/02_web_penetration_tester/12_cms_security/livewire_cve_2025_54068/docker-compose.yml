@@ -1,0 +1,8 @@
+services:
+  livewire:
+    image: vulhub/livewire:3.6.3
+    container_name: cyberlab_livewire_cve_2025_54068
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8624:8080"

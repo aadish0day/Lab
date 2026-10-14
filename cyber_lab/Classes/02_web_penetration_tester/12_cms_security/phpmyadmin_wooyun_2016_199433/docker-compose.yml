@@ -1,0 +1,8 @@
+services:
+  phpmyadmin:
+    image: vulhub/phpmyadmin:2.8.0.4
+    container_name: cyberlab_phpmyadmin_wooyun_2016_199433
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8564:8080"

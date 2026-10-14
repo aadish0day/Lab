@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:cmd-path-traversal
+    container_name: cyberlab_skf_cmd_path_traversal
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8854:5000"

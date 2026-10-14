@@ -1,0 +1,8 @@
+services:
+  vulhub:
+    image: vulhub/jupyter:notebook-rce
+    container_name: cyberlab_vulhub_jupyter_notebook_rce
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8763:8888"

@@ -1,0 +1,8 @@
+services:
+  vulhub:
+    image: vulhub/dubbo:2.7.3
+    container_name: cyberlab_vulhub_dubbo_cve_2019_17564
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8828:8080"

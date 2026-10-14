@@ -1,0 +1,8 @@
+services:
+  django:
+    image: vulhub/django:3.0.3
+    container_name: cyberlab_django_cve_2020_9402
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8621:8080"

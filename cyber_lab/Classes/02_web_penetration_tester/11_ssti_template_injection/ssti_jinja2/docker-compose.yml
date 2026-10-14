@@ -1,6 +1,6 @@
 services:
   ssti-target:
-    image: christianblos/ssti-flask-app:latest
+    image: d4rk10rd/ssti:latest
     container_name: cyberlab_web_ssti_jinja2
     ports:
       - "8094:5000"

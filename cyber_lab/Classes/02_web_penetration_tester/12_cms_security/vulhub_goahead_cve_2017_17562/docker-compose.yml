@@ -1,0 +1,8 @@
+services:
+  vulhub:
+    image: vulhub/goahead:3.6.4
+    container_name: cyberlab_vulhub_goahead_cve_2017_17562
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8825:80"

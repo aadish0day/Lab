@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:cors-trust-all-subdomains
+    container_name: cyberlab_skf_cors_trust_all
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8819:5000"

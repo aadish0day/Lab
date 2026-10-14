@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:cmd-shell-expansion
+    container_name: cyberlab_skf_cmd_shell_expansion
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8855:5000"

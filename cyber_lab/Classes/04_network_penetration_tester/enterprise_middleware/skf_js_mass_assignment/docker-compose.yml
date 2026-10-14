@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:js-mass-assignment
+    container_name: cyberlab_skf_js_mass_assignment
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8788:3000"

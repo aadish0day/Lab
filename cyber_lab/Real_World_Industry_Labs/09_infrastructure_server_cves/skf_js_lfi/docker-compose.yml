@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:js-lfi
+    container_name: cyberlab_skf_js_lfi
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8798:3000"

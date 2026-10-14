@@ -1,0 +1,8 @@
+services:
+  confluence:
+    image: vulhub/confluence:6.10.2
+    container_name: cyberlab_confluence_cve_2019_3396
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8668:8080"

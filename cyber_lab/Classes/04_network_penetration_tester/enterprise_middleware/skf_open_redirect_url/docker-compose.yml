@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:open-redirect-url
+    container_name: cyberlab_skf_open_redirect_url
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8847:5000"

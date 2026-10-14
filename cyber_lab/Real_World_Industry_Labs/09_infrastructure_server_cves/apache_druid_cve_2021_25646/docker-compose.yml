@@ -1,0 +1,8 @@
+services:
+  apache_druid:
+    image: vulhub/apache-druid:0.20.0
+    container_name: cyberlab_apache_druid_cve_2021_25646
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8662:8080"

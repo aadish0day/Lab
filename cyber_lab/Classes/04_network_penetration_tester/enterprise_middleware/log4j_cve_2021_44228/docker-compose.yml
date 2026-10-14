@@ -1,0 +1,8 @@
+services:
+  log4j:
+    image: vulhub/solr:8.11.0
+    container_name: cyberlab_log4j_cve_2021_44228
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8593:8080"

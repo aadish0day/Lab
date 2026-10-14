@@ -1,0 +1,8 @@
+services:
+  vulhub:
+    image: vulhub/ghostscript:9.26
+    container_name: cyberlab_vulhub_ghostscript_cve_2019_6116
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8826:80"

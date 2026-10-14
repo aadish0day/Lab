@@ -1,0 +1,8 @@
+services:
+  imagemagick:
+    image: vulhub/imagemagick:7.0.10-36
+    container_name: cyberlab_imagemagick_cve_2020_29599
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8628:8080"

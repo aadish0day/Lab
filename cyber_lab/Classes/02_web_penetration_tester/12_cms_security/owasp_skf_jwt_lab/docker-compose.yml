@@ -1,7 +1,7 @@
 version: '2'
 services:
   web:
-    image: blabla1337/owasp-skf-lab:jwt
+    image: blabla1337/owasp-skf-lab:jwt-secret
     mem_limit: 1024m
     restart: unless-stopped
     ports:

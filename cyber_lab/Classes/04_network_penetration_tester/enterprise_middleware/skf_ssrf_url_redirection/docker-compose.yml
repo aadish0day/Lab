@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:ssrf-url-redirection
+    container_name: cyberlab_skf_ssrf_url_redirection
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8841:5000"

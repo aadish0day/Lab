@@ -1,0 +1,8 @@
+services:
+  struts2:
+    image: vulhub/struts2:2.5.25
+    container_name: cyberlab_struts2_s2_061
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8608:8080"

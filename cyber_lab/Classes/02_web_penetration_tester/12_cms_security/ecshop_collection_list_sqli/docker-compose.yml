@@ -1,0 +1,8 @@
+services:
+  ecshop:
+    image: vulhub/ecshop:4.0.6
+    container_name: cyberlab_ecshop_collection_list_sqli
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8630:8080"

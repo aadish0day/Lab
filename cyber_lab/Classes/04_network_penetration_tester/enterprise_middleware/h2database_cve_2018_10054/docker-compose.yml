@@ -1,0 +1,8 @@
+services:
+  h2database:
+    image: vulhub/spring-with-h2database:1.4.197
+    container_name: cyberlab_h2database_cve_2018_10054
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8641:8080"

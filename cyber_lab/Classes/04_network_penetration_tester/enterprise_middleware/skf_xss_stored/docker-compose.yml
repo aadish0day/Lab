@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:xss-stored
+    container_name: cyberlab_skf_xss_stored
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8837:5000"

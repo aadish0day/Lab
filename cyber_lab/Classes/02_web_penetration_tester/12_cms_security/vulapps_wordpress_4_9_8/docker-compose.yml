@@ -1,0 +1,8 @@
+services:
+  vulapps:
+    image: avfisherdocker/wordpress:4.9.8
+    container_name: cyberlab_vulapps_wordpress_4_9_8
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8690:80"

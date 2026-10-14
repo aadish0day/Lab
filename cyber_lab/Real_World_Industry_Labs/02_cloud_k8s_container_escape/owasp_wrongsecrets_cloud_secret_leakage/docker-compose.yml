@@ -1,7 +1,7 @@
 version: '2'
 services:
   web:
-    image: commjoen/wrongsecrets:latest
+    image: jeroenwillemsen/wrongsecrets:latest-no-vault
     mem_limit: 1024m
     restart: unless-stopped
     ports:

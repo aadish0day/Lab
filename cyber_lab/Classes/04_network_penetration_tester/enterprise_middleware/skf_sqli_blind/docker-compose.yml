@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:sqli-blind
+    container_name: cyberlab_skf_sqli_blind
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8838:5000"

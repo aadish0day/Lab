@@ -1,0 +1,8 @@
+services:
+  vulapps:
+    image: medicean/vulapps:s_spring_2
+    container_name: cyberlab_vulapps_spring_s_2
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8705:8080"

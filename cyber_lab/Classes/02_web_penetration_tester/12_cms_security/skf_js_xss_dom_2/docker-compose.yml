@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:js-xss-dom-2
+    container_name: cyberlab_skf_js_xss_dom_2
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8744:3000"

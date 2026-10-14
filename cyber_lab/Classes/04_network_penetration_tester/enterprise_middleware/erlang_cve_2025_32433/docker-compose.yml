@@ -1,0 +1,8 @@
+services:
+  erlang:
+    image: vulhub/erlang:27.3.2-with-ssh
+    container_name: cyberlab_erlang_cve_2025_32433
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8653:8080"

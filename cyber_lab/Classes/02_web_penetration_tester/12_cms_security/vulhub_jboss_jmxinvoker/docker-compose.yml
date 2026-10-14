@@ -1,0 +1,8 @@
+services:
+  vulhub:
+    image: vulhub/jboss:6.1.0
+    container_name: cyberlab_vulhub_jboss_jmxinvoker
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8829:8080"

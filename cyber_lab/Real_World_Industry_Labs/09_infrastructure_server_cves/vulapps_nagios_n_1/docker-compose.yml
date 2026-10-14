@@ -1,0 +1,8 @@
+services:
+  vulapps:
+    image: medicean/vulapps:n_nagios_1
+    container_name: cyberlab_vulapps_nagios_n_1
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8733:80"

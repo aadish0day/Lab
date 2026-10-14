@@ -1,6 +1,6 @@
 services:
   nosql-target:
-    image: charlottedns/vulnerable-node-app:latest
+    image: blabla1337/owasp-skf-lab:sqli_node
     container_name: cyberlab_02_nosql_lab
     ports:
       - "3001:3000"

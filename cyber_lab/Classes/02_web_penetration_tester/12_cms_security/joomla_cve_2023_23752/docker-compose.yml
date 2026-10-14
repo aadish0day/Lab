@@ -1,0 +1,8 @@
+services:
+  joomla:
+    image: vulhub/joomla:4.2.7
+    container_name: cyberlab_joomla_cve_2023_23752
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8573:8080"

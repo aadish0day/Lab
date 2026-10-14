@@ -1,0 +1,8 @@
+services:
+  phpmyadmin:
+    image: vulhub/phpmyadmin:4.4.15.6
+    container_name: cyberlab_phpmyadmin_cve_2016_5734
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8565:8080"

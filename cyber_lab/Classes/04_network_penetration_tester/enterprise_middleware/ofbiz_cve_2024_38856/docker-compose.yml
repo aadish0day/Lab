@@ -1,0 +1,8 @@
+services:
+  ofbiz:
+    image: vulhub/ofbiz:18.12.14
+    container_name: cyberlab_ofbiz_cve_2024_38856
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8590:8080"

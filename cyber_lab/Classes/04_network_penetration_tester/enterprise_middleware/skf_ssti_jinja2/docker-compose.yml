@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:ssti-jinja2
+    container_name: cyberlab_skf_ssti_jinja2
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8842:5000"

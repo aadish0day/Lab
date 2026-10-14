@@ -1,0 +1,8 @@
+services:
+  vulapps:
+    image: medicean/vulapps:s_struts2_s2-devmode
+    container_name: cyberlab_vulapps_struts2_s2_devmode
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8703:8080"

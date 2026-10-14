@@ -1,0 +1,8 @@
+services:
+  redis:
+    image: vulhub/redis:4.0.14
+    container_name: cyberlab_redis_4_unacc
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8618:8080"

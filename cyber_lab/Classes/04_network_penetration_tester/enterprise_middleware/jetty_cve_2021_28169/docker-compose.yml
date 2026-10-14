@@ -1,0 +1,8 @@
+services:
+  jetty:
+    image: vulhub/jetty:9.4.40
+    container_name: cyberlab_jetty_cve_2021_28169
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8596:8080"

@@ -1,6 +1,6 @@
 services:
   mutillidae:
-    image: webpwnized/mutillidae:latest
+    image: webpwnized/mutillidae:www
     container_name: cyberlab_02_mutillidae
     ports:
       - "8116:80"

@@ -1,0 +1,8 @@
+services:
+  electron:
+    image: vulhub/electron:wine
+    container_name: cyberlab_electron_cve_2018_15685
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8655:8080"

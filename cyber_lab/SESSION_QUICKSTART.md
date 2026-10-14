@@ -13,7 +13,7 @@ This file serves as the **master state document** for your `cyber_lab` environme
  * `wazuh-4.14.6`: Dedicated SIEM/SOC Appliance (4 GB RAM, 2 vCPUs)
  * `Windows 10 x64`: Target/Active Directory client (4 GB RAM, 4 vCPUs)
  * `Metasploitable`: Target VM (512 MB RAM, 2 vCPUs)
-* **Docker Host Sizing Rule**: Run Docker targets **on-demand** (`./lab start <shortcut>`). Never run all 500 labs simultaneously on a 14 GB RAM host.
+* **Docker Host Sizing Rule**: Run Docker targets **on-demand** (`./lab start <shortcut>`). Never run all 800 labs simultaneously on a 14 GB RAM host.
 
 ---
 
@@ -36,7 +36,7 @@ The repository is partitioned into three distinct functional areas:
 All containers and workspaces are managed through the central `./lab` CLI script in the repository root:
 
 ```bash
-# List all 500 labs and shortcuts (501 entries)
+# List all 800 labs and shortcuts (621 entries)
 ./lab list
 
 # Start a specific lab or tool
@@ -580,6 +580,308 @@ All containers and workspaces are managed through the central `./lab` CLI script
 | `memcached-cve-2016-8704-append-overflow` | `Port 8557` | Memcached CVE-2016-8704-Append-Overflow Vulnerability Target |
 | `memcached-cve-2016-8705-update-overflow` | `Port 8558` | Memcached CVE-2016-8705-Update-Overflow Vulnerability Target |
 | `memcached-cve-2016-8706-sasl-overflow` | `Port 8559` | Memcached CVE-2016-8706-SASL-Overflow Vulnerability Target |
+
+| `thinkphp-5-rce` | `Port 8560` | Thinkphp 5-RCE Practice Target |
+| `thinkphp-2-rce` | `Port 8561` | Thinkphp 2-RCE Practice Target |
+| `rails-cve-2018-3760` | `Port 8562` | Rails CVE-2018-3760 Practice Target |
+| `python-pil-cve-2018-16509` | `Port 8563` | Python PIL-CVE-2018-16509 Practice Target |
+| `phpmyadmin-wooyun-2016-199433` | `Port 8564` | Phpmyadmin WOOYUN-2016-199433 Practice Target |
+| `phpmyadmin-cve-2016-5734` | `Port 8565` | Phpmyadmin CVE-2016-5734 Practice Target |
+| `php-cve-2024-2961` | `Port 8566` | Php CVE-2024-2961 Practice Target |
+| `php-cve-2019-11043` | `Port 8567` | Php CVE-2019-11043 Practice Target |
+| `php-cve-2018-19518` | `Port 8568` | Php CVE-2018-19518 Practice Target |
+| `php-8-1-backdoor` | `Port 8569` | Php 8.1-BACKDOOR Practice Target |
+| `node-cve-2017-16082` | `Port 8570` | Node CVE-2017-16082 Practice Target |
+| `next-js-cve-2025-29927` | `Port 8571` | Next.js CVE-2025-29927 Practice Target |
+| `magento-2-2-sqli` | `Port 8572` | Magento 2.2-SQLI Practice Target |
+| `joomla-cve-2023-23752` | `Port 8573` | Joomla CVE-2023-23752 Practice Target |
+| `joomla-cve-2017-8917` | `Port 8574` | Joomla CVE-2017-8917 Practice Target |
+| `joomla-cve-2015-8562` | `Port 8575` | Joomla CVE-2015-8562 Practice Target |
+| `gitea-1-4-rce` | `Port 8576` | Gitea 1.4-RCE Practice Target |
+| `fastjson-1-2-83-rce` | `Port 8577` | Fastjson 1.2.83-RCE Practice Target |
+| `fastjson-1-2-47-rce` | `Port 8578` | Fastjson 1.2.47-RCE Practice Target |
+| `fastjson-1-2-24-rce` | `Port 8579` | Fastjson 1.2.24-RCE Practice Target |
+| `weblogic-cve-2023-21839` | `Port 8580` | Weblogic CVE-2023-21839 Practice Target |
+| `weblogic-cve-2018-2894` | `Port 8581` | Weblogic CVE-2018-2894 Practice Target |
+| `weblogic-cve-2018-2628` | `Port 8582` | Weblogic CVE-2018-2628 Practice Target |
+| `tomcat-cve-2026-34486` | `Port 8583` | Tomcat CVE-2026-34486 Practice Target |
+| `spring-cve-2025-41242` | `Port 8584` | Spring CVE-2025-41242 Practice Target |
+| `solr-remote-streaming-fileread` | `Port 8585` | Solr REMOTE-STREAMING-FILEREAD Practice Target |
+| `solr-cve-2017-12629-xxe` | `Port 8586` | Solr CVE-2017-12629-XXE Practice Target |
+| `solr-cve-2017-12629-rce` | `Port 8587` | Solr CVE-2017-12629-RCE Practice Target |
+| `ofbiz-cve-2024-45507` | `Port 8588` | Ofbiz CVE-2024-45507 Practice Target |
+| `ofbiz-cve-2024-45195` | `Port 8589` | Ofbiz CVE-2024-45195 Practice Target |
+| `ofbiz-cve-2024-38856` | `Port 8590` | Ofbiz CVE-2024-38856 Practice Target |
+| `ofbiz-cve-2023-51467` | `Port 8591` | Ofbiz CVE-2023-51467 Practice Target |
+| `ofbiz-cve-2023-49070` | `Port 8592` | Ofbiz CVE-2023-49070 Practice Target |
+| `log4j-cve-2021-44228` | `Port 8593` | Log4j CVE-2021-44228 Practice Target |
+| `liferay-portal-cve-2020-7961` | `Port 8594` | Liferay-portal CVE-2020-7961 Practice Target |
+| `kkfileview-4-3-zipslip-rce` | `Port 8595` | Kkfileview 4.3-ZIPSLIP-RCE Practice Target |
+| `jetty-cve-2021-28169` | `Port 8596` | Jetty CVE-2021-28169 Practice Target |
+| `jenkins-cve-2018-1000861` | `Port 8597` | Jenkins CVE-2018-1000861 Practice Target |
+| `jboss-cve-2017-7504` | `Port 8598` | Jboss CVE-2017-7504 Practice Target |
+| `hugegraph-cve-2024-43441` | `Port 8599` | Hugegraph CVE-2024-43441 Practice Target |
+| `yapi-unacc` | `Port 8600` | Yapi UNACC Practice Target |
+| `xstream-cve-2021-21351` | `Port 8601` | Xstream CVE-2021-21351 Practice Target |
+| `uwsgi-unacc` | `Port 8602` | Uwsgi UNACC Practice Target |
+| `uwsgi-cve-2018-7490` | `Port 8603` | Uwsgi CVE-2018-7490 Practice Target |
+| `teamcity-cve-2024-27198` | `Port 8604` | Teamcity CVE-2024-27198 Practice Target |
+| `teamcity-cve-2023-42793` | `Port 8605` | Teamcity CVE-2023-42793 Practice Target |
+| `struts2-s2-067` | `Port 8606` | Struts2 S2-067 Practice Target |
+| `struts2-s2-066` | `Port 8607` | Struts2 S2-066 Practice Target |
+| `struts2-s2-061` | `Port 8608` | Struts2 S2-061 Practice Target |
+| `struts2-s2-059` | `Port 8609` | Struts2 S2-059 Practice Target |
+| `struts2-s2-053` | `Port 8610` | Struts2 S2-053 Practice Target |
+| `struts2-s2-052` | `Port 8611` | Struts2 S2-052 Practice Target |
+| `struts2-s2-048` | `Port 8612` | Struts2 S2-048 Practice Target |
+| `spark-unacc` | `Port 8613` | Spark UNACC Practice Target |
+| `showdoc-cnvd-2020-26585` | `Port 8614` | Showdoc CNVD-2020-26585 Practice Target |
+| `showdoc-3-2-5-sqli` | `Port 8615` | Showdoc 3.2.5-SQLI Practice Target |
+| `rocketmq-cve-2023-37582` | `Port 8616` | Rocketmq CVE-2023-37582 Practice Target |
+| `rocketmq-cve-2023-33246` | `Port 8617` | Rocketmq CVE-2023-33246 Practice Target |
+| `redis-4-unacc` | `Port 8618` | Redis 4-UNACC Practice Target |
+| `postgres-cve-2018-1058` | `Port 8619` | Postgres CVE-2018-1058 Practice Target |
+
+| `mongo-express-cve-2019-10758` | `Port 8620` | Mongo-express CVE-2019-10758 Vulnerability Target |
+| `django-cve-2020-9402` | `Port 8621` | Django CVE-2020-9402 Vulnerability Target |
+| `django-cve-2017-12794` | `Port 8622` | Django CVE-2017-12794 Vulnerability Target |
+| `neo4j-cve-2021-34371` | `Port 8623` | Neo4j CVE-2021-34371 Vulnerability Target |
+| `livewire-cve-2025-54068` | `Port 8624` | Livewire CVE-2025-54068 Vulnerability Target |
+| `jira-cve-2019-11581` | `Port 8625` | Jira CVE-2019-11581 Vulnerability Target |
+| `inetutils-cve-2026-24061` | `Port 8626` | Inetutils CVE-2026-24061 Vulnerability Target |
+| `imagemagick-cve-2022-44268` | `Port 8627` | Imagemagick CVE-2022-44268 Vulnerability Target |
+| `imagemagick-cve-2020-29599` | `Port 8628` | Imagemagick CVE-2020-29599 Vulnerability Target |
+| `hertzbeat-cve-2024-42323` | `Port 8629` | Hertzbeat CVE-2024-42323 Vulnerability Target |
+| `ecshop-collection-list-sqli` | `Port 8630` | Ecshop COLLECTION_LIST-SQLI Vulnerability Target |
+| `drupal-cve-2019-6341` | `Port 8631` | Drupal CVE-2019-6341 Vulnerability Target |
+| `drupal-cve-2019-6339` | `Port 8632` | Drupal CVE-2019-6339 Vulnerability Target |
+| `drupal-cve-2018-7602` | `Port 8633` | Drupal CVE-2018-7602 Vulnerability Target |
+| `drupal-cve-2018-7600` | `Port 8634` | Drupal CVE-2018-7600 Vulnerability Target |
+| `drupal-cve-2017-6920` | `Port 8635` | Drupal CVE-2017-6920 Vulnerability Target |
+| `discuz-x3-4-arbitrary-file-deletion` | `Port 8636` | Discuz X3.4-ARBITRARY-FILE-DELETION Vulnerability Target |
+| `discuz-wooyun-2010-080723` | `Port 8637` | Discuz WOOYUN-2010-080723 Vulnerability Target |
+| `craftcms-cve-2024-56145` | `Port 8638` | Craftcms CVE-2024-56145 Vulnerability Target |
+| `cmsms-cve-2021-26120` | `Port 8639` | Cmsms CVE-2021-26120 Vulnerability Target |
+| `h2database-cve-2022-23221` | `Port 8640` | H2database CVE-2022-23221 Vulnerability Target |
+| `h2database-cve-2018-10054` | `Port 8641` | H2database CVE-2018-10054 Vulnerability Target |
+| `grafana-admin-ssrf` | `Port 8642` | Grafana ADMIN-SSRF Vulnerability Target |
+| `grafana-cve-2024-9264` | `Port 8643` | Grafana CVE-2024-9264 Vulnerability Target |
+| `gradio-cve-2024-1561` | `Port 8644` | Gradio CVE-2024-1561 Vulnerability Target |
+| `gradio-cve-2023-51449` | `Port 8645` | Gradio CVE-2023-51449 Vulnerability Target |
+| `gotenberg-cve-2026-40281` | `Port 8646` | Gotenberg CVE-2026-40281 Vulnerability Target |
+| `gitlab-cve-2026-85706` | `Port 8647` | Gitlab CVE-2026-85706 Vulnerability Target |
+| `git-cve-2017-8386` | `Port 8648` | Git CVE-2017-8386 Vulnerability Target |
+| `geoserver-cve-2023-25157` | `Port 8649` | Geoserver CVE-2023-25157 Vulnerability Target |
+| `apereo-cas-4-1-rce` | `Port 8650` | Apereo-cas 4.1-RCE Vulnerability Target |
+| `geoserver-cve-2022-24816` | `Port 8651` | Geoserver CVE-2022-24816 Vulnerability Target |
+| `geoserver-cve-2021-40822` | `Port 8652` | Geoserver CVE-2021-40822 Vulnerability Target |
+| `erlang-cve-2025-32433` | `Port 8653` | Erlang CVE-2025-32433 Vulnerability Target |
+| `elfinder-cve-2021-32682` | `Port 8654` | Elfinder CVE-2021-32682 Vulnerability Target |
+| `electron-cve-2018-15685` | `Port 8655` | Electron CVE-2018-15685 Vulnerability Target |
+| `electron-cve-2018-1000006` | `Port 8656` | Electron CVE-2018-1000006 Vulnerability Target |
+| `dataease-cve-2025-49001` | `Port 8657` | Dataease CVE-2025-49001 Vulnerability Target |
+| `dataease-cve-2025-32966` | `Port 8658` | Dataease CVE-2025-32966 Vulnerability Target |
+| `dataease-cve-2024-56511` | `Port 8659` | Dataease CVE-2024-56511 Vulnerability Target |
+| `elasticsearch-wooyun-2015-110216` | `Port 8660` | Elasticsearch WOOYUN-2015-110216 Vulnerability Target |
+| `elasticsearch-cve-2015-1427` | `Port 8661` | Elasticsearch CVE-2015-1427 Vulnerability Target |
+| `apache-druid-cve-2021-25646` | `Port 8662` | Apache-druid CVE-2021-25646 Vulnerability Target |
+| `cups-browsed-cve-2024-47177` | `Port 8663` | Cups-browsed CVE-2024-47177 Vulnerability Target |
+| `confluence-cve-2023-22527` | `Port 8664` | Confluence CVE-2023-22527 Vulnerability Target |
+| `confluence-cve-2023-22515` | `Port 8665` | Confluence CVE-2023-22515 Vulnerability Target |
+| `confluence-cve-2022-26134` | `Port 8666` | Confluence CVE-2022-26134 Vulnerability Target |
+| `confluence-cve-2021-26084` | `Port 8667` | Confluence CVE-2021-26084 Vulnerability Target |
+| `confluence-cve-2019-3396` | `Port 8668` | Confluence CVE-2019-3396 Vulnerability Target |
+| `comfyui-cve-2026-22777` | `Port 8669` | Comfyui CVE-2026-22777 Vulnerability Target |
+| `nginx-ui-cve-2026-27944` | `Port 8670` | Nginx-ui CVE-2026-27944 Vulnerability Target |
+| `ingress-nginx-cve-2025-1974` | `Port 8671` | Ingress-nginx CVE-2025-1974 Vulnerability Target |
+| `httpd-ssi-rce` | `Port 8672` | Httpd SSI-RCE Vulnerability Target |
+| `httpd-cve-2021-40438` | `Port 8673` | Httpd CVE-2021-40438 Vulnerability Target |
+| `comfyui-cve-2025-67303` | `Port 8674` | Comfyui CVE-2025-67303 Vulnerability Target |
+| `coldfusion-cve-2023-29300` | `Port 8675` | Coldfusion CVE-2023-29300 Vulnerability Target |
+| `coldfusion-cve-2023-26360` | `Port 8676` | Coldfusion CVE-2023-26360 Vulnerability Target |
+| `coldfusion-cve-2017-3066` | `Port 8677` | Coldfusion CVE-2017-3066 Vulnerability Target |
+| `cmsms-cve-2019-9053` | `Port 8678` | Cmsms CVE-2019-9053 Vulnerability Target |
+| `cgi-cve-2016-5385` | `Port 8679` | Cgi CVE-2016-5385 Vulnerability Target |
+| `skf-cmd-blind` | `Port 8680` | OWASP-SKF Blind Command Injection Target |
+| `skf-cmd2` | `Port 8681` | OWASP-SKF Command Injection v2 Target |
+| `skf-cmd3` | `Port 8682` | OWASP-SKF Command Injection v3 Target |
+| `skf-cmd4` | `Port 8683` | OWASP-SKF Command Injection v4 Target |
+| `skf-js-cmd` | `Port 8684` | OWASP-SKF Node.js Command Injection Target |
+| `skf-js-cmd-blind` | `Port 8685` | OWASP-SKF Node.js Blind Command Injection Target |
+| `skf-js-cmd2` | `Port 8686` | OWASP-SKF Node.js Command Injection v2 Target |
+| `skf-js-cmd4` | `Port 8687` | OWASP-SKF Node.js Command Injection v4 Target |
+| `tpgetshell` | `Port 8688` | ThinkPHP tpgetshell Arbitrary Code Execution Target |
+| `rails-cve-2019-5418` | `Port 8689` | Ruby on Rails File Content Disclosure & RCE |
+| `wordpress-4-9-8` | `Port 8690` | WordPress 4.9.8 Vulnerable Core Practice Target |
+| `wordpress-base-lamp` | `Port 8691` | WordPress Core Media Attachment Arbitrary Code Execution |
+| `wordpress-w-2` | `Port 8692` | WordPress XML-RPC Brute Force and SSRF Target |
+| `wordpress-w-3` | `Port 8693` | WordPress REST API Content Injection Target |
+| `wordpress-w-4` | `Port 8694` | WordPress Form Submissions Blind SQL Injection Target |
+| `wordpress-w-5` | `Port 8695` | WordPress Avatar Upload Path Traversal Target |
+| `drupal-d-1` | `Port 8696` | Drupal Core Vulnerable Practice Environment |
+| `joomla-j-1` | `Port 8697` | Joomla com_content SQL Injection Practice Environment |
+| `cmseasy-c-1` | `Port 8698` | CMSEasy Template Injection RCE Environment |
+| `skf-client-restriction-bypass` | `Port 8699` | OWASP-SKF Client-Side Restriction Bypass Target |
+| `struts2-s2-032` | `Port 8700` | Apache Struts2 S2-032 Method Prefix RCE Target |
+| `struts2-s2-037` | `Port 8701` | Apache Struts2 S2-037 REST Plugin RCE Target |
+| `struts2-s2-046` | `Port 8702` | Apache Struts2 S2-046 Multipart Content-Disposition RCE |
+| `struts2-s2-devmode` | `Port 8703` | Apache Struts2 DevMode Parameter Execution RCE |
+| `spring-s-1` | `Port 8704` | Spring Framework SpEL Remote Code Execution Target |
+| `spring-s-2` | `Port 8705` | Spring Framework Data Commons RCE Target |
+| `springboot-s-1` | `Port 8706` | SpringBoot Actuator Jolokia Remote Code Execution Target |
+| `springwebflow-s-1` | `Port 8707` | Spring WebFlow SpEL Evaluation RCE Target |
+| `tomcat-t-1` | `Port 8708` | Apache Tomcat Session Deserialization Practice Target |
+| `tomcat-t-2` | `Port 8709` | Apache Tomcat Remote Code Execution Target |
+| `skf-jwt-null` | `Port 8710` | OWASP-SKF None Algorithm JWT Bypass Target |
+| `skf-js-jwt-null` | `Port 8711` | OWASP-SKF Node.js None Algorithm JWT Bypass Target |
+| `skf-jwt-secret` | `Port 8712` | OWASP-SKF Weak Secret HMAC JWT Target |
+| `skf-session-hijack` | `Port 8713` | OWASP-SKF Session Hijacking XSS Target |
+| `skf-untrusted-sources-js` | `Port 8714` | OWASP-SKF Untrusted Script Source Injection Target |
+| `skf-js-untrusted-sources` | `Port 8715` | OWASP-SKF Node.js Untrusted Source Injection Target |
+| `supervisor-s-1` | `Port 8716` | Supervisor XML-RPC Authenticated RCE Target (CVE-2017-11610) |
+| `shiro-s-1` | `Port 8717` | Apache Shiro Default Encryption Key Deserialization RCE |
+| `cisco-c-1` | `Port 8718` | Cisco ASA WebVPN Traversal & Authentication Bypass |
+| `tools-xunfeng` | `Port 8719` | Xunfeng Security Vulnerability Scanner Practice Target |
+| `elasticsearch-cve-2015-5531` | `Port 8720` | Elasticsearch Directory Traversal & Code Execution |
+| `elasticsearch-cve-2015-3337` | `Port 8721` | Elasticsearch Directory Traversal File Disclosure |
+| `redis-r-1` | `Port 8722` | Redis Unauthenticated Replication Code Execution Target |
+| `memcached-cve-2016-8704` | `Port 8723` | Memcached Append Command Heap Overflow Target |
+| `memcached-cve-2016-8705` | `Port 8724` | Memcached Update Command Integer Overflow Target |
+| `memcached-cve-2016-8706` | `Port 8725` | Memcached SASL Authentication Overflow Target |
+| `skf-des-pickle` | `Port 8726` | OWASP-SKF Python Pickle Deserialization Target |
+| `skf-des-pickle-2` | `Port 8727` | OWASP-SKF Python Advanced Pickle Deserialization Target |
+| `skf-sqli-node` | `Port 8728` | OWASP-SKF Node.js SQL Injection Target |
+| `node-cve-2017-14849` | `Port 8729` | Node.js Express Framework Directory Traversal Target |
+| `bash-shellshock1` | `Port 8730` | GNU Bash Shellshock Function Definition Environment RCE |
+| `bash-shellshock2` | `Port 8731` | GNU Bash Shellshock Incomplete Parser Patch RCE |
+| `samba-s-1` | `Port 8732` | SambaCry Remote Code Execution Target (CVE-2017-7494) |
+| `nagios-n-1` | `Port 8733` | Nagios Core Command Injection Root RCE Target |
+| `nginx-n-1` | `Port 8734` | Nginx Integer Overflow Buffer Manipulation Target |
+| `zabbix-z-1` | `Port 8735` | Zabbix Server Command Injection Target |
+| `zabbix-z-2` | `Port 8736` | Zabbix Server SQL Injection Target |
+| `ffmpeg-f-1` | `Port 8737` | FFmpeg HLS Playlist File Read & SSRF Target |
+| `imagemagick-i-1` | `Port 8738` | ImageMagick Shell Parameter Injection RCE Target |
+| `git-g-1` | `Port 8739` | Git Client Command Execution Target (CVE-2014-9390) |
+| `skf-js-xss` | `Port 8740` | OWASP-SKF Node.js Cross-Site Scripting Target |
+| `skf-js-xss-url` | `Port 8741` | OWASP-SKF Node.js URL XSS Target |
+| `skf-js-xss-attribute` | `Port 8742` | OWASP-SKF Node.js Attribute XSS Target |
+| `skf-js-xss-dom` | `Port 8743` | OWASP-SKF Node.js DOM XSS Target |
+| `skf-js-xss-dom-2` | `Port 8744` | OWASP-SKF Node.js Advanced DOM XSS Target |
+| `skf-js-ratelimiting` | `Port 8745` | OWASP-SKF Node.js Rate Limiting Bypass Target |
+| `skf-js-racecondition` | `Port 8746` | OWASP-SKF Node.js Concurrency Race Condition Target |
+| `skf-js-racecondition-file` | `Port 8747` | OWASP-SKF Node.js File Write Race Condition Target |
+| `skf-js-rfi` | `Port 8748` | OWASP-SKF Node.js Remote File Inclusion Target |
+| `skf-js-parameterbinding` | `Port 8749` | OWASP-SKF Node.js Mass Parameter Binding Target |
+| `skf-js-url-redirection` | `Port 8750` | OWASP-SKF Node.js Open URL Redirection Target |
+| `skf-js-url-redirection-harder` | `Port 8751` | OWASP-SKF Node.js Filtered URL Redirection Target |
+| `skf-js-url-redirection-harder2` | `Port 8752` | OWASP-SKF Node.js Advanced Filtered URL Redirection Target |
+| `skf-js-rtlo` | `Port 8753` | OWASP-SKF Node.js Right-to-Left Override Injection Target |
+| `skf-js-open-redirect` | `Port 8754` | OWASP-SKF Node.js Open Redirect Target |
+| `skf-js-open-redirect-harder` | `Port 8755` | OWASP-SKF Node.js Hardened Open Redirect Target |
+| `skf-js-idor` | `Port 8756` | OWASP-SKF Node.js Insecure Direct Object Reference Target |
+| `skf-js-idor-harder` | `Port 8757` | OWASP-SKF Node.js Hardened IDOR Target |
+| `skf-js-csrf` | `Port 8758` | OWASP-SKF Node.js Cross-Site Request Forgery Target |
+| `skf-js-cors` | `Port 8759` | OWASP-SKF Node.js Insecure CORS Configuration Target |
+| `tikiwiki-cve-2020-15906` | `Port 8760` | TikiWiki Authentication Bypass Target (CVE-2020-15906) |
+| `owncloud-cve-2023-49103` | `Port 8761` | ownCloud Information Disclosure Target (CVE-2023-49103) |
+| `phpmailer-cve-2017-5223` | `Port 8762` | PHPMailer Local File Disclosure Target (CVE-2017-5223) |
+| `jupyter-notebook-rce` | `Port 8763` | Jupyter Notebook Unauthorized Access RCE Target |
+| `metabase-cve-2021-41277` | `Port 8764` | Metabase GeoJSON Arbitrary File Read Target (CVE-2021-41277) |
+| `metersphere-cve-2021-45788` | `Port 8765` | MeterSphere Plugin File Read Target (CVE-2021-45788) |
+| `skf-js-session-fixation` | `Port 8766` | OWASP-SKF Node.js Session Fixation Target |
+| `skf-js-privilege-escalation` | `Port 8767` | OWASP-SKF Node.js Privilege Escalation Target |
+| `skf-js-path-traversal` | `Port 8768` | OWASP-SKF Node.js Directory Path Traversal Target |
+| `wordpress-w-6` | `Port 8769` | WordPress Plugin File Upload Remote Code Execution |
+| `weblogic-weak-password` | `Port 8770` | Oracle WebLogic Console Weak Password Target |
+| `weblogic-cve-2020-14882` | `Port 8771` | Oracle WebLogic Console Authentication Bypass RCE (CVE-2020-14882) |
+| `jetty-cve-2021-34429` | `Port 8772` | Eclipse Jetty Information Disclosure Target (CVE-2021-34429) |
+| `jetty-cve-2021-28164` | `Port 8773` | Eclipse Jetty WEB-INF Information Disclosure (CVE-2021-28164) |
+| `mojarra-jsf-deserialization` | `Port 8774` | Mojarra JSF ViewState Deserialization RCE Target |
+| `unomi-cve-2020-13942` | `Port 8775` | Apache Unomi OGNL MVEL Remote Code Execution (CVE-2020-13942) |
+| `xstream-cve-2021-29505` | `Port 8776` | XStream Remote Code Execution Target (CVE-2021-29505) |
+| `skf-java-deserialization` | `Port 8777` | OWASP-SKF Java Deserialization Target |
+| `skf-java-sqli` | `Port 8778` | OWASP-SKF SQL Injection Practice Target |
+| `skf-java-xss` | `Port 8779` | OWASP-SKF Cross-Site Scripting Practice Target |
+| `redis-cve-2022-0543` | `Port 8780` | Redis Lua Sandbox Escape RCE Target (CVE-2022-0543) |
+| `postgres-cve-2019-9193` | `Port 8781` | PostgreSQL COPY FROM PROGRAM Command Execution (CVE-2019-9193) |
+| `skf-js-nosqli` | `Port 8782` | OWASP-SKF Node.js NoSQL Operator Injection Target |
+| `skf-js-sqli` | `Port 8783` | OWASP-SKF Node.js SQL Injection Target |
+| `skf-js-ssrf` | `Port 8784` | OWASP-SKF Node.js Server-Side Request Forgery Target |
+| `skf-js-graphql` | `Port 8785` | OWASP-SKF Node.js GraphQL Introspection & Injection Target |
+| `skf-js-graphql-mutation` | `Port 8786` | OWASP-SKF Node.js GraphQL Mutation Bypass Target |
+| `skf-js-jwt-weak-key` | `Port 8787` | OWASP-SKF Node.js JWT Brute Force Weak Key Target |
+| `skf-js-mass-assignment` | `Port 8788` | OWASP-SKF Node.js Mass Assignment Vulnerability Target |
+| `skf-js-ldap-injection` | `Port 8789` | OWASP-SKF Node.js LDAP Injection Target |
+| `nginx-parsing-vulnerability` | `Port 8790` | Nginx PHP-FPM Configuration Parsing Vulnerability Target |
+| `nginx-insecure-configuration` | `Port 8791` | Nginx Alias Path Traversal Insecure Configuration Target |
+| `nginx-cve-2013-4547` | `Port 8792` | Nginx File Name Parsing Bypass Target (CVE-2013-4547) |
+| `zabbix-cve-2020-11800` | `Port 8793` | Zabbix Server Remote Code Execution Target (CVE-2020-11800) |
+| `openssl-heartbleed` | `Port 8794` | OpenSSL Heartbleed TLS Memory Disclosure (CVE-2014-0160) |
+| `tools-hawkeye` | `Port 8795` | Hawkeye Source Code Security Monitor Practice Target |
+| `tools-ant` | `Port 8796` | Ant Vulnerability Assessment System Target |
+| `skf-js-ldap-injection-harder` | `Port 8797` | OWASP-SKF Node.js Filtered LDAP Injection Target |
+| `skf-js-lfi` | `Port 8798` | OWASP-SKF Node.js Local File Inclusion Target |
+| `skf-js-ssti` | `Port 8799` | OWASP-SKF Node.js Server-Side Template Injection Target |
+| `skf-js-file-upload` | `Port 8800` | OWASP-SKF Node.js Unrestricted File Upload Target |
+| `skf-js-lfi-2` | `Port 8801` | OWASP-SKF Node.js LFI with Extension Truncation |
+| `skf-js-lfi-3` | `Port 8802` | OWASP-SKF Node.js Advanced Path Traversal Target |
+| `skf-js-http-response-splitting` | `Port 8803` | OWASP-SKF Node.js CRLF Response Splitting Target |
+| `skf-js-dos-regex` | `Port 8804` | OWASP-SKF Node.js Regular Expression DoS Target |
+| `skf-js-content-type` | `Port 8805` | OWASP-SKF Node.js Content-Type Validation Bypass Target |
+| `skf-js-client-side-bypass` | `Port 8806` | OWASP-SKF Node.js Client-Side Bypass Target |
+| `skf-js-clickjacking` | `Port 8807` | OWASP-SKF Node.js Clickjacking Protection Bypass |
+| `skf-js-csti` | `Port 8808` | OWASP-SKF Node.js Client-Side Template Injection Target |
+| `skf-js-cssi` | `Port 8809` | OWASP-SKF Node.js CSS Injection Target |
+| `skf-js-csp` | `Port 8810` | OWASP-SKF Node.js Content Security Policy Bypass Target |
+| `skf-info-leak-metadata` | `Port 8811` | OWASP-SKF Metadata Information Leakage Target |
+| `skf-info-leak-comments` | `Port 8812` | OWASP-SKF HTML Comments Information Disclosure Target |
+| `skf-http-response-splitting` | `Port 8813` | OWASP-SKF Python HTTP Response Splitting Target |
+| `skf-idor-hash` | `Port 8814` | OWASP-SKF Predictable Hash IDOR Vulnerability Target |
+| `skf-idor-harder` | `Port 8815` | OWASP-SKF Hardened IDOR Access Control Target |
+| `skf-csrf-weak-anti-csrf` | `Port 8816` | OWASP-SKF Weak Anti-CSRF Token Validation Target |
+| `skf-csrf-token-bypass` | `Port 8817` | OWASP-SKF Anti-CSRF Token Bypass Vulnerability Target |
+| `skf-cors-null` | `Port 8818` | OWASP-SKF Insecure Null Origin CORS Bypass Target |
+| `skf-cors-trust-all` | `Port 8819` | OWASP-SKF Wildcard Subdomain CORS Trust Target |
+| `jenkins-cve-2024-23897` | `Port 8820` | Jenkins CLI Arbitrary File Read Target (CVE-2024-23897) |
+| `jenkins-cve-2017-1000353` | `Port 8821` | Jenkins Java SignedObject Deserialization RCE Target |
+| `gitlab-cve-2021-22205` | `Port 8822` | GitLab ExifTool Workhorse Arbitrary Code Execution (CVE-2021-22205) |
+| `gitlab-cve-2016-9086` | `Port 8823` | GitLab Project Import Directory Traversal Target (CVE-2016-9086) |
+| `v2board-privilege-escalation` | `Port 8824` | v2board 1.6.1 Password Reset Privilege Escalation |
+| `goahead-cve-2017-17562` | `Port 8825` | GoAhead Embedded Server LD_PRELOAD CGI RCE (CVE-2017-17562) |
+| `ghostscript-cve-2019-6116` | `Port 8826` | Ghostscript Safer Mode Bypass Command Execution (CVE-2019-6116) |
+| `hugegraph-cve-2024-27348` | `Port 8827` | Apache HugeGraph Gremlin Gremlin Server RCE (CVE-2024-27348) |
+| `dubbo-cve-2019-17564` | `Port 8828` | Apache Dubbo HTTP Invoker Deserialization RCE (CVE-2019-17564) |
+| `jboss-jmxinvoker` | `Port 8829` | JBoss Application Server JMXInvokerServlet Deserialization RCE |
+| `java-rmi-bind-deserialization` | `Port 8830` | Java RMI Registry Bind Remote Code Execution Target |
+| `skf-ldap-injection` | `Port 8831` | OWASP-SKF LDAP Injection Vulnerability Target |
+| `httpd-apache-parsing` | `Port 8832` | Apache HTTP Server Multiviews Extension Parsing Vulnerability |
+| `grafana-cve-2021-43798` | `Port 8833` | Grafana Plugin Directory Traversal & Arbitrary File Read |
+| `skf-xxe-blind` | `Port 8834` | OWASP-SKF Blind XML External Entity Injection Target |
+| `skf-xxe-dos` | `Port 8835` | OWASP-SKF XML Entity Expansion Billion Laughs DoS Target |
+| `skf-xss-reflected` | `Port 8836` | OWASP-SKF Reflected Cross-Site Scripting Target |
+| `skf-xss-stored` | `Port 8837` | OWASP-SKF Stored Cross-Site Scripting Target |
+| `skf-sqli-blind` | `Port 8838` | OWASP-SKF Boolean-Based Blind SQL Injection Target |
+| `skf-sqli-time-based` | `Port 8839` | OWASP-SKF Time-Based Blind SQL Injection Target |
+| `skf-ssrf-blind` | `Port 8840` | OWASP-SKF Blind Server-Side Request Forgery Target |
+| `skf-ssrf-url-redirection` | `Port 8841` | OWASP-SKF SSRF via Open URL Redirection Target |
+| `skf-ssti-jinja2` | `Port 8842` | OWASP-SKF Jinja2 Server-Side Template Injection Target |
+| `skf-ssti-mako` | `Port 8843` | OWASP-SKF Mako Server-Side Template Injection Target |
+| `skf-rfi-remote-inclusion` | `Port 8844` | OWASP-SKF Remote File Inclusion Vulnerability Target |
+| `skf-rate-limiting-login` | `Port 8845` | OWASP-SKF Login Rate Limiting & Brute Force Target |
+| `skf-race-condition-file` | `Port 8846` | OWASP-SKF File Write Race Condition Practice Target |
+| `skf-open-redirect-url` | `Port 8847` | OWASP-SKF Open URL Redirection Practice Target |
+| `skf-open-redirect-path` | `Port 8848` | OWASP-SKF Path-Based Open Redirect Practice Target |
+| `skf-lfi-null-byte` | `Port 8849` | OWASP-SKF LFI with Null Byte Injection Target |
+| `skf-jwt-weak-hmac` | `Port 8850` | OWASP-SKF Weak HMAC Secret JWT Cracking Target |
+| `skf-jwt-none-alg` | `Port 8851` | OWASP-SKF None Algorithm JWT Signature Bypass |
+| `skf-jwt-kid-injection` | `Port 8852` | OWASP-SKF JWT Key ID (kid) Header Injection Target |
+| `skf-jwt-jwks-spoofing` | `Port 8853` | OWASP-SKF JWKS Endpoint Spoofing Verification Target |
+| `skf-cmd-path-traversal` | `Port 8854` | OWASP-SKF Command Injection with Path Traversal Target |
+| `skf-cmd-shell-expansion` | `Port 8855` | OWASP-SKF Shell Parameter Expansion Injection Target |
+| `skf-auth-bypass-sqli` | `Port 8856` | OWASP-SKF Authentication Bypass via SQL Injection |
+| `skf-auth-bypass-headers` | `Port 8857` | OWASP-SKF Authentication Bypass via Custom HTTP Headers |
+| `skf-auth-bypass-timing` | `Port 8858` | OWASP-SKF Timing Attack Side-Channel Auth Bypass |
+| `skf-clickjacking-x-frame` | `Port 8859` | OWASP-SKF X-Frame-Options Header Clickjacking Target |
 
 ## Rules for Next Session
 

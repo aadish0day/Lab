@@ -1,0 +1,8 @@
+services:
+  hertzbeat:
+    image: vulhub/hertzbeat:1.4.4
+    container_name: cyberlab_hertzbeat_cve_2024_42323
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8629:8080"

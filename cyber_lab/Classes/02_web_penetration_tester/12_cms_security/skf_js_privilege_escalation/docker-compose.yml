@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:js-privilege-escalation
+    container_name: cyberlab_skf_js_privilege_escalation
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8767:3000"

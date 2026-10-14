@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:js-dos-regex
+    container_name: cyberlab_skf_js_dos_regex
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8804:3000"

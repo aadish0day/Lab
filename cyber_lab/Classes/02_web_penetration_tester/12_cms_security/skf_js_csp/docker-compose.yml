@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:js-csp
+    container_name: cyberlab_skf_js_csp
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8810:3000"

@@ -1,0 +1,8 @@
+services:
+  vulhub:
+    image: vulhub/grafana:8.3.0
+    container_name: cyberlab_vulhub_grafana_cve_2021_43798
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8833:3000"

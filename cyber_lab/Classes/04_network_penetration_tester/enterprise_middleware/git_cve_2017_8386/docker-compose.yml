@@ -1,0 +1,8 @@
+services:
+  git:
+    image: vulhub/git:2.12.2-with-openssh
+    container_name: cyberlab_git_cve_2017_8386
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8648:8080"

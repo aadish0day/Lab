@@ -1,0 +1,8 @@
+services:
+  vulapps:
+    image: medicean/vulapps:z_zabbix_1
+    container_name: cyberlab_vulapps_zabbix_z_1
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8735:80"

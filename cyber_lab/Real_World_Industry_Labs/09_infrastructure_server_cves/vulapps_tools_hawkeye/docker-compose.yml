@@ -1,0 +1,8 @@
+services:
+  vulapps:
+    image: medicean/vulapps:tools_hawkeye
+    container_name: cyberlab_vulapps_tools_hawkeye
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8795:80"

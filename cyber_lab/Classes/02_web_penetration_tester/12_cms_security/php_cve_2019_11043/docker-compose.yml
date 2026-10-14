@@ -1,0 +1,8 @@
+services:
+  php:
+    image: nginx:1
+    container_name: cyberlab_php_cve_2019_11043
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8567:8080"

@@ -1,0 +1,8 @@
+services:
+  vulapps:
+    image: medicean/vulapps:m_memcached_CVE-2016-8704
+    container_name: cyberlab_vulapps_memcached_cve_2016_8704
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8723:11211"

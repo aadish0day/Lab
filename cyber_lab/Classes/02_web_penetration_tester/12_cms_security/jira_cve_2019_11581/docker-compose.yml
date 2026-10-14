@@ -1,0 +1,8 @@
+services:
+  jira:
+    image: vulhub/jira:8.1.0
+    container_name: cyberlab_jira_cve_2019_11581
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8625:8080"

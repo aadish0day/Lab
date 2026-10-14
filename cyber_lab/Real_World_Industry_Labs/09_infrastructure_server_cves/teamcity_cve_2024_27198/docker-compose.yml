@@ -1,0 +1,8 @@
+services:
+  teamcity:
+    image: vulhub/teamcity:2023.11.3
+    container_name: cyberlab_teamcity_cve_2024_27198
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8604:8080"

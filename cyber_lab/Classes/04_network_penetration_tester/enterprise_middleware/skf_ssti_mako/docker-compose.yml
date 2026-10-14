@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:ssti-mako
+    container_name: cyberlab_skf_ssti_mako
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8843:5000"

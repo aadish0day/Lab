@@ -1,0 +1,8 @@
+services:
+  httpd:
+    image: vulhub/tomcat:8.5.19
+    container_name: cyberlab_httpd_cve_2021_40438
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8673:8080"

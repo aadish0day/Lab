@@ -1,0 +1,8 @@
+services:
+  vulapps:
+    image: medicean/vulapps:tools_ant
+    container_name: cyberlab_vulapps_tools_ant
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8796:3000"

@@ -1,0 +1,8 @@
+services:
+  vulapps:
+    image: medicean/vulapps:s_supervisor_1
+    container_name: cyberlab_vulapps_supervisor_s_1
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8716:9001"

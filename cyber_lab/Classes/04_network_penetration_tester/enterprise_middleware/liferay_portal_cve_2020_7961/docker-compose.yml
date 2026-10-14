@@ -1,0 +1,8 @@
+services:
+  liferay_portal:
+    image: vulhub/liferay-portal:7.2.0-ga1
+    container_name: cyberlab_liferay_portal_cve_2020_7961
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8594:8080"

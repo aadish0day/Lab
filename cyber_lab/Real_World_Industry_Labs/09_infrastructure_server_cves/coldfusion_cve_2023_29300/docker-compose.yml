@@ -1,0 +1,8 @@
+services:
+  coldfusion:
+    image: vulhub/coldfusion:2018.0.15
+    container_name: cyberlab_coldfusion_cve_2023_29300
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8675:8080"

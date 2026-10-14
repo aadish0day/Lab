@@ -1,0 +1,8 @@
+services:
+  jboss:
+    image: vulhub/jboss:as-4.0.5
+    container_name: cyberlab_jboss_cve_2017_7504
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8598:8080"

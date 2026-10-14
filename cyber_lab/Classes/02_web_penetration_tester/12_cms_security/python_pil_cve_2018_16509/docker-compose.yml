@@ -1,0 +1,8 @@
+services:
+  python:
+    image: vulhub/ghostscript:9.23-with-flask
+    container_name: cyberlab_python_pil_cve_2018_16509
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8563:8080"

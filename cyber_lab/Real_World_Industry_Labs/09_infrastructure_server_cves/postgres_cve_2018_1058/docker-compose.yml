@@ -1,0 +1,8 @@
+services:
+  postgres:
+    image: vulhub/postgres:9.6.7
+    container_name: cyberlab_postgres_cve_2018_1058
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8619:8080"

@@ -1,0 +1,8 @@
+services:
+  mongo_express:
+    image: vulhub/mongo-express:0.53.0
+    container_name: cyberlab_mongo_express_cve_2019_10758
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8620:8080"

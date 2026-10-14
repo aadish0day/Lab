@@ -1,0 +1,8 @@
+services:
+  gotenberg:
+    image: vulhub/gotenberg:8.30.1
+    container_name: cyberlab_gotenberg_cve_2026_40281
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8646:8080"

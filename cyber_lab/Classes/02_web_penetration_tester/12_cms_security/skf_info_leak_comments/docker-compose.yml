@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:info-leakeage-comments
+    container_name: cyberlab_skf_info_leak_comments
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8812:5000"

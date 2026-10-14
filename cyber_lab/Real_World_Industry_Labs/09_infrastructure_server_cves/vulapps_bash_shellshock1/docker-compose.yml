@@ -1,0 +1,8 @@
+services:
+  vulapps:
+    image: medicean/vulapps:b_bash_shellshock1
+    container_name: cyberlab_vulapps_bash_shellshock1
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8730:80"

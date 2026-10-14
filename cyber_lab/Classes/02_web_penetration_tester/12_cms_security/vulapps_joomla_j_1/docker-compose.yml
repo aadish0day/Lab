@@ -1,0 +1,8 @@
+services:
+  vulapps:
+    image: medicean/vulapps:j_joomla_1
+    container_name: cyberlab_vulapps_joomla_j_1
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8697:80"

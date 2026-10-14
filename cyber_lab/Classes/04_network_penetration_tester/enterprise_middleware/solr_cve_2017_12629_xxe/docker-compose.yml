@@ -1,0 +1,8 @@
+services:
+  solr:
+    image: vulhub/solr:7.0.1
+    container_name: cyberlab_solr_cve_2017_12629_xxe
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8586:8080"

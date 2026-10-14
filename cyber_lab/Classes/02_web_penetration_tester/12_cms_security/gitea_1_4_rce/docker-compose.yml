@@ -1,0 +1,8 @@
+services:
+  gitea:
+    image: vulhub/gitea:1.4.0
+    container_name: cyberlab_gitea_1_4_rce
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8576:8080"

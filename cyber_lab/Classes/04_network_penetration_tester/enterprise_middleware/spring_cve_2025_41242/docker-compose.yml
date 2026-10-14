@@ -1,0 +1,8 @@
+services:
+  spring:
+    image: vulhub/spring-boot-jetty:3.2.4
+    container_name: cyberlab_spring_cve_2025_41242
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8584:8080"

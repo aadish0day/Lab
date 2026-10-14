@@ -1,0 +1,8 @@
+services:
+  elfinder:
+    image: vulhub/elfinder:2.1.58
+    container_name: cyberlab_elfinder_cve_2021_32682
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8654:8080"

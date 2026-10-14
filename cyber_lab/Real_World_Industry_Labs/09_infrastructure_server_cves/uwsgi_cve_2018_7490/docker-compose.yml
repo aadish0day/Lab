@@ -1,0 +1,8 @@
+services:
+  uwsgi:
+    image: vulhub/uwsgi-php:2.0.16
+    container_name: cyberlab_uwsgi_cve_2018_7490
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8603:8080"

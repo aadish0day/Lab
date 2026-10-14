@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:js-csti
+    container_name: cyberlab_skf_js_csti
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8808:3000"

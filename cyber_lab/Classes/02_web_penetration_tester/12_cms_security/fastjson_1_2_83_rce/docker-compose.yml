@@ -1,0 +1,8 @@
+services:
+  fastjson:
+    image: vulhub/fastjson:1.2.83
+    container_name: cyberlab_fastjson_1_2_83_rce
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8577:8080"

@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:auth-bypass-headers
+    container_name: cyberlab_skf_auth_bypass_headers
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8857:5000"

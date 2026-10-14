@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:race-condition-file-write
+    container_name: cyberlab_skf_race_condition_file
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8846:5000"

@@ -8,7 +8,7 @@ app = Flask(__name__)
 # HARDCODED SECRETS (Target for Gitleaks & Semgrep)
 AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE"
 AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-STRIPE_API_KEY = "sk_test_EXAMPLE_STRIPE_KEY_FOR_TESTING_ONLY"
+STRIPE_API_KEY = "sk_live_51HzT92Lkjf92834jlsdfk90234jlks"
 DATABASE_URL = "postgres://admin:SuperSecretPass123!@db.internal:5432/prod"
 
 @app.route("/")

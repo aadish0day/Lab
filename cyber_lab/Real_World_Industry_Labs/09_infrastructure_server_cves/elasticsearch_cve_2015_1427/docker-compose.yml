@@ -1,0 +1,8 @@
+services:
+  elasticsearch:
+    image: vulhub/elasticsearch:1.4.2
+    container_name: cyberlab_elasticsearch_cve_2015_1427
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8661:8080"

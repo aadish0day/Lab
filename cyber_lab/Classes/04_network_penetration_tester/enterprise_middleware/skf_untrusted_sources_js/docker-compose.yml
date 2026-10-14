@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:untrusted-sources-js
+    container_name: cyberlab_skf_untrusted_sources_js
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8714:5000"

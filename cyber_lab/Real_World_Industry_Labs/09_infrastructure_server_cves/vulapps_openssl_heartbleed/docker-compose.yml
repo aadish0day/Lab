@@ -1,0 +1,8 @@
+services:
+  vulapps:
+    image: medicean/vulapps:o_openssl_heartbleed_CVE-2014-0160
+    container_name: cyberlab_vulapps_openssl_heartbleed
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8794:443"

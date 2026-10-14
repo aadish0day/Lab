@@ -1,0 +1,8 @@
+services:
+  httpd:
+    image: vulhub/php:7.4.33-apache
+    container_name: cyberlab_httpd_ssi_rce
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8672:8080"

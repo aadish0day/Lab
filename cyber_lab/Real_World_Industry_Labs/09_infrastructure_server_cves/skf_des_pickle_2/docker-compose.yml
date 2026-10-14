@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:des-pickle-2
+    container_name: cyberlab_skf_des_pickle_2
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8727:5000"

@@ -1,0 +1,8 @@
+services:
+  vulhub:
+    image: vulhub/rails:5.2.2.1
+    container_name: cyberlab_vulhub_rails_cve_2019_5418
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8689:3000"

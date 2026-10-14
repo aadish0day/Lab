@@ -1,0 +1,8 @@
+services:
+  vulapps:
+    image: medicean/vulapps:tools_xunfeng
+    container_name: cyberlab_vulapps_tools_xunfeng
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8719:80"

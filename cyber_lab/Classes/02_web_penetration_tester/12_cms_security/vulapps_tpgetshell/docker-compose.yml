@@ -1,0 +1,8 @@
+services:
+  vulapps:
+    image: virink/tpgetshell
+    container_name: cyberlab_vulapps_tpgetshell
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8688:80"

@@ -1,0 +1,8 @@
+services:
+  yapi:
+    image: mongo:5.0.6
+    container_name: cyberlab_yapi_unacc
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8600:8080"

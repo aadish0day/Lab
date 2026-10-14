@@ -1,0 +1,8 @@
+services:
+  joomla:
+    image: vulhub/joomla:3.4.5
+    container_name: cyberlab_joomla_cve_2015_8562
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8575:8080"

@@ -1,0 +1,8 @@
+services:
+  vulhub:
+    image: vulhub/unomi:1.5.1
+    container_name: cyberlab_vulhub_unomi_cve_2020_13942
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8775:8181"

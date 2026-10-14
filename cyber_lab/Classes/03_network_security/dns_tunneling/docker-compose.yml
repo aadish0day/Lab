@@ -1,6 +1,6 @@
 services:
   iodine-dns:
-    image: kylemanna/iodine:latest
+    image: spritsail/iodine:latest
     container_name: cyberlab_03_dns_iodine
     cap_add:
       - NET_ADMIN

@@ -1,0 +1,8 @@
+services:
+  tomcat:
+    image: vulhub/tomcat:9.0.116
+    container_name: cyberlab_tomcat_cve_2026_34486
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8583:8080"

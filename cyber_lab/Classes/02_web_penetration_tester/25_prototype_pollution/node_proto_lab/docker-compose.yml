@@ -19,7 +19,7 @@ services:
              app.get("/", (req, res) => {
                res.send(`<h1>Prototype Pollution Target</h1>
                          <p>Status: Running</p>
-                         <p>Admin Flag: ${config.admin ? "FLAG{PROTO_POLLUTED_ROOT}" : "ACCESS_DENIED"}</p>`);
+                         <p>Admin Flag: $${config.admin ? "FLAG{PROTO_POLLUTED_ROOT}" : "ACCESS_DENIED"}</p>`);
              });
 
              app.post("/api/update", (req, res) => {

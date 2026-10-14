@@ -1,0 +1,8 @@
+services:
+  drupal:
+    image: vulhub/drupal:7.57
+    container_name: cyberlab_drupal_cve_2018_7602
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8633:8080"

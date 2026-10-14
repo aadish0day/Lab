@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:cors-null
+    container_name: cyberlab_skf_cors_null
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8818:5000"

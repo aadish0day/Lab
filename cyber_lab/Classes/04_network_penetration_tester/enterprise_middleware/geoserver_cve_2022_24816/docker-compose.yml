@@ -1,0 +1,8 @@
+services:
+  geoserver:
+    image: vulhub/geoserver:2.17.2
+    container_name: cyberlab_geoserver_cve_2022_24816
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8651:8080"

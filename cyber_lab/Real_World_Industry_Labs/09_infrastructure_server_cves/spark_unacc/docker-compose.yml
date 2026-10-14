@@ -1,0 +1,8 @@
+services:
+  spark:
+    image: vulhub/spark:2.3.1
+    container_name: cyberlab_spark_unacc
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8613:8080"

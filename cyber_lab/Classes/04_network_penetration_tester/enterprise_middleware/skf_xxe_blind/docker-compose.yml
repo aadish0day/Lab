@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:xxe-blind
+    container_name: cyberlab_skf_xxe_blind
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8834:5000"

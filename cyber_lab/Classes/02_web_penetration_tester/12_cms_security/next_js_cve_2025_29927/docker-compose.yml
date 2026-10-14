@@ -1,0 +1,8 @@
+services:
+  next_js:
+    image: vulhub/nextjs:15.2.2
+    container_name: cyberlab_next_js_cve_2025_29927
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8571:8080"

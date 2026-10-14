@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:cmd3
+    container_name: cyberlab_skf_cmd3
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8682:5000"

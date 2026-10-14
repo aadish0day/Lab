@@ -1,7 +1,7 @@
 version: '2'
 services:
   web:
-    image: snoopysecurity/dvws-node:latest
+    image: tssoffsec/dvws:latest
     mem_limit: 1024m
     restart: unless-stopped
     ports:

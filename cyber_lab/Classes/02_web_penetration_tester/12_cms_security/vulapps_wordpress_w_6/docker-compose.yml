@@ -1,0 +1,8 @@
+services:
+  vulapps:
+    image: medicean/vulapps:w_wordpress_6
+    container_name: cyberlab_vulapps_wordpress_w_6
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8769:80"

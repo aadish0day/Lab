@@ -1,0 +1,8 @@
+services:
+  vulhub:
+    image: vulhub/redis:6.2.6
+    container_name: cyberlab_vulhub_redis_cve_2022_0543
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8780:6379"

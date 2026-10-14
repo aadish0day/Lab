@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:js-http-response-splitting
+    container_name: cyberlab_skf_js_http_response_splitting
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8803:3000"

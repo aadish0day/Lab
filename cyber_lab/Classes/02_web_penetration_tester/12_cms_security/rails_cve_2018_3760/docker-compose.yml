@@ -1,0 +1,8 @@
+services:
+  rails:
+    image: vulhub/rails:5.0.7
+    container_name: cyberlab_rails_cve_2018_3760
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8562:8080"

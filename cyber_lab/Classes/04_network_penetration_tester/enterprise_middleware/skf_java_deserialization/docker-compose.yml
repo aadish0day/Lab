@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:deserialization
+    container_name: cyberlab_skf_java_deserialization
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8777:8080"

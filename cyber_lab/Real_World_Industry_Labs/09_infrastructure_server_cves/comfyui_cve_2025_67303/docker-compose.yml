@@ -1,0 +1,8 @@
+services:
+  comfyui:
+    image: vulhub/comfyui:3.37-with-manager
+    container_name: cyberlab_comfyui_cve_2025_67303
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8674:8080"

@@ -1,0 +1,8 @@
+services:
+  vulhub:
+    image: vulhub/metersphere:1.15.3
+    container_name: cyberlab_vulhub_metersphere_cve_2021_45788
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8765:8081"

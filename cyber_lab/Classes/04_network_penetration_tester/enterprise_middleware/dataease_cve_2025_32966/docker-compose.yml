@@ -1,0 +1,8 @@
+services:
+  dataease:
+    image: vulhub/dataease:2.10.7
+    container_name: cyberlab_dataease_cve_2025_32966
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8658:8080"

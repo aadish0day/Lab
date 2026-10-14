@@ -1,0 +1,8 @@
+services:
+  php:
+    image: vulhub/php:8.3.4-apache
+    container_name: cyberlab_php_cve_2024_2961
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8566:8080"

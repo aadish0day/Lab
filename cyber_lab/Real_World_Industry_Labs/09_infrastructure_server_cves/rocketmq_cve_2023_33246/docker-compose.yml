@@ -1,0 +1,8 @@
+services:
+  rocketmq:
+    image: vulhub/rocketmq:5.1.0
+    container_name: cyberlab_rocketmq_cve_2023_33246
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8617:8080"

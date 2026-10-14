@@ -10,7 +10,7 @@ This repository is organized into three clean divisions:
 ## Quick Management via CLI (`./lab`)
 
 ```bash
-./lab list # List all 500 available labs, tools, and shortcuts (501 entries)
+./lab list # List all 800 available labs, tools, and shortcuts (805 entries)
 ./lab start <shortcut> # Start a specific lab/tool container
 ./lab shell <shortcut> # Open interactive shell in container
 ./lab stop <shortcut> # Stop container

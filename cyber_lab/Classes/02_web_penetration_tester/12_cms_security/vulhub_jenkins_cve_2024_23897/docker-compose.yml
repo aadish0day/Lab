@@ -1,0 +1,8 @@
+services:
+  vulhub:
+    image: vulhub/jenkins:2.441
+    container_name: cyberlab_vulhub_jenkins_cve_2024_23897
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8820:8080"

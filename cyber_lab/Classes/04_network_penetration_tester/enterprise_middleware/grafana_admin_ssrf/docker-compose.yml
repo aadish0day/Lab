@@ -1,0 +1,8 @@
+services:
+  grafana:
+    image: vulhub/grafana:8.5.4
+    container_name: cyberlab_grafana_admin_ssrf
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8642:8080"

@@ -1,0 +1,8 @@
+services:
+  cups_browsed:
+    image: vulhub/cups-browsed:2.0.1
+    container_name: cyberlab_cups_browsed_cve_2024_47177
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8663:8080"

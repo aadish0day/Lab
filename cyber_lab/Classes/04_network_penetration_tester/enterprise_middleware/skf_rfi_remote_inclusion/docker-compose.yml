@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:rfi-remote-inclusion
+    container_name: cyberlab_skf_rfi_remote_inclusion
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8844:5000"

@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:jwt-none-algorithm
+    container_name: cyberlab_skf_jwt_none_alg
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8851:5000"

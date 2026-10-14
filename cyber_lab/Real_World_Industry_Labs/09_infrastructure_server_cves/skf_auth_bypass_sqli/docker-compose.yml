@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:auth-bypass-sqli
+    container_name: cyberlab_skf_auth_bypass_sqli
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8856:5000"

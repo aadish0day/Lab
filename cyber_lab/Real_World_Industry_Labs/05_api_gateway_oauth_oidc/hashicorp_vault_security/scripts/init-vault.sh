@@ -27,7 +27,7 @@ curl -s -H "X-Vault-Token: $VAULT_TOKEN" \
 
 curl -s -H "X-Vault-Token: $VAULT_TOKEN" \
   -X POST "$VAULT_ADDR/v1/secret/data/payments/stripe" \
-  -d '{"data": {"api_key": "sk_test_FLAG{vault_stripe_super_secret_99412}", "webhook_secret": "whsec_test_90124"}}' > /dev/null
+  -d '{"data": {"api_key": "sk_live_FLAG{vault_stripe_super_secret_99412}", "webhook_secret": "whsec_live_90124"}}' > /dev/null
 
 curl -s -H "X-Vault-Token: $VAULT_TOKEN" \
   -X POST "$VAULT_ADDR/v1/secret/data/dev/sandbox" \

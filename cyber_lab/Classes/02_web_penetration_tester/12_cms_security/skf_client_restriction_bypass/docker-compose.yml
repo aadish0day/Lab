@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:client-side-restriction-bypass
+    container_name: cyberlab_skf_client_restriction_bypass
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8699:5000"

@@ -1,0 +1,8 @@
+services:
+  gradio:
+    image: vulhub/gradio:4.10.0
+    container_name: cyberlab_gradio_cve_2023_51449
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8645:8080"

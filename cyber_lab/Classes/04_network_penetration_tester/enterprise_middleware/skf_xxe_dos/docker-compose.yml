@@ -1,0 +1,8 @@
+services:
+  skf:
+    image: blabla1337/owasp-skf-lab:xxe-dos
+    container_name: cyberlab_skf_xxe_dos
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8835:5000"
