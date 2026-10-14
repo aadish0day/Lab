@@ -1,0 +1,17 @@
+services:
+  velociraptor:
+    image: ghcr.io/velocidex/velociraptor-server:latest
+    container_name: cyberlab_velociraptor
+    restart: unless-stopped
+    ports:
+      - "8114:8889"       # Velociraptor Web Management GUI (HTTPS)
+      - "8000:8000"       # Velociraptor Frontend Agent Communications
+    environment:
+      - VELOCIRAPTOR_HOSTNAME=localhost
+      - VELOCIRAPTOR_GUI_PORT=8889
+      - VELOCIRAPTOR_FRONTEND_PORT=8000
+      - VELOCIRAPTOR_INITIAL_ADMIN_PASSWORD=admin
+    volumes:
+      - ./config:/etc/velociraptor
+      - ./datastore:/datastore
+      - ./custom_artifacts:/custom_artifacts

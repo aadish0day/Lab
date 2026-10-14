@@ -1,0 +1,11 @@
+services:
+  nexus:
+    image: vulhub/nexus:3.21.1
+    container_name: cyberlab_industry_nexus_el_rce
+    ports:
+      - "8136:8081"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 1200M

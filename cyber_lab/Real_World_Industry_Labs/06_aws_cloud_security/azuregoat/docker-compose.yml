@@ -1,0 +1,18 @@
+services:
+  azuregoat:
+    image: mcr.microsoft.com/azure-cli:latest
+    container_name: cyberlab_azuregoat
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    volumes:
+      # Mount host Azure credentials if available
+      - ${HOME}/.azure:/root/.azure:ro
+      # Mount scenarios, Terraform scripts, and attack tools
+      - ./workspace:/workspace
+      - ./:/azuregoat_lab
+    working_dir: /workspace
+    environment:
+      - ARM_LOCATION=eastus
+      - TF_IN_AUTOMATION=1
+    command: /bin/bash

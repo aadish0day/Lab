@@ -1,0 +1,8 @@
+services:
+  ganache-blockchain:
+    image: trufflesuite/ganache:latest
+    container_name: cyberlab_realworld_ganache_evm
+    ports:
+      - "8545:8545"
+    command: --wallet.deterministic --miner.blockTime 1
+    restart: unless-stopped

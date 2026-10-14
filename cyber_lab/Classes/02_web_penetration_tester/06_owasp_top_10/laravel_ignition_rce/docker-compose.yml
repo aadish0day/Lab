@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  laravel:
+    image: vulhub/laravel:8.4.2
+    container_name: cyberlab_laravel
+    restart: unless-stopped
+    ports:
+      - "8187:80"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=laravel-ignition-rce"

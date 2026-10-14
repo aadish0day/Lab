@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  geoserver:
+    image: vulhub/geoserver:2.23.2
+    container_name: cyberlab_geoserver
+    restart: unless-stopped
+    ports:
+      - "8193:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=geoserver-rce"

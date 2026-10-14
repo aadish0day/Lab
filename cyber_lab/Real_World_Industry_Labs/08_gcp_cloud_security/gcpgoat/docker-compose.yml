@@ -1,0 +1,17 @@
+services:
+  gcpgoat:
+    image: google/cloud-sdk:latest
+    container_name: cyberlab_realworld_gcpgoat
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    volumes:
+      - ${HOME}/.config/gcloud:/root/.config/gcloud:ro
+      - ./workspace:/workspace
+      - ./:/gcpgoat_lab
+    working_dir: /workspace
+    command: /bin/bash
+    deploy:
+      resources:
+        limits:
+          memory: 600M

@@ -1,0 +1,11 @@
+services:
+  gitlist_argument_injection_rce:
+    image: vulhub/gitlist:0.6.0
+    container_name: cyberlab_industry_gitlist_arg_injection
+    ports:
+      - "8157:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 120M

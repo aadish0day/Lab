@@ -1,0 +1,7 @@
+services:
+ web:
+   image: vulhub/shiro:1.0.0
+   mem_limit: 1024m
+   restart: unless-stopped
+   ports:
+    - "8471:8080"

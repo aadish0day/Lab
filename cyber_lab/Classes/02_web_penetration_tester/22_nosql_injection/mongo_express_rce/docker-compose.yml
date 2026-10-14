@@ -1,0 +1,11 @@
+services:
+  mongo_express_rce:
+    image: vulhub/mongo-express:0.53.0
+    container_name: cyberlab_02_mongo_express_rce
+    ports:
+      - "8140:8081"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 350M

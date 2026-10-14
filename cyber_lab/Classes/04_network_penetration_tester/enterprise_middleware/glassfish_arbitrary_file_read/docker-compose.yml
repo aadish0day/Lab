@@ -1,0 +1,11 @@
+services:
+  glassfish_arbitrary_file_read:
+    image: vulhub/glassfish:4.1
+    container_name: cyberlab_04_glassfish_traversal
+    ports:
+      - "8163:4848"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 400M

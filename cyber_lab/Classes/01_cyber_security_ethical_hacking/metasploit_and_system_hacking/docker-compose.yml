@@ -1,0 +1,10 @@
+services:
+  metasploit-target:
+    image: tleemcjr/metasploitable2:latest
+    container_name: cyberlab_01_metasploit_target
+    ports:
+      - "2121:21"
+      - "2222:22"
+      - "2323:23"
+      - "8082:80"
+    restart: unless-stopped

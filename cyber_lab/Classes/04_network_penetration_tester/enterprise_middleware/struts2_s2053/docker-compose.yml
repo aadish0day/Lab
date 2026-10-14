@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  struts2_s2053:
+    image: vulhub/struts2:s2-053
+    container_name: cyberlab_struts2_s2053
+    restart: unless-stopped
+    ports:
+      - "8210:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=struts2-s2053"

@@ -1,0 +1,12 @@
+services:
+  jmeter_rmi_rce:
+    image: vulhub/jmeter:3.3
+    container_name: cyberlab_04_jmeter_rmi_rce
+    ports:
+      - "8178:8178"
+      - "1099:1099"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 200M

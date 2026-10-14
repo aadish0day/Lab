@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  nexus:
+    image: vulhub/nexus:3.14.0
+    container_name: cyberlab_nexus_el
+    restart: unless-stopped
+    ports:
+      - "8206:8081"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=nexus-el-rce"

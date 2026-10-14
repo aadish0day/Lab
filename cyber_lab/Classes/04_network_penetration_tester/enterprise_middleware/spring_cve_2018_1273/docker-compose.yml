@@ -1,0 +1,7 @@
+services:
+ spring:
+   image: vulhub/spring-data-commons:2.0.5
+   mem_limit: 1024m
+   restart: unless-stopped
+   ports:
+    - "8499:8080"

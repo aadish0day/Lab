@@ -1,0 +1,7 @@
+services:
+  ctf-target:
+    image: ctfd/ctfd:latest
+    container_name: cyberlab_01_ctfd
+    ports:
+      - "8000:8000"
+    restart: unless-stopped

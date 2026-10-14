@@ -1,0 +1,21 @@
+services:
+  cloudgoat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cyberlab_cloudgoat_runner:latest
+    container_name: cyberlab_cloudgoat
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    volumes:
+      # Mount host AWS credentials if available
+      - ${HOME}/.aws:/root/.aws:ro
+      # Persist CloudGoat scenario state and Terraform deployments
+      - ./workspace:/cloudgoat/workspace
+      - ./:/workspace
+    working_dir: /cloudgoat
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+      - TF_IN_AUTOMATION=1
+    command: /bin/bash

@@ -1,0 +1,11 @@
+services:
+  appweb_auth_bypass:
+    image: vulhub/appweb:7.0.1
+    container_name: cyberlab_02_appweb_auth_bypass
+    ports:
+      - "8159:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 50M

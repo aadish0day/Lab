@@ -1,0 +1,23 @@
+version: '3'
+services:
+  airflow:
+    image: vulhub/airflow:1.10.10
+    environment:
+      - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqUCho=
+      - EXECUTOR=Celery
+    command: webserver
+    ports:
+      - "8228:8080"
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+
+  redis:
+    image: redis:5-alpine

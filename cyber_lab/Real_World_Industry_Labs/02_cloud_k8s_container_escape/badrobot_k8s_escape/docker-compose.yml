@@ -1,0 +1,11 @@
+services:
+  privileged-escape-target:
+    image: alpine:latest
+    container_name: cyberlab_realworld_container_escape
+    privileged: true
+    volumes:
+      - /:/host:ro
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    command: /bin/sh

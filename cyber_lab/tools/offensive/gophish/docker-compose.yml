@@ -1,0 +1,8 @@
+services:
+  gophish:
+    image: gophish/gophish:latest
+    container_name: cyberlab_realworld_gophish
+    ports:
+      - "3333:3333"
+      - "8092:80"
+    restart: unless-stopped

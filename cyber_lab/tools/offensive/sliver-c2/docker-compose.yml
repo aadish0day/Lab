@@ -1,0 +1,10 @@
+services:
+  sliver-c2:
+    image: bishopfox/sliver:latest
+    container_name: cyberlab_realworld_sliver_c2
+    ports:
+      - "8889:8888"
+      - "31337:31337"
+    restart: unless-stopped
+    stdin_open: true
+    tty: true

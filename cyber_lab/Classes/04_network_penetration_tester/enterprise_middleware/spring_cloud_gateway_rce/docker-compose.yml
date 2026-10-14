@@ -1,0 +1,11 @@
+services:
+  spring-gateway:
+    image: vulhub/spring-cloud-gateway:3.1.0
+    container_name: cyberlab_04_spring_gateway_rce
+    ports:
+      - "8125:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 400M

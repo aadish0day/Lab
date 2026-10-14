@@ -1,0 +1,7 @@
+services:
+ spring:
+   image: vulhub/spring-cloud-function:3.2.2
+   mem_limit: 1024m
+   restart: unless-stopped
+   ports:
+    - "8501:8080"

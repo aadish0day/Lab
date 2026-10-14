@@ -1,0 +1,7 @@
+services:
+  sqli-labs:
+    image: acgpiano/sqli-labs:latest
+    container_name: cyberlab_02_sqli_labs
+    ports:
+      - "8086:80"
+    restart: unless-stopped

@@ -1,0 +1,11 @@
+services:
+  shellshock:
+    image: vulhub/bash:4.3.0-with-httpd
+    container_name: cyberlab_02_shellshock
+    ports:
+      - "8137:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 150M

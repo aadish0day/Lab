@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  solr:
+    image: vulhub/solr:7.0.1
+    container_name: cyberlab_solr_rce
+    restart: unless-stopped
+    ports:
+      - "8198:8983"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=solr-runexec-rce"

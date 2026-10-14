@@ -1,0 +1,7 @@
+services:
+  dvwa-basic:
+    image: vulnerables/web-dvwa:latest
+    container_name: cyberlab_01_dvwa_basics
+    ports:
+      - "8083:80"
+    restart: unless-stopped

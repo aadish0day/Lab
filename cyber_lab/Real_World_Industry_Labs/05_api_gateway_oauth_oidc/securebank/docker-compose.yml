@@ -1,0 +1,12 @@
+services:
+  securebank:
+    image: ssrd/securebank:latest
+    container_name: cyberlab_realworld_securebank
+    ports:
+      - "8118:80"
+      - "5001:5000"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 600M

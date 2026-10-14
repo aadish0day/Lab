@@ -1,0 +1,11 @@
+version: '3'
+services:
+  dubbo:
+    image: vulhub/dubbo:2.7.3
+    ports:
+      - "8240:8080"
+    depends_on:
+      - zookeeper
+
+  zookeeper:
+    image: zookeeper:3.7.0

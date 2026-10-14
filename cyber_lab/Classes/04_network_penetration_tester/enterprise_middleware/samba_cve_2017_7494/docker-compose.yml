@@ -1,0 +1,11 @@
+version: '2'
+services:
+ samba:
+   image: vulhub/samba:4.6.3
+   mem_limit: 1024m
+   restart: unless-stopped
+   tty: true
+   volumes:
+    - ./smb.conf:/usr/local/samba/etc/smb.conf
+   ports:
+    - "8491:445"

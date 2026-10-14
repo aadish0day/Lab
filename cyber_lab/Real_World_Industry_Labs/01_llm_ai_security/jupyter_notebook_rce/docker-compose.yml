@@ -1,0 +1,11 @@
+services:
+  jupyter_notebook_rce:
+    image: vulhub/jupyter-notebook:5.2.2
+    container_name: cyberlab_industry_jupyter_notebook_rce
+    ports:
+      - "8148:8888"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 350M

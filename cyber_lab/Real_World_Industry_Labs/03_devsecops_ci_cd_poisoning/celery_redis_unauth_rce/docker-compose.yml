@@ -1,0 +1,13 @@
+version: '3'
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "8229:6379"
+
+  celery:
+    image: vulhub/celery:3.1.23
+    environment:
+      - REDIS_HOST=redis
+    depends_on:
+      - redis

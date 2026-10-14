@@ -1,0 +1,21 @@
+version: '2'
+services:
+  mongo:
+    image: mongo:5.0.6
+    mem_limit: 1024m
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: yapi
+  web:
+    image: vulhub/yapi:1.10.2
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+    - "8469:3000"
+    volumes:
+    - ./config.json:/usr/config.json
+    - ./initdb.js:/usr/src/initdb.js
+    environment:
+    - MONGO_ADDR=mongo:27017

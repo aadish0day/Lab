@@ -1,0 +1,11 @@
+services:
+  remnux:
+    image: remnux/remnux-distro:latest
+    container_name: cyberlab_remnux
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    working_dir: /home/remnux/files
+    entrypoint: ["tail", "-f", "/dev/null"]
+    volumes:
+      - ./samples:/home/remnux/files

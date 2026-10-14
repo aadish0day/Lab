@@ -1,0 +1,18 @@
+version: '3.5'
+services:
+  oap:
+    image: vulhub/skywalking:8.3.0
+    mem_limit: 1024m
+    restart: unless-stopped
+    command: bash bin/oap-service.sh
+  web:
+    image: vulhub/skywalking:8.3.0
+    mem_limit: 1024m
+    restart: unless-stopped
+    command: bash bin/web-server.sh
+    depends_on:
+      - oap
+    ports:
+      - "8492:8080"
+    environment:
+      COLLECTOR_RIBBON_LISTOFSERVERS: oap:12800

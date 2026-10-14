@@ -1,0 +1,11 @@
+services:
+  joomla_sqli_cve_2017_8917:
+    image: vulhub/joomla:3.7.0
+    container_name: cyberlab_02_joomla_sqli_rce
+    ports:
+      - "8156:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 200M

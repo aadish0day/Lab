@@ -1,0 +1,7 @@
+services:
+  web:
+    image: vulhub/superset:2.0.1
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8476:8088"

@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  activemq:
+    image: vulhub/activemq:5.17.3
+    container_name: cyberlab_activemq_46604
+    restart: unless-stopped
+    ports:
+      - "8204:8161"
+      - "61617:61616"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=activemq-openwire-rce"

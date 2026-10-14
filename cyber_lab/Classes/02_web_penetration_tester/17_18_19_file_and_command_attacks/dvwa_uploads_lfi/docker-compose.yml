@@ -1,0 +1,7 @@
+services:
+  dvwa-lfi-upload:
+    image: vulnerables/web-dvwa:latest
+    container_name: cyberlab_02_dvwa_lfi_upload
+    ports:
+      - "8087:80"
+    restart: unless-stopped

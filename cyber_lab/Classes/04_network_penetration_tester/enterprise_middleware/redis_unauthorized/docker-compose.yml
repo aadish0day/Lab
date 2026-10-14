@@ -1,0 +1,11 @@
+services:
+  redis:
+    image: vulhub/redis:4.0.14
+    container_name: cyberlab_04_redis_unauth
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 150M

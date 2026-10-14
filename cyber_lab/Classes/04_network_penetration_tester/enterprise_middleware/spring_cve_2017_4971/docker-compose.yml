@@ -1,0 +1,7 @@
+services:
+ spring:
+   image: vulhub/spring-webflow:2.4.4
+   mem_limit: 1024m
+   restart: unless-stopped
+   ports:
+    - "8496:8080"

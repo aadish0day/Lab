@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  spring_regex:
+    image: vulhub/spring-security:5.6.3
+    container_name: cyberlab_spring_regex
+    restart: unless-stopped
+    ports:
+      - "8214:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=spring-regex-bypass"

@@ -1,0 +1,25 @@
+{
+  "request": {
+    "kind": { "kind": "Pod", "version": "v1" },
+    "operation": "CREATE",
+    "object": {
+      "metadata": { "name": "victim-debug-pod" },
+      "spec": {
+        "containers": [
+          {
+            "name": "standard-web",
+            "image": "internal-registry.corp.com/nginx:alpine",
+            "securityContext": { "privileged": false }
+          }
+        ],
+        "ephemeralContainers": [
+          {
+            "name": "backdoor-debugger",
+            "image": "internal-registry.corp.com/alpine:latest",
+            "securityContext": { "privileged": true }
+          }
+        ]
+      }
+    }
+  }
+}

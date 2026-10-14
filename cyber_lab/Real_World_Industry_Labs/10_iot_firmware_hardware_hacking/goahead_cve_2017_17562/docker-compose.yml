@@ -1,0 +1,11 @@
+services:
+  goahead_cve_2017_17562:
+    image: vulhub/goahead:3.6.4
+    container_name: cyberlab_industry_goahead_rce
+    ports:
+      - "8149:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 50M

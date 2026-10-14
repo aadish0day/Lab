@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  shiro:
+    image: vulhub/shiro:1.5.1
+    container_name: cyberlab_shiro_1957
+    restart: unless-stopped
+    ports:
+      - "8219:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=shiro-path-bypass"

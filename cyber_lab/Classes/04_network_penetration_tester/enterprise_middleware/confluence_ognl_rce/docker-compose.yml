@@ -1,0 +1,11 @@
+services:
+  confluence_ognl_rce:
+    image: vulhub/confluence:7.13.6
+    container_name: cyberlab_04_confluence_ognl_rce
+    ports:
+      - "8158:8090"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 1200M

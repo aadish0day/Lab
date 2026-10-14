@@ -1,0 +1,11 @@
+services:
+  php_xxe_injection:
+    image: vulhub/php-xxe:latest
+    container_name: cyberlab_02_php_xxe_injection
+    ports:
+      - "8180:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 40M

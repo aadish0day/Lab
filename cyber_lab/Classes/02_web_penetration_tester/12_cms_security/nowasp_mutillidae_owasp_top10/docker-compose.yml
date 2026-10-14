@@ -1,0 +1,8 @@
+version: '2'
+services:
+  web:
+    image: citizenstig/nowasp:latest
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8477:80"

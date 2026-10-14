@@ -1,0 +1,14 @@
+version: '3'
+services:
+  django:
+    image: vulhub/django:3.2.4
+    ports:
+      - "8237:8000"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=django

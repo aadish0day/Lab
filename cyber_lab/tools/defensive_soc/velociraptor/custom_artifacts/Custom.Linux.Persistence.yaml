@@ -1,0 +1,25 @@
+name: Custom.Linux.Persistence.SystemdServices
+description: |
+  Custom VQL Artifact to hunt for newly created or modified systemd services
+  commonly abused for persistence by adversary implants and rootkits.
+
+author: CyberLab DFIR Team
+type: CLIENT
+
+parameters:
+  - name: ServicePathGlob
+    default: /etc/systemd/system/**
+  - name: DaysBack
+    type: int
+    default: 7
+
+sources:
+  - query: |
+      LET TargetTime = now() - (DaysBack * 86400)
+      SELECT OSPath,
+             Size,
+             Mtime,
+             Ctime,
+             upload(file=OSPath) AS UploadedFile
+      FROM glob(globs=ServicePathGlob)
+      WHERE Mtime > TargetTime AND NOT IsDir

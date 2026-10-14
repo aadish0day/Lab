@@ -1,0 +1,20 @@
+{
+  "request": {
+    "kind": { "kind": "Pod", "version": "v1" },
+    "operation": "CREATE",
+    "object": {
+      "metadata": { "name": "exploit-registry-bypass" },
+      "spec": {
+        "containers": [
+          {
+            "name": "attacker-container",
+            "image": "docker.io/attacker/internal-registry.corp.com-backdoor:latest",
+            "securityContext": {
+              "runAsNonRoot": false
+            }
+          }
+        ]
+      }
+    }
+  }
+}

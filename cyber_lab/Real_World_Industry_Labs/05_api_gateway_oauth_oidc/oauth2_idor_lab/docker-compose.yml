@@ -1,0 +1,11 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: cyberlab_realworld_oauth_keycloak
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    command: start-dev --http-port 8093
+    ports:
+      - "8093:8093"
+    restart: unless-stopped

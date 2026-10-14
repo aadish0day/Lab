@@ -1,0 +1,9 @@
+services:
+  glauth-ad-sim:
+    image: glauth/glauth:latest
+    container_name: cyberlab_glauth_ldap
+    ports:
+      - "3893:3893"
+    volumes:
+      - ./config.cfg:/app/config/config.cfg:ro
+    restart: unless-stopped

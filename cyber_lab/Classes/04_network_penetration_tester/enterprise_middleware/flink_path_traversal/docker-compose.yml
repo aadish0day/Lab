@@ -1,0 +1,11 @@
+services:
+  flink:
+    image: vulhub/flink:1.11.2
+    container_name: cyberlab_04_flink_path_traversal
+    ports:
+      - "8135:8081"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 600M

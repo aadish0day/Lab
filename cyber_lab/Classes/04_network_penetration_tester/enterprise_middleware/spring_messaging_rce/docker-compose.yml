@@ -1,0 +1,11 @@
+services:
+  spring_messaging_rce:
+    image: vulhub/spring-messaging:5.0.4
+    container_name: cyberlab_04_spring_messaging_rce
+    ports:
+      - "8151:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 450M

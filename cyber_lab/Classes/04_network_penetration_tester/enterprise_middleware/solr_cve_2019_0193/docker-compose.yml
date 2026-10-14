@@ -1,0 +1,7 @@
+services:
+ solr:
+   image: vulhub/solr:8.1.1
+   mem_limit: 1024m
+   restart: unless-stopped
+   ports:
+    - "8493:8983"

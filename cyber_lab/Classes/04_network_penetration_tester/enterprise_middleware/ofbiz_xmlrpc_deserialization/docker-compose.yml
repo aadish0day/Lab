@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  ofbiz:
+    image: vulhub/ofbiz:17.12.01
+    container_name: cyberlab_ofbiz_9496
+    restart: unless-stopped
+    ports:
+      - "8220:8443"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=ofbiz-xmlrpc-rce"

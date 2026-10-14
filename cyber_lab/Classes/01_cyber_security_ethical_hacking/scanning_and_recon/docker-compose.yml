@@ -1,0 +1,7 @@
+services:
+  recon-target:
+    image: vulnerables/cve-2014-6271:latest
+    container_name: cyberlab_01_recon_target
+    ports:
+      - "8081:80"
+    restart: unless-stopped

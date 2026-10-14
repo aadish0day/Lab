@@ -1,0 +1,19 @@
+services:
+  frontend:
+    image: haproxy:alpine
+    container_name: cyberlab_smuggling_frontend
+    ports:
+      - "8108:80"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: cyberlab_smuggling_backend:latest
+    container_name: cyberlab_smuggling_backend
+    restart: unless-stopped

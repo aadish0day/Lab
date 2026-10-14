@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  nacos:
+    image: vulhub/nacos:1.4.0
+    container_name: cyberlab_nacos
+    restart: unless-stopped
+    ports:
+      - "8207:8848"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=nacos-auth-bypass"

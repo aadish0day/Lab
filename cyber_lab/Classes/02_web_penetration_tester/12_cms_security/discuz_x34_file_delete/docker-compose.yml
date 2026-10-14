@@ -1,0 +1,14 @@
+version: '3'
+services:
+  discuz:
+    image: vulhub/discuz:x3.4
+    ports:
+      - "8239:80"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.5
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=discuz

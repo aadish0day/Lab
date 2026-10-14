@@ -1,0 +1,8 @@
+version: '2'
+services:
+  scrapyd: 
+    image: vulhub/scrapyd:1.2.1
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8470:6800"

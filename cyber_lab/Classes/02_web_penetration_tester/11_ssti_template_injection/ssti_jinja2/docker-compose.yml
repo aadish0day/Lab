@@ -1,0 +1,7 @@
+services:
+  ssti-target:
+    image: christianblos/ssti-flask-app:latest
+    container_name: cyberlab_web_ssti_jinja2
+    ports:
+      - "8094:5000"
+    restart: unless-stopped

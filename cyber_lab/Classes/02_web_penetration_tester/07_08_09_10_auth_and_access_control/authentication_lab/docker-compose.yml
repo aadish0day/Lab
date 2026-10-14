@@ -1,0 +1,7 @@
+services:
+  auth-lab:
+    image: vulnerables/web-dvwa:latest
+    container_name: cyberlab_02_auth_lab
+    ports:
+      - "8084:80"
+    restart: unless-stopped

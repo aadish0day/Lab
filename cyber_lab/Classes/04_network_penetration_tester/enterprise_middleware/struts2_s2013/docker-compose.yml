@@ -1,0 +1,11 @@
+services:
+  struts2_s2013:
+    image: vulhub/s2-013:latest
+    container_name: cyberlab_04_struts2_s2013
+    ports:
+      - "8177:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 250M

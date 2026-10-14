@@ -1,0 +1,10 @@
+services:
+  defectdojo:
+    image: defectdojo/defectdojo-django:latest
+    container_name: cyberlab_defectdojo_server
+    ports:
+      - "8098:8080"
+    environment:
+      - DD_SECRET_KEY=cyberlab_insecure_threat_intel_key
+      - DD_DEBUG=True
+    restart: unless-stopped

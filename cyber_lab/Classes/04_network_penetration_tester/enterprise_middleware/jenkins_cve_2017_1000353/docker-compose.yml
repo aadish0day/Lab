@@ -1,0 +1,7 @@
+version: '3'
+services:
+  jenkins:
+    image: vulhub/jenkins:2.46.1
+    ports:
+      - "8261:8080"
+      - "50003:50000"

@@ -1,0 +1,8 @@
+version: '2'
+services:
+  web:
+    image: we45/vulnerable-flask-app:latest
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8480:5000"

@@ -1,0 +1,11 @@
+services:
+  solr:
+    image: vulhub/solr:8.2.0
+    container_name: cyberlab_02_solr_velocity_ssti
+    ports:
+      - "8130:8983"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 600M

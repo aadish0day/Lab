@@ -1,0 +1,9 @@
+services:
+  interactsh-server:
+    image: projectdiscovery/interactsh-server:latest
+    container_name: cyberlab_interactsh
+    command: -listen-ip 0.0.0.0 -http-port 8090 -dns-port 5354
+    ports:
+      - "8090:8090"
+      - "5354:5354/udp"
+    restart: unless-stopped

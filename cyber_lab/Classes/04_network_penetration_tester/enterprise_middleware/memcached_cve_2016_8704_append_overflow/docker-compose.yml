@@ -1,0 +1,8 @@
+version: '2'
+services:
+  web:
+    image: medicean/vulapps:m_memcached_CVE-2016-8704
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8557:11211"

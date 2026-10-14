@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  adminer:
+    image: vulhub/adminer:4.6.2
+    container_name: cyberlab_adminer
+    restart: unless-stopped
+    ports:
+      - "8189:80"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=adminer-ssrf"

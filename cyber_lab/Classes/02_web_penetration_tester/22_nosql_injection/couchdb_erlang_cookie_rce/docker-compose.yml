@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  couchdb:
+    image: vulhub/couchdb:3.2.1
+    container_name: cyberlab_couchdb_cookie
+    restart: unless-stopped
+    ports:
+      - "8199:5984"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=couchdb-cookie-rce"

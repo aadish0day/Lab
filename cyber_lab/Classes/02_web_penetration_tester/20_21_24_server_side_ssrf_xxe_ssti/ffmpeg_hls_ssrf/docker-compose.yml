@@ -1,0 +1,11 @@
+services:
+  ffmpeg_hls_ssrf:
+    image: vulhub/ffmpeg:2.8.4-with-php
+    container_name: cyberlab_02_ffmpeg_hls_ssrf
+    ports:
+      - "8165:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 80M

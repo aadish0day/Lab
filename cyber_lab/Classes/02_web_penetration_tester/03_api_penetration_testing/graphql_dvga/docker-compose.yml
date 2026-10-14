@@ -1,0 +1,7 @@
+services:
+  dvga:
+    image: dolevf/dvga:latest
+    container_name: cyberlab_02_dvga_graphql
+    ports:
+      - "5013:5013"
+    restart: unless-stopped

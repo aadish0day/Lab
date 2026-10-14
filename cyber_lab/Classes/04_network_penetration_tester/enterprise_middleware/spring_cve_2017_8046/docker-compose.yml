@@ -1,0 +1,7 @@
+services:
+ spring:
+   image: vulhub/spring-rest-data:2.6.6
+   mem_limit: 1024m
+   restart: unless-stopped
+   ports:
+    - "8497:8080"

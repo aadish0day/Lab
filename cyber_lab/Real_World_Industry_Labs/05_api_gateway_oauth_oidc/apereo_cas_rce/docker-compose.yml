@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  cas:
+    image: vulhub/apereo-cas:4.1.5
+    container_name: cyberlab_apereo_cas
+    restart: unless-stopped
+    ports:
+      - "8186:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=apereo-cas-rce"

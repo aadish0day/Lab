@@ -1,0 +1,11 @@
+services:
+  imagetragick:
+    image: vulhub/imagemagick:6.9.2-10-php
+    container_name: cyberlab_02_imagetragick_rce
+    ports:
+      - "8133:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 250M

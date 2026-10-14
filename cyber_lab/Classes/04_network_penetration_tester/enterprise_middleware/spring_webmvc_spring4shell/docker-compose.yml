@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  spring4shell:
+    image: vulhub/spring-webmvc:5.3.17
+    container_name: cyberlab_spring4shell
+    restart: unless-stopped
+    ports:
+      - "8194:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=spring4shell-rce"

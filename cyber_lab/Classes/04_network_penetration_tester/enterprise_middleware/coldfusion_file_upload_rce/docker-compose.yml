@@ -1,0 +1,11 @@
+services:
+  coldfusion_file_upload_rce:
+    image: vulhub/coldfusion:8.0.1
+    container_name: cyberlab_04_coldfusion_rce
+    ports:
+      - "8167:8500"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 500M

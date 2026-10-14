@@ -1,0 +1,6 @@
+services:
+  snort:
+    image: linton/docker-snort:latest
+    container_name: cyberlab_03_snort
+    network_mode: "host"
+    restart: unless-stopped

@@ -1,0 +1,6 @@
+version: '3'
+services:
+  php:
+    image: vulhub/php:8.1-backdoor
+    ports:
+      - "8248:80"

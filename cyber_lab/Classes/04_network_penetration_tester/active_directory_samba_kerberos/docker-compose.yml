@@ -1,0 +1,25 @@
+services:
+  samba-dc:
+    image: nowsci/samba-domain:latest
+    container_name: cyberlab_samba_ad_dc
+    restart: unless-stopped
+    ports:
+      - "88:88"           # Kerberos KDC (TCP)
+      - "88:88/udp"       # Kerberos KDC (UDP)
+      - "389:389"         # LDAP (TCP)
+      - "389:389/udp"     # LDAP (UDP)
+      - "445:445"         # SMB
+      - "464:464"         # Kerberos kpasswd (TCP)
+      - "464:464/udp"     # Kerberos kpasswd (UDP)
+      - "636:636"         # LDAPS
+    environment:
+      - DOMAIN=LAB
+      - REALM=LAB.LOCAL
+      - ADMIN_PASSWORD=Password123!
+      - NO_PW_REQUIREMENTS=true
+      - DNS_FORWARDER=8.8.8.8
+    volumes:
+      - samba_data:/var/lib/samba
+
+volumes:
+  samba_data:

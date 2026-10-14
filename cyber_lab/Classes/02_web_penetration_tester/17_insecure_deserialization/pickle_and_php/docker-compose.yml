@@ -1,0 +1,7 @@
+services:
+  deserialization-target:
+    image: vulnerables/cve-2014-6271:latest
+    container_name: cyberlab_web_deserialization
+    ports:
+      - "8095:80"
+    restart: unless-stopped

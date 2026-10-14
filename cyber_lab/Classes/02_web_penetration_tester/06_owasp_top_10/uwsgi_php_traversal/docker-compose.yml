@@ -1,0 +1,11 @@
+services:
+  uwsgi_php_traversal:
+    image: vulhub/uwsgi-php:2.0.16
+    container_name: cyberlab_02_uwsgi_php_traversal
+    ports:
+      - "8153:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 80M

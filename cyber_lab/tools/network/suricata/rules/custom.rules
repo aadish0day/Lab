@@ -1,0 +1,25 @@
+# ==============================================================================
+# Custom Suricata Detection Rules for SOC Triage & Threat Hunting
+# ==============================================================================
+
+# 1. Suspicious User-Agent: Automated Web Vulnerability Scanners (sqlmap)
+alert http any any -> any any (msg:"SOC ALERT - Automated SQL Injection Tool Detected (sqlmap)"; flow:established,to_server; http.user_agent; content:"sqlmap"; nocase; classtype:web-application-attack; sid:1000001; rev:1; metadata:created_at 2026_10_14, confidence high;)
+
+# 2. Suspicious User-Agent: Cobalt Strike / Nikto / DirBuster Reconnaissance
+alert http any any -> any any (msg:"SOC ALERT - Reconnaissance Scanner Tool User-Agent Detected (Nikto/DirBuster)"; flow:established,to_server; http.user_agent; pcre:"/(Nikto|DirBuster|Gobuster|wpscan)/i"; classtype:attempted-recon; sid:1000002; rev:1;)
+
+# 3. Log4Shell / JNDI Remote Code Execution Injection Pattern (CVE-2021-44228)
+alert http any any -> any any (msg:"SOC ALERT - Potential Log4j JNDI RCE Exploit Attempt (CVE-2021-44228)"; flow:established,to_server; content:"${jndi:"; nocase; fast_pattern; classtype:attempted-admin; sid:1000003; rev:1;)
+
+# 4. Outbound Interactive Reverse Shell Telemetry (Bash / Netcat)
+alert tcp any any -> any any (msg:"SOC ALERT - Interactive Reverse Shell Payload Detected (bash -i)"; flow:established; content:"/bin/bash -i"; fast_pattern; classtype:trojan-activity; sid:1000004; rev:1;)
+alert tcp any any -> any any (msg:"SOC ALERT - Interactive Reverse Shell Payload Detected (/bin/sh -i)"; flow:established; content:"/bin/sh -i"; fast_pattern; classtype:trojan-activity; sid:1000005; rev:1;)
+
+# 5. Outbound Malicious C2 Beaconing to Suspicious DNS Subdomain (DGA / Tunneling)
+alert dns any any -> any 53 (msg:"SOC ALERT - Potential DNS Tunneling Query Length Exceeding Threshold"; dns.query; content:".tunnel."; nocase; classtype:bad-unknown; sid:1000006; rev:1;)
+
+# 6. Cleartext Password Transmission over HTTP GET/POST Request
+alert http any any -> any any (msg:"SOC POLICY - Cleartext Credential Transmission in HTTP Body"; flow:established,to_server; http.request_body; content:"password="; nocase; classtype:policy-violation; sid:1000007; rev:1;)
+
+# 7. ICMP Ping Sweep / Reconnaissance
+alert icmp any any -> any any (msg:"SOC ALERT - ICMP Echo Request Ping Sweep Detected"; itype:8; icode:0; classtype:attempted-recon; sid:1000008; rev:1;)

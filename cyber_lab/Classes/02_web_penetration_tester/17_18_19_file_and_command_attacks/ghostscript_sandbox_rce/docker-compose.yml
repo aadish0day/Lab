@@ -1,0 +1,11 @@
+services:
+  ghostscript:
+    image: vulhub/ghostscript:9.23-with-flask
+    container_name: cyberlab_02_ghostscript_rce
+    ports:
+      - "8134:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 300M

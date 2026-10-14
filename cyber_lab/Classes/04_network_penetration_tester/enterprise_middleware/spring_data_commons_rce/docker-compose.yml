@@ -1,0 +1,11 @@
+services:
+  spring_data_commons_rce:
+    image: vulhub/spring-data-commons:2.0.5
+    container_name: cyberlab_04_spring_data_commons_rce
+    ports:
+      - "8152:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 450M

@@ -1,0 +1,8 @@
+version: '2'
+services:
+  web:
+    image: medicean/vulapps:j_jboss_1
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8538:8080"

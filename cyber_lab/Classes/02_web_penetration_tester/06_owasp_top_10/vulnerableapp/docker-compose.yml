@@ -1,0 +1,11 @@
+services:
+  vulnerableapp:
+    image: sasanlabs/owasp-vulnerableapp:latest
+    container_name: cyberlab_02_vulnerableapp
+    ports:
+      - "8119:9090"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 850M

@@ -1,0 +1,8 @@
+services:
+  dvws:
+    image: tssoffsec/dvws:latest
+    container_name: cyberlab_web_dvws
+    ports:
+      - "8102:80"
+      - "8103:8080"
+    restart: unless-stopped

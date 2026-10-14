@@ -1,0 +1,8 @@
+services:
+  firmware-analysis:
+    image: kalilinux/kali-rolling:latest
+    container_name: cyberlab_realworld_iot_firmware
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    command: /bin/bash

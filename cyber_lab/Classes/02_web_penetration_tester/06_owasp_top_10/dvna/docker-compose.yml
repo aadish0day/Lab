@@ -1,0 +1,11 @@
+services:
+  dvna:
+    image: appsecco/dvna:sqlite
+    container_name: cyberlab_02_dvna_node
+    ports:
+      - "8117:9090"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 400M

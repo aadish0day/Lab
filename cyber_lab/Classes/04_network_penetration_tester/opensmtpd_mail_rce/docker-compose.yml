@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  opensmtpd:
+    image: vulhub/opensmtpd:6.6.1p1
+    container_name: cyberlab_opensmtpd
+    restart: unless-stopped
+    ports:
+      - "8192:25"
+      - "2525:25"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=opensmtpd-rce"

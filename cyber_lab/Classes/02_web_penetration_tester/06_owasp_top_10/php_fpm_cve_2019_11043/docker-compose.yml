@@ -1,0 +1,11 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:1
+    ports:
+      - "8267:80"
+    depends_on:
+      - php
+
+  php:
+    image: vulhub/php:7.2.10-fpm

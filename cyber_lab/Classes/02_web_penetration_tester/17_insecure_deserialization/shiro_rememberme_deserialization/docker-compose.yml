@@ -1,0 +1,11 @@
+services:
+  shiro:
+    image: vulhub/shiro:1.2.4
+    container_name: cyberlab_02_shiro_deserialization
+    ports:
+      - "8127:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 450M

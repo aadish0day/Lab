@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  spring_data_rest:
+    image: vulhub/spring-rest-data:2.6.6
+    container_name: cyberlab_spring_data_rest
+    restart: unless-stopped
+    ports:
+      - "8213:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=spring-data-rest-rce"

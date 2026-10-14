@@ -1,0 +1,11 @@
+services:
+  discuz_cookie_rce:
+    image: vulhub/discuz:7.2
+    container_name: cyberlab_02_discuz_cookie_rce
+    ports:
+      - "8173:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 60M

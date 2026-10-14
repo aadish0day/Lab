@@ -1,0 +1,7 @@
+services:
+  wordpress:
+    image: wpscanteam/vulnerablewordpress:latest
+    container_name: cyberlab_vulnerable_wordpress
+    ports:
+      - "8107:80"
+    restart: unless-stopped

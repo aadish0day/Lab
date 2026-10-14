@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  fastjson:
+    image: vulhub/fastjson:1.2.45
+    container_name: cyberlab_fastjson_autotype
+    restart: unless-stopped
+    ports:
+      - "8205:8090"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=fastjson-autotype-bypass"

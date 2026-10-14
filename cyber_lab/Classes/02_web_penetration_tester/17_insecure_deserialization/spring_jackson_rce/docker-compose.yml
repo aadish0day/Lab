@@ -1,0 +1,11 @@
+services:
+  spring_jackson_rce:
+    image: vulhub/spring-with-jackson:2.8.8
+    container_name: cyberlab_02_spring_jackson_rce
+    ports:
+      - "8171:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 300M

@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  solr:
+    image: vulhub/solr:8.8.1
+    container_name: cyberlab_solr_streaming
+    restart: unless-stopped
+    ports:
+      - "8217:8983"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=solr-streaming-fileread"

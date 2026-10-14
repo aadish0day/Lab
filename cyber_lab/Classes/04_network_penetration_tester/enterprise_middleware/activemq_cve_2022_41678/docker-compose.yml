@@ -1,0 +1,7 @@
+version: '3'
+services:
+  activemq:
+    image: vulhub/activemq:5.17.3
+    ports:
+      - "8256:8161"
+      - "61619:61616"

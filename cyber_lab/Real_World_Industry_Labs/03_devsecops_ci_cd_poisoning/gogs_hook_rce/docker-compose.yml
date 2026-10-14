@@ -1,0 +1,11 @@
+services:
+  gogs_hook_rce:
+    image: vulhub/gogs:0.11.66
+    container_name: cyberlab_industry_gogs_hook_rce
+    ports:
+      - "8147:3000"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 150M

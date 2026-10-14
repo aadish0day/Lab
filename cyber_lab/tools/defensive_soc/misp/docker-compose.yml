@@ -1,0 +1,80 @@
+services:
+  misp-web:
+    image: ghcr.io/misp/misp-docker/misp-nginx:latest
+    container_name: cyberlab_misp_web
+    restart: unless-stopped
+    ports:
+      - "8115:8080"       # MISP Web UI (HTTP)
+    depends_on:
+      - misp-core
+    environment:
+      - BASE_URL=http://localhost:8115
+      - FASTCGI_LISTEN=misp-core:9002
+      - TZ=UTC
+
+  misp-core:
+    image: ghcr.io/misp/misp-docker/misp-core:latest
+    container_name: cyberlab_misp_core
+    restart: unless-stopped
+    depends_on:
+      - misp-db
+      - misp-redis
+      - misp-modules
+    environment:
+      - BASE_URL=http://localhost:8115
+      - ADMIN_EMAIL=admin@admin.test
+      - ADMIN_PASSWORD=admin
+      - ADMIN_ORG=CyberLab
+      - MYSQL_HOST=misp-db
+      - MYSQL_PORT=3306
+      - MYSQL_USER=misp
+      - MYSQL_PASSWORD=misp_password
+      - MYSQL_DATABASE=misp
+      - REDIS_HOST=misp-redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=redispassword
+      - TZ=UTC
+      - DEBUG=0
+    volumes:
+      - ./configs:/var/www/MISP/app/Config
+      - ./logs:/var/www/MISP/app/tmp/logs
+      - ./files:/var/www/MISP/app/files
+      - ./samples:/workspace/samples:ro
+    cap_add:
+      - AUDIT_WRITE
+
+  misp-db:
+    image: mariadb:10.11
+    container_name: cyberlab_misp_db
+    restart: unless-stopped
+    environment:
+      - MYSQL_USER=misp
+      - MYSQL_PASSWORD=misp_password
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=misp
+      - TZ=UTC
+    volumes:
+      - misp_mariadb_data:/var/lib/mysql
+
+  misp-redis:
+    image: valkey/valkey:7.2
+    container_name: cyberlab_misp_redis
+    restart: unless-stopped
+    command: valkey-server --requirepass "redispassword"
+    environment:
+      - REDIS_PASSWORD=redispassword
+      - TZ=UTC
+    volumes:
+      - misp_redis_data:/data
+
+  misp-modules:
+    image: ghcr.io/misp/misp-docker/misp-modules:latest
+    container_name: cyberlab_misp_modules
+    restart: unless-stopped
+    environment:
+      - REDIS_BACKEND=misp-redis
+      - REDIS_PW=redispassword
+
+volumes:
+  misp_mariadb_data:
+  misp_redis_data:

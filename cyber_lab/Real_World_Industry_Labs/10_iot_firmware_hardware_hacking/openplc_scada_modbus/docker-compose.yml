@@ -1,0 +1,12 @@
+services:
+  openplc:
+    image: tuttas/openplc_v3:latest
+    container_name: cyberlab_realworld_openplc
+    ports:
+      - "502:502"
+      - "8123:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 600M

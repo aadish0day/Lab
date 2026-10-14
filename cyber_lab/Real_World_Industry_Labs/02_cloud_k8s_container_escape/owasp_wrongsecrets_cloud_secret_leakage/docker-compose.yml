@@ -1,0 +1,8 @@
+version: '2'
+services:
+  web:
+    image: commjoen/wrongsecrets:latest
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8481:8080"

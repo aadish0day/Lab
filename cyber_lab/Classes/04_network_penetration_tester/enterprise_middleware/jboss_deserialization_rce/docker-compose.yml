@@ -1,0 +1,11 @@
+services:
+  jboss_deserialization_rce:
+    image: vulhub/jboss:as-6.1.0
+    container_name: cyberlab_04_jboss_deserialization_rce
+    ports:
+      - "8143:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 600M

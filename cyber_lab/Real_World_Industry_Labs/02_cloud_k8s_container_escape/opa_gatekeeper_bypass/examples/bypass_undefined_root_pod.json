@@ -1,0 +1,17 @@
+{
+  "request": {
+    "kind": { "kind": "Pod", "version": "v1" },
+    "operation": "CREATE",
+    "object": {
+      "metadata": { "name": "exploit-root-undefined-bypass" },
+      "spec": {
+        "containers": [
+          {
+            "name": "root-workload",
+            "image": "internal-registry.corp.com/legit-app:v1"
+          }
+        ]
+      }
+    }
+  }
+}

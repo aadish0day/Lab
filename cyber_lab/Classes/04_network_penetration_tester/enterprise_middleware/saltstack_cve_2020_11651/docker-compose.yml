@@ -1,0 +1,7 @@
+services:
+ saltstack:
+   image: vulhub/saltstack:2019.2.3
+   mem_limit: 1024m
+   restart: unless-stopped
+   ports:
+    - "8488:8000"

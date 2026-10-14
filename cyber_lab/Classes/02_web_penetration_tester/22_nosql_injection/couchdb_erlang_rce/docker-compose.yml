@@ -1,0 +1,11 @@
+services:
+  couchdb:
+    image: vulhub/couchdb:2.1.0
+    container_name: cyberlab_02_couchdb_erlang_rce
+    ports:
+      - "5984:5984"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 350M

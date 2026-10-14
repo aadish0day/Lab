@@ -1,0 +1,11 @@
+services:
+  webmin_backdoor_rce:
+    image: vulhub/webmin:1.910
+    container_name: cyberlab_04_webmin_backdoor_rce
+    ports:
+      - "8141:10000"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 250M

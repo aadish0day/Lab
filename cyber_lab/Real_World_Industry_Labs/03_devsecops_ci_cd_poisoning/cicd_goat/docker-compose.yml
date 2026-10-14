@@ -1,0 +1,58 @@
+networks:
+  cicd-net:
+    driver: bridge
+
+services:
+  # Primary Challenge Platform: CI/CD Goat CTFd Portal
+  # Accessible at http://localhost:8112
+  ctfd:
+    image: cidersecurity/goat-ctfd:latest
+    container_name: cyberlab_cicd_ctfd
+    restart: unless-stopped
+    ports:
+      - "8112:8000"
+    networks:
+      - cicd-net
+    environment:
+      - REVERSE_PROXY=false
+
+  # Optional Full Infrastructure Profile: Gitea VCS
+  gitea:
+    image: cidersecurity/goat-gitea:latest
+    container_name: cyberlab_cicd_gitea
+    restart: unless-stopped
+    profiles:
+      - full
+    ports:
+      - "3004:3000"
+      - "2224:22"
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    networks:
+      - cicd-net
+
+  # Optional Full Infrastructure Profile: Jenkins Master Server
+  jenkins:
+    image: cidersecurity/goat-jenkins-server:latest
+    container_name: cyberlab_cicd_jenkins
+    restart: unless-stopped
+    profiles:
+      - full
+    ports:
+      - "8113:8080"
+      - "50001:50000"
+    networks:
+      - cicd-net
+
+  # Optional Full Infrastructure Profile: Jenkins Runner Agent
+  jenkins-agent:
+    image: cidersecurity/goat-jenkins-agent:latest
+    container_name: cyberlab_cicd_jenkins_agent
+    restart: unless-stopped
+    profiles:
+      - full
+    networks:
+      - cicd-net
+    environment:
+      - JENKINS_AGENT_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC33zkdtvwp8giZLp1mVUbqzCKi0KIiWD8/towT0+9k1SCDYjJ/YVPqKidkSefYaKBgJ1yFcWa9qroXAUd5nACXN3Xdes2fe4w+xZ8GQTpqHKyStEHy6R9QXi00r/VxGcmBYZWLifEyzV//PiRC+hUaG27JeeBnkZ1FEOyXUunpaPixNaDkfnLbCimflkd2uYH2arMY+FdOH950ezow/+v4vsNrzoMwVVCCSg/dIJBS2G/JaoAbbQgIGo63Kyz0j++rIInsXMFmxhy9hEpViX/tEorFzGh4gUvJPLy3IDjWjUz/Nfte9By6usQjN/1plJcuP+rUqrjjGeMpfhDP6aq5ZvfuPTmXOVkWJ9vJZaK2BCtSZk1vOJR4luxCyUZQbKgb3jS9YZ4N1ZS26z3EKwJGP/acNtEMx2u2zhY7zXdG7ca1Qo1yeVDMRctlvH++KMEYX/ZR6LqYlJyV6TFICZVUT7dLF65gq68UyIFswMu9pQ8/VvIMkkO6eiU1cqFr8gc=

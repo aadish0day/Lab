@@ -1,0 +1,43 @@
+services:
+  suricata:
+    image: jasonish/suricata:latest
+    container_name: cyberlab_suricata
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_NICE
+    command: -i eth0
+    environment:
+      - SURICATA_OPTIONS=-s /etc/suricata/rules/custom.rules
+    volumes:
+      - ./logs:/var/log/suricata
+      - ./rules:/etc/suricata/rules:ro
+      - ./pcaps:/workspace/pcaps:rw
+
+  evebox:
+    image: jasonish/evebox:latest
+    container_name: cyberlab_evebox
+    restart: unless-stopped
+    ports:
+      - "8113:5636"
+    volumes:
+      - ./logs:/var/log/suricata:ro
+      - ./evebox_data:/var/lib/evebox
+    command:
+      - evebox
+      - server
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "5636"
+      - --database
+      - sqlite
+      - --input
+      - /var/log/suricata/eve.json
+      - --no-auth
+      - --no-tls
+      - -D
+      - /var/lib/evebox
+    depends_on:
+      - suricata

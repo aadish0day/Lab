@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  ghostscript:
+    image: vulhub/imagemagick:7.0.8-27-php
+    container_name: cyberlab_ghostscript_6116
+    restart: unless-stopped
+    ports:
+      - "8222:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=ghostscript-policy-bypass"

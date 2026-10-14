@@ -1,0 +1,28 @@
+services:
+  web-wireshark:
+    image: linuxserver/wireshark:latest
+    container_name: cyberlab_web_wireshark
+    restart: unless-stopped
+    ports:
+      - "3003:3000"       # Web-based Wireshark GUI (KasmVNC)
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./pcaps:/config/pcaps
+      - ./zeek_logs:/config/zeek_logs
+    security_opt:
+      - seccomp:unconfined
+
+  zeek:
+    image: zeek/zeek:lts
+    container_name: cyberlab_zeek
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    working_dir: /workspace/zeek_logs
+    entrypoint: ["tail", "-f", "/dev/null"]
+    volumes:
+      - ./pcaps:/workspace/pcaps
+      - ./zeek_logs:/workspace/zeek_logs

@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  spring_function:
+    image: vulhub/spring-cloud-function:3.2.2
+    container_name: cyberlab_spring_function
+    restart: unless-stopped
+    ports:
+      - "8195:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=spring-function-rce"

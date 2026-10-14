@@ -1,0 +1,12 @@
+services:
+  jenkins:
+    image: vulhub/jenkins:2.441
+    container_name: cyberlab_04_jenkins_cve
+    ports:
+      - "8122:8080"
+      - "50000:50000"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 950M

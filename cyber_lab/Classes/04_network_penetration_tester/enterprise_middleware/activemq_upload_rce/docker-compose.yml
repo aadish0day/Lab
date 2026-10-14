@@ -1,0 +1,12 @@
+services:
+  activemq:
+    image: vulhub/activemq:5.11.1
+    container_name: cyberlab_04_activemq_upload_rce
+    ports:
+      - "8126:8161"
+      - "61616:61616"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 450M

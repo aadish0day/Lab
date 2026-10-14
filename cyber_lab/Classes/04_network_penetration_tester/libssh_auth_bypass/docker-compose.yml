@@ -1,0 +1,11 @@
+services:
+  libssh_auth_bypass:
+    image: vulhub/libssh:0.8.1
+    container_name: cyberlab_04_libssh_auth_bypass
+    ports:
+      - "8142:2222"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 100M

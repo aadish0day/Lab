@@ -1,0 +1,14 @@
+services:
+  docker-remote-api:
+    image: docker:27-dind
+    container_name: cyberlab_realworld_docker_api
+    privileged: true
+    environment:
+      - DOCKER_TLS_CERTDIR=
+    ports:
+      - "2375:2375"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 300M

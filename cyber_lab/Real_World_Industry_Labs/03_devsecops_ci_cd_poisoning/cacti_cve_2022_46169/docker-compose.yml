@@ -1,0 +1,14 @@
+version: '3'
+services:
+  cacti:
+    image: vulhub/cacti:1.2.22
+    ports:
+      - "8230:80"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=cacti

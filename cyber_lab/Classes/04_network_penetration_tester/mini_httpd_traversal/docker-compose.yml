@@ -1,0 +1,11 @@
+services:
+  mini_httpd_traversal:
+    image: vulhub/mini_httpd:1.29
+    container_name: cyberlab_04_mini_httpd_traversal
+    ports:
+      - "8150:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 50M

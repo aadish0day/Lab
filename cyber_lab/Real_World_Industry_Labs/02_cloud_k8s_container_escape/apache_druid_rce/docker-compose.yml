@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  druid:
+    image: vulhub/apache-druid:0.20.0
+    container_name: cyberlab_druid
+    restart: unless-stopped
+    ports:
+      - "8183:8888"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=druid-rce"

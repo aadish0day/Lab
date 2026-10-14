@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  mojarra:
+    image: vulhub/mojarra:2.1.28
+    container_name: cyberlab_mojarra
+    restart: unless-stopped
+    ports:
+      - "8201:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=mojarra-viewstate-rce"

@@ -1,0 +1,7 @@
+services:
+ spring:
+   image: vulhub/spring-messaging:5.0.4
+   mem_limit: 1024m
+   restart: unless-stopped
+   ports:
+    - "8498:8080"

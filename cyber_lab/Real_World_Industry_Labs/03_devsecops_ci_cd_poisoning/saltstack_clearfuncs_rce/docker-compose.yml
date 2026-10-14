@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  saltstack:
+    image: vulhub/saltstack:2019.2.3
+    container_name: cyberlab_saltstack_clearfuncs
+    restart: unless-stopped
+    ports:
+      - "8208:8000"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=saltstack-clearfuncs-rce"

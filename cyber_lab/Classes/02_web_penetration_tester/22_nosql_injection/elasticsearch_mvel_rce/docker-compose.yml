@@ -1,0 +1,11 @@
+services:
+  elasticsearch:
+    image: vulhub/elasticsearch:1.4.2
+    container_name: cyberlab_02_elasticsearch_rce
+    ports:
+      - "9200:9200"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 600M

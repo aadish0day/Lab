@@ -1,0 +1,11 @@
+services:
+  opa:
+    image: openpolicyagent/opa:latest
+    container_name: cyberlab_opa_server
+    restart: unless-stopped
+    ports:
+      - "8111:8181"
+    command: run --server --addr :8181 /policies
+    volumes:
+      - ./policies:/policies:ro
+      - ./examples:/examples:ro

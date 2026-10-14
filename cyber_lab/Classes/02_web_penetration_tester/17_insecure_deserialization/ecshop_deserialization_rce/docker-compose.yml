@@ -1,0 +1,11 @@
+services:
+  ecshop_deserialization_rce:
+    image: vulhub/ecshop:2.7.3
+    container_name: cyberlab_02_ecshop_deserialization
+    ports:
+      - "8172:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 60M

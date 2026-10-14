@@ -1,0 +1,11 @@
+services:
+  spring_oauth2_rce:
+    image: vulhub/spring-security-oauth2:2.0.8
+    container_name: cyberlab_industry_spring_oauth2_rce
+    ports:
+      - "8170:8080"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 300M

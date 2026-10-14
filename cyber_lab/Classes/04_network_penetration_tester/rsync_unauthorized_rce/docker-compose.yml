@@ -1,0 +1,11 @@
+services:
+  rsync_unauthorized_rce:
+    image: vulhub/rsync:3.1.2
+    container_name: cyberlab_04_rsync_unauthorized_rce
+    ports:
+      - "8154:873"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 50M

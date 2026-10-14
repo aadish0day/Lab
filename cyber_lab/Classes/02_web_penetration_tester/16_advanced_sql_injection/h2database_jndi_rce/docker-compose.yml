@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  h2database:
+    image: vulhub/spring-with-h2database:2.0.204
+    container_name: cyberlab_h2database
+    restart: unless-stopped
+    ports:
+      - "8184:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=h2database-rce"

@@ -1,0 +1,11 @@
+services:
+  metasploitable2:
+    image: tleemcjr/metasploitable2:latest
+    container_name: cyberlab_04_metasploitable2
+    ports:
+      - "21:21"
+      - "22:22"
+      - "23:23"
+      - "80:80"
+      - "445:445"
+    restart: unless-stopped

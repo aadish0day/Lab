@@ -1,0 +1,7 @@
+services:
+  linux-privesc:
+    image: vulnerable/cve-2021-3156:latest
+    container_name: cyberlab_04_linux_privesc
+    restart: unless-stopped
+    stdin_open: true
+    tty: true

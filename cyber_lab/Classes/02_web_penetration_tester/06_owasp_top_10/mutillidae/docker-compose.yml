@@ -1,0 +1,11 @@
+services:
+  mutillidae:
+    image: webpwnized/mutillidae:latest
+    container_name: cyberlab_02_mutillidae
+    ports:
+      - "8116:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 800M

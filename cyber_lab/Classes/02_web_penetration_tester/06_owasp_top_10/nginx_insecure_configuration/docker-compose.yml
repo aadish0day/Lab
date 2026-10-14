@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: vulhub/nginx:1
+    container_name: cyberlab_nginx_misconfig
+    restart: unless-stopped
+    ports:
+      - "8221:8080"
+      - "8223:8081"
+      - "8224:8082"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=nginx-misconfig"

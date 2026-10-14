@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  saltstack:
+    image: vulhub/saltstack:3002
+    container_name: cyberlab_saltstack
+    restart: unless-stopped
+    ports:
+      - "8190:8000"
+      - "4505:4505"
+      - "4506:4506"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=saltstack-rce"

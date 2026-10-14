@@ -1,0 +1,61 @@
+{
+  "type": "bundle",
+  "id": "bundle--3d0d798b-393f-417e-956d-c0f7bd07b62c",
+  "spec_version": "2.1",
+  "objects": [
+    {
+      "type": "threat-actor",
+      "spec_version": "2.1",
+      "id": "threat-actor--5b497b77-3e11-477d-94c6-e78a635293d0",
+      "created": "2026-10-14T04:00:00.000Z",
+      "modified": "2026-10-14T04:00:00.000Z",
+      "name": "APT-PhantomSpider",
+      "description": "Financially motivated threat actor group deploying custom loaders and ransomware.",
+      "threat_actor_types": ["cybercrime-syndicate"],
+      "aliases": ["PhantomSpider", "GoldBramble"]
+    },
+    {
+      "type": "malware",
+      "spec_version": "2.1",
+      "id": "malware--7f374782-b7bc-4993-ae16-832f05a165b4",
+      "created": "2026-10-14T04:00:00.000Z",
+      "modified": "2026-10-14T04:00:00.000Z",
+      "name": "PhantomLoader",
+      "is_family": true,
+      "malware_types": ["loader", "trojan"],
+      "description": "Multi-stage dropper delivering Cobalt Strike and ransomware payloads."
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--92cf08ee-55fa-4c4f-9a4d-b0dc836ecda1",
+      "created": "2026-10-14T04:00:00.000Z",
+      "modified": "2026-10-14T04:00:00.000Z",
+      "name": "PhantomLoader C2 Domain",
+      "pattern": "[domain-name:value = 'c2-sync-telemetry.com']",
+      "pattern_type": "stix",
+      "valid_from": "2026-10-14T04:00:00.000Z"
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--e5a61099-03b7-4c47-8a62-6cfa8723ad2e",
+      "created": "2026-10-14T04:00:00.000Z",
+      "modified": "2026-10-14T04:00:00.000Z",
+      "name": "PhantomLoader Dropper Hash (SHA-256)",
+      "pattern": "[file:hashes.'SHA-256' = '275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f']",
+      "pattern_type": "stix",
+      "valid_from": "2026-10-14T04:00:00.000Z"
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--4d59a8c1-5369-450e-a579-246e7f226871",
+      "created": "2026-10-14T04:00:00.000Z",
+      "modified": "2026-10-14T04:00:00.000Z",
+      "relationship_type": "indicates",
+      "source_ref": "indicator--92cf08ee-55fa-4c4f-9a4d-b0dc836ecda1",
+      "target_ref": "malware--7f374782-b7bc-4993-ae16-832f05a165b4"
+    }
+  ]
+}

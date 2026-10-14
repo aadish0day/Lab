@@ -1,0 +1,11 @@
+services:
+  fastjson:
+    image: vulhub/fastjson:1.2.24
+    container_name: cyberlab_02_fastjson_deserialization
+    ports:
+      - "8128:8090"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 400M

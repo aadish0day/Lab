@@ -1,0 +1,14 @@
+services:
+  mqtt-broker:
+    image: eclipse-mosquitto:latest
+    container_name: cyberlab_realworld_mqtt_broker
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 150M

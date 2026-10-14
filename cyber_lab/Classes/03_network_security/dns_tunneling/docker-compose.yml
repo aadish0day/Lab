@@ -1,0 +1,9 @@
+services:
+  iodine-dns:
+    image: kylemanna/iodine:latest
+    container_name: cyberlab_03_dns_iodine
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "5353:53/udp"
+    restart: unless-stopped

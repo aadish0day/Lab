@@ -1,0 +1,11 @@
+services:
+  drupalgeddon1:
+    image: vulhub/drupal:7.31
+    container_name: cyberlab_02_drupalgeddon1
+    ports:
+      - "8166:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 60M

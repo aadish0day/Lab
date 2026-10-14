@@ -1,0 +1,26 @@
+version: '3'
+services:
+  apisix:
+    image: vulhub/apisix:2.9
+    restart: always
+    ports:
+      - "8226:9080"
+    depends_on:
+      - etcd
+
+  dashboard:
+    image: vulhub/apisix-dashboard:2.9.0
+    restart: always
+    ports:
+      - "8225:9000"
+    depends_on:
+      - etcd
+
+  etcd:
+    image: gcr.io/etcd-development/etcd:v3.4.15
+    restart: always
+    environment:
+      - ETCD_ENABLE_V2=true
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://0.0.0.0:2379
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379

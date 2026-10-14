@@ -1,0 +1,7 @@
+services:
+ saltstack:
+   image: vulhub/saltstack:3002
+   mem_limit: 1024m
+   restart: unless-stopped
+   ports:
+    - "8490:8000"

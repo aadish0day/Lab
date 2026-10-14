@@ -1,0 +1,8 @@
+version: '2'
+services:
+  web:
+    image: medicean/vulapps:t_tomcat_2
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8534:8080"

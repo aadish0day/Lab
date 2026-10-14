@@ -1,0 +1,11 @@
+services:
+  openssh_user_enum:
+    image: vulhub/openssh:7.7
+    container_name: cyberlab_04_openssh_user_enum
+    ports:
+      - "8160:22"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 50M

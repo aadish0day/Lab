@@ -1,0 +1,15 @@
+services:
+  wrongsecrets:
+    image: jeroenwillemsen/wrongsecrets:latest-no-vault
+    container_name: cyberlab_wrongsecrets
+    restart: unless-stopped
+    ports:
+      - "8100:8080"      # Main WrongSecrets Web Application
+      - "8101:8090"      # MCP Server (Model Context Protocol Challenge 60)
+    environment:
+      - HINTS_ENABLED=true
+      - REASON_ENABLED=true
+      - SPOILING_ENABLED=true
+      - ENV_SECRET=cyberlab_env_flag_998124
+      - SPECIAL_K8S_SECRET=cyberlab_k8s_secret_flag_43901
+      - SPECIAL_SPECIAL_K8S_SECRET=cyberlab_vault_token_alpha

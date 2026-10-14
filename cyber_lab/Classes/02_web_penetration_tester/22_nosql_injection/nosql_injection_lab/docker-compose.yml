@@ -1,0 +1,7 @@
+services:
+  nosql-target:
+    image: charlottedns/vulnerable-node-app:latest
+    container_name: cyberlab_02_nosql_lab
+    ports:
+      - "3001:3000"
+    restart: unless-stopped

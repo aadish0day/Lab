@@ -1,0 +1,11 @@
+services:
+  django_trailing_redirect:
+    image: vulhub/django:2.0.7
+    container_name: cyberlab_02_django_trailing_redirect
+    ports:
+      - "8181:8000"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 40M

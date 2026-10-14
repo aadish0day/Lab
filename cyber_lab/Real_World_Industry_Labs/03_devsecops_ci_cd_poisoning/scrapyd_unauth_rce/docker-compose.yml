@@ -1,0 +1,11 @@
+services:
+  scrapyd_unauth_rce:
+    image: vulhub/scrapyd:1.2.1
+    container_name: cyberlab_industry_scrapyd_rce
+    ports:
+      - "8168:6800"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 100M

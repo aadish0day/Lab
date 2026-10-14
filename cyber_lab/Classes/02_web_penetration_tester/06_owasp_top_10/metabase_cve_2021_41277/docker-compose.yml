@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  metabase:
+    image: vulhub/metabase:0.40.4
+    container_name: cyberlab_metabase_fileread
+    restart: unless-stopped
+    ports:
+      - "8215:3000"
+    deploy:
+      resources:
+        limits:
+          memory: 1024m
+    labels:
+      - "cyberlab.managed=true"
+      - "cyberlab.category=practice-target"
+      - "cyberlab.shortcut=metabase-fileread"

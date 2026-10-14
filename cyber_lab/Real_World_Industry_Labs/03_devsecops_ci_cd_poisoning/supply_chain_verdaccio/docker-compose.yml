@@ -1,0 +1,7 @@
+services:
+  verdaccio:
+    image: verdaccio/verdaccio:latest
+    container_name: cyberlab_verdaccio_registry
+    ports:
+      - "8110:4873"
+    restart: unless-stopped
