@@ -1,0 +1,8 @@
+services:
+  owasp_threat_dragon_v2_6_2:
+    image: owasp/threat-dragon:v2.6.2
+    container_name: cyberlab_owasp_threat_dragon_v2_6_2
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

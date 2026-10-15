@@ -1,0 +1,8 @@
+services:
+  cvelasquez94_flow_fs_latest:
+    image: cvelasquez94/flow-fs:latest
+    container_name: cyberlab_cvelasquez94_flow_fs_latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

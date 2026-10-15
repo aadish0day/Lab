@@ -1,0 +1,8 @@
+services:
+  achrefbenmbarek123159_owasp_latest:
+    image: achrefbenmbarek123159/owasp:latest
+    container_name: cyberlab_achrefbenmbarek123159_owasp_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

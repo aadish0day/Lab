@@ -1,0 +1,8 @@
+services:
+  yh1768967390_heartbleed_v1:
+    image: yh1768967390/heartbleed:v1
+    container_name: cyberlab_yh1768967390_heartbleed_v1
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

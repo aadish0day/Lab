@@ -1,0 +1,8 @@
+services:
+  crapi_mailhog_latest:
+    image: crapi/mailhog:latest
+    container_name: cyberlab_crapi_mailhog_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  gogs_gogs_013_armv7:
+    image: gogs/gogs:0.13-armv7
+    container_name: cyberlab_gogs_gogs_013_armv7
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

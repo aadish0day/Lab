@@ -1,0 +1,8 @@
+services:
+  vulhub_httpd_2_4_with_ssi:
+    image: vulhub/httpd:2.4-with-ssi
+    container_name: cyberlab_vulhub_httpd_2_4_with_ssi
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

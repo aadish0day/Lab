@@ -1,0 +1,8 @@
+services:
+  jetmtej_heartbleed_latest:
+    image: jetmtej/heartbleed:latest
+    container_name: cyberlab_jetmtej_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

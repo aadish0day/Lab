@@ -1,0 +1,8 @@
+services:
+  empiric_heartbleed_v3:
+    image: empiric/heartbleed:v3
+    container_name: cyberlab_empiric_heartbleed_v3
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

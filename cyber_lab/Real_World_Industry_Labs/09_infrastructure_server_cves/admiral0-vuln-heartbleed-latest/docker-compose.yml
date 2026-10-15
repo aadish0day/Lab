@@ -1,0 +1,8 @@
+services:
+  admiral0_vuln_heartbleed_latest:
+    image: admiral0/vuln-heartbleed:latest
+    container_name: cyberlab_admiral0_vuln_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  shuvam1707_owasp_v4:
+    image: shuvam1707/owasp:v4
+    container_name: cyberlab_shuvam1707_owasp_v4
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

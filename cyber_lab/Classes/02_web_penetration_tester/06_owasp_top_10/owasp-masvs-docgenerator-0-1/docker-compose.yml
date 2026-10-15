@@ -1,0 +1,8 @@
+services:
+  owasp_masvs_docgenerator_0_1:
+    image: owasp/masvs-docgenerator:0.1
+    container_name: cyberlab_owasp_masvs_docgenerator_0_1
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  portainer_portainer_ce_lts:
+    image: portainer/portainer-ce:lts
+    container_name: cyberlab_portainer_portainer_ce_lts
+    ports:
+      - "9000:9000"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  vulhub_gitlab_13_10_1:
+    image: vulhub/gitlab:13.10.1
+    container_name: cyberlab_vulhub_gitlab_13_10_1
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

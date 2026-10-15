@@ -1,0 +1,8 @@
+services:
+  jenkins_jenkins_2586_hotspot_windowsservercore_ltsc2022:
+    image: jenkins/jenkins:2.586-hotspot-windowsservercore-ltsc2022
+    container_name: cyberlab_jenkins_jenkins_2586_hotspot_windowsservercore_ltsc2022
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

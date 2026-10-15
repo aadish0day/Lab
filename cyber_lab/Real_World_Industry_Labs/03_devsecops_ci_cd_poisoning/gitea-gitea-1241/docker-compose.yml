@@ -1,0 +1,8 @@
+services:
+  gitea_gitea_1241:
+    image: gitea/gitea:1.24.1
+    container_name: cyberlab_gitea_gitea_1241
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

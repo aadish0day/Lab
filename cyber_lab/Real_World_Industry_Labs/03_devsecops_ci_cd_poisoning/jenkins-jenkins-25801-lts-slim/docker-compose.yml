@@ -1,0 +1,8 @@
+services:
+  jenkins_jenkins_25801_lts_slim:
+    image: jenkins/jenkins:2.580.1-lts-slim
+    container_name: cyberlab_jenkins_jenkins_25801_lts_slim
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

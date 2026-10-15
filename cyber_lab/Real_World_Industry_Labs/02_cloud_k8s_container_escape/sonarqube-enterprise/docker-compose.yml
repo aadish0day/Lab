@@ -1,0 +1,8 @@
+services:
+  sonarqube_enterprise:
+    image: sonarqube:enterprise
+    container_name: cyberlab_sonarqube_enterprise
+    ports:
+      - "9000:9000"
+    restart: unless-stopped
+    mem_limit: 1024m

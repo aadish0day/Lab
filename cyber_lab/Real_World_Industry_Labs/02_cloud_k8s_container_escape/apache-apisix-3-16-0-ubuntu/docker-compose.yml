@@ -1,0 +1,8 @@
+services:
+  apache_apisix_3_16_0_ubuntu:
+    image: apache/apisix:3.16.0-ubuntu
+    container_name: cyberlab_apache_apisix_3_16_0_ubuntu
+    ports:
+      - "9080:9080"
+    restart: unless-stopped
+    mem_limit: 1024m

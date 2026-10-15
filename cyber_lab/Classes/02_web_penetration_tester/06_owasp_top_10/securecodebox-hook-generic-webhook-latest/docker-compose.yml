@@ -1,0 +1,8 @@
+services:
+  securecodebox_hook_generic_webhook_latest:
+    image: securecodebox/hook-generic-webhook:latest
+    container_name: cyberlab_securecodebox_hook_generic_webhook_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

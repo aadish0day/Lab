@@ -1,0 +1,8 @@
+services:
+  vulhub_tomcat_6:
+    image: vulhub/tomcat:6
+    container_name: cyberlab_vulhub_tomcat_6
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

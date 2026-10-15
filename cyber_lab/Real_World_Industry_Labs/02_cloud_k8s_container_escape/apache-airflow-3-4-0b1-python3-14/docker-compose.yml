@@ -1,0 +1,8 @@
+services:
+  apache_airflow_3_4_0b1_python3_14:
+    image: apache/airflow:3.4.0b1-python3.14
+    container_name: cyberlab_apache_airflow_3_4_0b1_python3_14
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

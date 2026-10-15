@@ -1,0 +1,8 @@
+services:
+  securecodebox_engine_latest:
+    image: securecodebox/engine:latest
+    container_name: cyberlab_securecodebox_engine_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

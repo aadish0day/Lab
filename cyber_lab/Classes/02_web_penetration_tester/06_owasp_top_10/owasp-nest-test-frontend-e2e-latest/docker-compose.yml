@@ -1,0 +1,8 @@
+services:
+  owasp_nest_test_frontend_e2e_latest:
+    image: owasp/nest:test-frontend-e2e-latest
+    container_name: cyberlab_owasp_nest_test_frontend_e2e_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

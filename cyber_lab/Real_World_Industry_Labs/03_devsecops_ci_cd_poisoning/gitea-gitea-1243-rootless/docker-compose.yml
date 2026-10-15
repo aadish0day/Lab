@@ -1,0 +1,8 @@
+services:
+  gitea_gitea_1243_rootless:
+    image: gitea/gitea:1.24.3-rootless
+    container_name: cyberlab_gitea_gitea_1243_rootless
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

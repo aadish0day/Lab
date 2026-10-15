@@ -1,0 +1,8 @@
+services:
+  vultarget_weblogic_t3_rce_cve_2020_14756_latest:
+    image: vultarget/weblogic_t3_rce-cve_2020_14756:latest
+    container_name: cyberlab_vultarget_weblogic_t3_rce_cve_2020_14756_latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

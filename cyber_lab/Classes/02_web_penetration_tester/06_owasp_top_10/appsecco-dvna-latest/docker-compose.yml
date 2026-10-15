@@ -1,0 +1,8 @@
+services:
+  appsecco_dvna_latest:
+    image: appsecco/dvna:latest
+    container_name: cyberlab_appsecco_dvna_latest
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    mem_limit: 1024m

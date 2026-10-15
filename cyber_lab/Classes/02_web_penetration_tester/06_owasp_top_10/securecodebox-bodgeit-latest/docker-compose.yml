@@ -1,0 +1,8 @@
+services:
+  securecodebox_bodgeit_latest:
+    image: securecodebox/bodgeit:latest
+    container_name: cyberlab_securecodebox_bodgeit_latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  tezu26_owasp_latest:
+    image: tezu26/owasp:latest
+    container_name: cyberlab_tezu26_owasp_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

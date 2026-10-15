@@ -1,0 +1,8 @@
+services:
+  louieru_heartbleed_latest:
+    image: louieru/heartbleed:latest
+    container_name: cyberlab_louieru_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

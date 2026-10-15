@@ -1,0 +1,8 @@
+services:
+  effesociety_heartbleed_vulnerable_server_latest:
+    image: effesociety/heartbleed-vulnerable-server:latest
+    container_name: cyberlab_effesociety_heartbleed_vulnerable_server_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

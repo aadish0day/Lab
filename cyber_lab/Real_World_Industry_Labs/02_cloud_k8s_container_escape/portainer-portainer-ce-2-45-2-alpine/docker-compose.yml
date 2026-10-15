@@ -1,0 +1,8 @@
+services:
+  portainer_portainer_ce_2_45_2_alpine:
+    image: portainer/portainer-ce:2.45.2-alpine
+    container_name: cyberlab_portainer_portainer_ce_2_45_2_alpine
+    ports:
+      - "9000:9000"
+    restart: unless-stopped
+    mem_limit: 1024m

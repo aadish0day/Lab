@@ -1,0 +1,8 @@
+services:
+  ducksauz_openssl_heartbleed_latest:
+    image: ducksauz/openssl-heartbleed:latest
+    container_name: cyberlab_ducksauz_openssl_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

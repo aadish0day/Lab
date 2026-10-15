@@ -1,0 +1,8 @@
+services:
+  gitlab_gitlab_ce_rc:
+    image: gitlab/gitlab-ce:rc
+    container_name: cyberlab_gitlab_gitlab_ce_rc
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

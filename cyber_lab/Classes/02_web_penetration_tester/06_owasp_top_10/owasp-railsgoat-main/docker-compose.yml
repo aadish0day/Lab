@@ -1,0 +1,8 @@
+services:
+  owasp_railsgoat_main:
+    image: owasp/railsgoat:main
+    container_name: cyberlab_owasp_railsgoat_main
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

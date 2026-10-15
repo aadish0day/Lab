@@ -1,0 +1,8 @@
+services:
+  cvetkovic_dirigent_trace_function_latest:
+    image: cvetkovic/dirigent_trace_function:latest
+    container_name: cyberlab_cvetkovic_dirigent_trace_function_latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

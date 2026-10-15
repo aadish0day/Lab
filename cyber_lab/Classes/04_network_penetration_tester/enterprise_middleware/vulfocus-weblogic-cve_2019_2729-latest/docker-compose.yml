@@ -1,0 +1,8 @@
+services:
+  vulfocus_weblogic_cve_2019_2729_latest:
+    image: vulfocus/weblogic-cve_2019_2729:latest
+    container_name: cyberlab_vulfocus_weblogic_cve_2019_2729_latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

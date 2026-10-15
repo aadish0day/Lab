@@ -1,0 +1,8 @@
+services:
+  crapi_gateway_service_latest:
+    image: crapi/gateway-service:latest
+    container_name: cyberlab_crapi_gateway_service_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

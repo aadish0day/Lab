@@ -1,0 +1,8 @@
+services:
+  csx239_nosebleed_latest:
+    image: csx239/nosebleed:latest
+    container_name: cyberlab_csx239_nosebleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  madhuakula_k8s_goat_hunger_check_latest:
+    image: madhuakula/k8s-goat-hunger-check:latest
+    container_name: cyberlab_madhuakula_k8s_goat_hunger_check_latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

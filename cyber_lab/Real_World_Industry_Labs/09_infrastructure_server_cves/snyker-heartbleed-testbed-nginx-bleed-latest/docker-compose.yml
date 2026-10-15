@@ -1,0 +1,8 @@
+services:
+  snyker_heartbleed_testbed_nginx_bleed_latest:
+    image: snyker/heartbleed-testbed-nginx-bleed:latest
+    container_name: cyberlab_snyker_heartbleed_testbed_nginx_bleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

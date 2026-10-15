@@ -1,0 +1,8 @@
+services:
+  appfabs_heartbleed_latest:
+    image: appfabs/heartbleed:latest
+    container_name: cyberlab_appfabs_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

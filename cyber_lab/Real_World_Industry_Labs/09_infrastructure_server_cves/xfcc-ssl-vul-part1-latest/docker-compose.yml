@@ -1,0 +1,8 @@
+services:
+  xfcc_ssl_vul_part1_latest:
+    image: xfcc/ssl-vul-part1:latest
+    container_name: cyberlab_xfcc_ssl_vul_part1_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

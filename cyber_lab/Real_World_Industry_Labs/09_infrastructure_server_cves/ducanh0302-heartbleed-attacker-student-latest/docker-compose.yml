@@ -1,0 +1,8 @@
+services:
+  ducanh0302_heartbleed_attacker_student_latest:
+    image: ducanh0302/heartbleed.attacker.student:latest
+    container_name: cyberlab_ducanh0302_heartbleed_attacker_student_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

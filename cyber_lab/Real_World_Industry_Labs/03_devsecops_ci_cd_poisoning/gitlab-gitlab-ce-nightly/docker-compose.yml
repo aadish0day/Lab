@@ -1,0 +1,8 @@
+services:
+  gitlab_gitlab_ce_nightly:
+    image: gitlab/gitlab-ce:nightly
+    container_name: cyberlab_gitlab_gitlab_ce_nightly
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

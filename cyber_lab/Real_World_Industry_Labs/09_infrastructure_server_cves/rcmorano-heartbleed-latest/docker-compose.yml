@@ -1,0 +1,8 @@
+services:
+  rcmorano_heartbleed_latest:
+    image: rcmorano/heartbleed:latest
+    container_name: cyberlab_rcmorano_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  amimran_drupalgeddon_min_magie_latest:
+    image: amimran/drupalgeddon-min-magie:latest
+    container_name: cyberlab_amimran_drupalgeddon_min_magie_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

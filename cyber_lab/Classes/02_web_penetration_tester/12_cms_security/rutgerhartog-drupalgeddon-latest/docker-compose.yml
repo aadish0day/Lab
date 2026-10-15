@@ -1,0 +1,8 @@
+services:
+  rutgerhartog_drupalgeddon_latest:
+    image: rutgerhartog/drupalgeddon:latest
+    container_name: cyberlab_rutgerhartog_drupalgeddon_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

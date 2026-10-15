@@ -1,0 +1,8 @@
+services:
+  owasp_railsgoat_chore_remove_empty_scaffold_specs:
+    image: owasp/railsgoat:chore_remove-empty-scaffold-specs
+    container_name: cyberlab_owasp_railsgoat_chore_remove_empty_scaffold_specs
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

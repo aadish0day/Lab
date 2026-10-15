@@ -1,0 +1,8 @@
+services:
+  cvergaray_label_web_2_0_1:
+    image: cvergaray/label_web_2:0.1
+    container_name: cyberlab_cvergaray_label_web_2_0_1
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  sonarqube_datacenter_app:
+    image: sonarqube:datacenter-app
+    container_name: cyberlab_sonarqube_datacenter_app
+    ports:
+      - "9000:9000"
+    restart: unless-stopped
+    mem_limit: 1024m

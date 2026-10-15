@@ -1,0 +1,8 @@
+services:
+  vulhub_thinkphp_5_1_33:
+    image: vulhub/thinkphp:5.1.33
+    container_name: cyberlab_vulhub_thinkphp_5_1_33
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  quorauk_heartbleed_latest:
+    image: quorauk/heartbleed:latest
+    container_name: cyberlab_quorauk_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

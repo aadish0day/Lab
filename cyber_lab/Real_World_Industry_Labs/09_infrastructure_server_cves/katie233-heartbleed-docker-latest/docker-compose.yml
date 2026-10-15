@@ -1,0 +1,8 @@
+services:
+  katie233_heartbleed_docker_latest:
+    image: katie233/heartbleed-docker:latest
+    container_name: cyberlab_katie233_heartbleed_docker_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

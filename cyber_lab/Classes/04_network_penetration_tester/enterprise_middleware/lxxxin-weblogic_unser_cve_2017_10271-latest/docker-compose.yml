@@ -1,0 +1,8 @@
+services:
+  lxxxin_weblogic_unser_cve_2017_10271_latest:
+    image: lxxxin/weblogic_unser_cve_2017_10271:latest
+    container_name: cyberlab_lxxxin_weblogic_unser_cve_2017_10271_latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

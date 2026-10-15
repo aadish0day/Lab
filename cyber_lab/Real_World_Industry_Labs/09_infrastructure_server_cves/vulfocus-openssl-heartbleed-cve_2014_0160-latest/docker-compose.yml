@@ -1,0 +1,8 @@
+services:
+  vulfocus_openssl_heartbleed_cve_2014_0160_latest:
+    image: vulfocus/openssl-heartbleed-cve_2014_0160:latest
+    container_name: cyberlab_vulfocus_openssl_heartbleed_cve_2014_0160_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

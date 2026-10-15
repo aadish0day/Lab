@@ -1,0 +1,8 @@
+services:
+  madhuakula_node_app_vuln_latest:
+    image: madhuakula/node-app-vuln:latest
+    container_name: cyberlab_madhuakula_node_app_vuln_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

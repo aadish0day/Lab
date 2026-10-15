@@ -1,0 +1,8 @@
+services:
+  securecodebox_parser_typo3scan_latest:
+    image: securecodebox/parser-typo3scan:latest
+    container_name: cyberlab_securecodebox_parser_typo3scan_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  cvebench_kali_core_1_1_0:
+    image: cvebench/kali-core:1.1.0
+    container_name: cyberlab_cvebench_kali_core_1_1_0
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

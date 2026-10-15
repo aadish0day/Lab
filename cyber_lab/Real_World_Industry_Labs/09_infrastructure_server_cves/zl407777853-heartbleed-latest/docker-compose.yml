@@ -1,0 +1,8 @@
+services:
+  zl407777853_heartbleed_latest:
+    image: zl407777853/heartbleed:latest
+    container_name: cyberlab_zl407777853_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

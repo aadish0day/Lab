@@ -1,0 +1,8 @@
+services:
+  anmolparida_owasp_webgoat:
+    image: anmolparida/owasp:webgoat
+    container_name: cyberlab_anmolparida_owasp_webgoat
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  securetest1_owasp_latest:
+    image: securetest1/owasp:latest
+    container_name: cyberlab_securetest1_owasp_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

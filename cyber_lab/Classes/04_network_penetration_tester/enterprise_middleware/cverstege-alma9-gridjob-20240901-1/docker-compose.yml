@@ -1,0 +1,8 @@
+services:
+  cverstege_alma9_gridjob_20240901_1:
+    image: cverstege/alma9-gridjob:20240901-1
+    container_name: cyberlab_cverstege_alma9_gridjob_20240901_1
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

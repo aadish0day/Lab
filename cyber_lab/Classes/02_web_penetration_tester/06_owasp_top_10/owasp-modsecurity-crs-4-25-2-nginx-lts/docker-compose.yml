@@ -1,0 +1,8 @@
+services:
+  owasp_modsecurity_crs_4_25_2_nginx_lts:
+    image: owasp/modsecurity-crs:4.25.2-nginx-lts
+    container_name: cyberlab_owasp_modsecurity_crs_4_25_2_nginx_lts
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  vulhub_hadoop_3_2_1:
+    image: vulhub/hadoop:3.2.1
+    container_name: cyberlab_vulhub_hadoop_3_2_1
+    ports:
+      - "8088:8088"
+    restart: unless-stopped
+    mem_limit: 1024m

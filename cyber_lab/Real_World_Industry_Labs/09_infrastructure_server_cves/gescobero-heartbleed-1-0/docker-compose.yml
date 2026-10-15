@@ -1,0 +1,8 @@
+services:
+  gescobero_heartbleed_1_0:
+    image: gescobero/heartbleed:1.0
+    container_name: cyberlab_gescobero_heartbleed_1_0
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

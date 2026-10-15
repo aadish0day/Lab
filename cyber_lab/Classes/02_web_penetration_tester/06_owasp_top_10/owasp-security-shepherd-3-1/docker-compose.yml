@@ -1,0 +1,8 @@
+services:
+  owasp_security_shepherd_3_1:
+    image: owasp/security-shepherd:3.1
+    container_name: cyberlab_owasp_security_shepherd_3_1
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

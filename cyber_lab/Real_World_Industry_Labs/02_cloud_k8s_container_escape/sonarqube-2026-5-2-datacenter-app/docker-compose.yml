@@ -1,0 +1,8 @@
+services:
+  sonarqube_2026_5_2_datacenter_app:
+    image: sonarqube:2026.5.2-datacenter-app
+    container_name: cyberlab_sonarqube_2026_5_2_datacenter_app
+    ports:
+      - "9000:9000"
+    restart: unless-stopped
+    mem_limit: 1024m

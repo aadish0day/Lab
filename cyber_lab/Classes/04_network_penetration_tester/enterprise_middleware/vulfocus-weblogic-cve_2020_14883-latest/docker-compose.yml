@@ -1,0 +1,8 @@
+services:
+  vulfocus_weblogic_cve_2020_14883_latest:
+    image: vulfocus/weblogic-cve_2020_14883:latest
+    container_name: cyberlab_vulfocus_weblogic_cve_2020_14883_latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

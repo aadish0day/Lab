@@ -1,0 +1,8 @@
+services:
+  manelmontilla_vulcan_heartbleed_latest:
+    image: manelmontilla/vulcan-heartbleed:latest
+    container_name: cyberlab_manelmontilla_vulcan_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  marcositu_heartbleed_with_php_login_latest:
+    image: marcositu/heartbleed-with-php-login:latest
+    container_name: cyberlab_marcositu_heartbleed_with_php_login_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

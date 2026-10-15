@@ -1,0 +1,8 @@
+services:
+  gitlab_gitlab_ce_19_1_8_ce_0:
+    image: gitlab/gitlab-ce:19.1.8-ce.0
+    container_name: cyberlab_gitlab_gitlab_ce_19_1_8_ce_0
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

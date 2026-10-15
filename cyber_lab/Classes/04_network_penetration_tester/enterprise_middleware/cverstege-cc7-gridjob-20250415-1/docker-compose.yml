@@ -1,0 +1,8 @@
+services:
+  cverstege_cc7_gridjob_20250415_1:
+    image: cverstege/cc7-gridjob:20250415-1
+    container_name: cyberlab_cverstege_cc7_gridjob_20250415_1
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

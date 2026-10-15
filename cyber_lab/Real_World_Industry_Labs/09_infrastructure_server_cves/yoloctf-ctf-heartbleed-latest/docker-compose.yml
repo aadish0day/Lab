@@ -1,0 +1,8 @@
+services:
+  yoloctf_ctf_heartbleed_latest:
+    image: yoloctf/ctf-heartbleed:latest
+    container_name: cyberlab_yoloctf_ctf_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

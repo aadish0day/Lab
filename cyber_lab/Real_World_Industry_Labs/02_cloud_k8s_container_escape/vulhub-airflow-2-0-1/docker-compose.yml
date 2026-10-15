@@ -1,0 +1,8 @@
+services:
+  vulhub_airflow_2_0_1:
+    image: vulhub/airflow:2.0.1
+    container_name: cyberlab_vulhub_airflow_2_0_1
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

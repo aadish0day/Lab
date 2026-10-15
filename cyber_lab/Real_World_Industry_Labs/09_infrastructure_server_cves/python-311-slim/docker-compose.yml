@@ -1,0 +1,8 @@
+services:
+  python_311_slim:
+    image: python:3.11-slim
+    container_name: cyberlab_python_311_slim
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

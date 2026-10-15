@@ -1,0 +1,8 @@
+services:
+  jenkins_jenkins_alpine324_jdk25:
+    image: jenkins/jenkins:alpine3.24-jdk25
+    container_name: cyberlab_jenkins_jenkins_alpine324_jdk25
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

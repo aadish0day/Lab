@@ -1,0 +1,8 @@
+services:
+  owasp_docksec_2026_9_21:
+    image: owasp/docksec:2026.9.21
+    container_name: cyberlab_owasp_docksec_2026_9_21
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

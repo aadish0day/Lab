@@ -1,0 +1,8 @@
+services:
+  drone_drone_linux_arm64:
+    image: drone/drone:linux-arm64
+    container_name: cyberlab_drone_drone_linux_arm64
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

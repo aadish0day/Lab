@@ -1,0 +1,8 @@
+services:
+  simonswine_wheezy_with_heartbleed_latest:
+    image: simonswine/wheezy-with-heartbleed:latest
+    container_name: cyberlab_simonswine_wheezy_with_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

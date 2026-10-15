@@ -1,0 +1,8 @@
+services:
+  einyx_owasp_latest:
+    image: einyx/owasp:latest
+    container_name: cyberlab_einyx_owasp_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

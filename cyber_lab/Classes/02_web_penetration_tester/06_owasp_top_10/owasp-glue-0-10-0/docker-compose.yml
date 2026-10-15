@@ -1,0 +1,8 @@
+services:
+  owasp_glue_0_10_0:
+    image: owasp/glue:0.10.0
+    container_name: cyberlab_owasp_glue_0_10_0
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

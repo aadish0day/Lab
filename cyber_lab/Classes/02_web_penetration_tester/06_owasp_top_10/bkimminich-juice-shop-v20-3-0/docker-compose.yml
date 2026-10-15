@@ -1,0 +1,8 @@
+services:
+  bkimminich_juice_shop_v20_3_0:
+    image: bkimminich/juice-shop:v20.3.0
+    container_name: cyberlab_bkimminich_juice_shop_v20_3_0
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

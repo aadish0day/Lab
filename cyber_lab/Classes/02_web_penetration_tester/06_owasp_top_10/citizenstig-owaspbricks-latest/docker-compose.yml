@@ -1,0 +1,8 @@
+services:
+  citizenstig_owaspbricks_latest:
+    image: citizenstig/owaspbricks:latest
+    container_name: cyberlab_citizenstig_owaspbricks_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

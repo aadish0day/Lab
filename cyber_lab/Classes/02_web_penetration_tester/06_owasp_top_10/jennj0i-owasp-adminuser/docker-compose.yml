@@ -1,0 +1,8 @@
+services:
+  jennj0i_owasp_adminuser:
+    image: jennj0i/owasp:adminuser
+    container_name: cyberlab_jennj0i_owasp_adminuser
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

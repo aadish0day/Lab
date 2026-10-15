@@ -1,0 +1,8 @@
+services:
+  drone_drone_2_28_2:
+    image: drone/drone:2.28.2
+    container_name: cyberlab_drone_drone_2_28_2
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

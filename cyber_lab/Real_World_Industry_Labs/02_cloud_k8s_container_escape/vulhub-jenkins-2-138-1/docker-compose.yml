@@ -1,0 +1,8 @@
+services:
+  vulhub_jenkins_2_138_1:
+    image: vulhub/jenkins:2.138.1
+    container_name: cyberlab_vulhub_jenkins_2_138_1
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

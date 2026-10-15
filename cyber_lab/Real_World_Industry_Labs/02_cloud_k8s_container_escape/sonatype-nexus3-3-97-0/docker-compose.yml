@@ -1,0 +1,8 @@
+services:
+  sonatype_nexus3_3_97_0:
+    image: sonatype/nexus3:3.97.0
+    container_name: cyberlab_sonatype_nexus3_3_97_0
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+    mem_limit: 1024m

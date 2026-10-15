@@ -1,0 +1,8 @@
+services:
+  jenkins_jenkins_slim:
+    image: jenkins/jenkins:slim
+    container_name: cyberlab_jenkins_jenkins_slim
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

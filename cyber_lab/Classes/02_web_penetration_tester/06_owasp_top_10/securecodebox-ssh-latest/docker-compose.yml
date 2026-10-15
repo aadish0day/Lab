@@ -1,0 +1,8 @@
+services:
+  securecodebox_ssh_latest:
+    image: securecodebox/ssh:latest
+    container_name: cyberlab_securecodebox_ssh_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

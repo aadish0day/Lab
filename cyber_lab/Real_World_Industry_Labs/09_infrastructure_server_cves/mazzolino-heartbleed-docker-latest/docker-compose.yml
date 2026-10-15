@@ -1,0 +1,8 @@
+services:
+  mazzolino_heartbleed_docker_latest:
+    image: mazzolino/heartbleed-docker:latest
+    container_name: cyberlab_mazzolino_heartbleed_docker_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  vulhub_nginx_1_15_5:
+    image: vulhub/nginx:1.15.5
+    container_name: cyberlab_vulhub_nginx_1_15_5
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

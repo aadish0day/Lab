@@ -1,0 +1,8 @@
+services:
+  kacperzuk_heartbleed_testbed_http_bystander_latest:
+    image: kacperzuk/heartbleed-testbed-http-bystander:latest
+    container_name: cyberlab_kacperzuk_heartbleed_testbed_http_bystander_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

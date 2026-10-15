@@ -1,0 +1,8 @@
+services:
+  gitea_gitea_28_nightly:
+    image: gitea/gitea:28-nightly
+    container_name: cyberlab_gitea_gitea_28_nightly
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

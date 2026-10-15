@@ -1,0 +1,8 @@
+services:
+  hashicorp_vault_2_1_0:
+    image: hashicorp/vault:2.1.0
+    container_name: cyberlab_hashicorp_vault_2_1_0
+    ports:
+      - "8200:8200"
+    restart: unless-stopped
+    mem_limit: 1024m

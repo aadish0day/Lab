@@ -1,0 +1,8 @@
+services:
+  zbk81qfm33_owasp_latest:
+    image: zbk81qfm33/owasp:latest
+    container_name: cyberlab_zbk81qfm33_owasp_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

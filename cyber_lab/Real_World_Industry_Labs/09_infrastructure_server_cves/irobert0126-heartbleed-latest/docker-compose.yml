@@ -1,0 +1,8 @@
+services:
+  irobert0126_heartbleed_latest:
+    image: irobert0126/heartbleed:latest
+    container_name: cyberlab_irobert0126_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

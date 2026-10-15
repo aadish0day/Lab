@@ -1,0 +1,8 @@
+services:
+  cveinnt_letsmarkdown_latest:
+    image: cveinnt/letsmarkdown:latest
+    container_name: cyberlab_cveinnt_letsmarkdown_latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

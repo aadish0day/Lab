@@ -1,0 +1,8 @@
+services:
+  prom_prometheus_main:
+    image: prom/prometheus:main
+    container_name: cyberlab_prom_prometheus_main
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    mem_limit: 1024m

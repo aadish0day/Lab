@@ -1,0 +1,8 @@
+services:
+  prosyslab_bug_bench_heartbleeder_latest:
+    image: prosyslab/bug-bench-heartbleeder:latest
+    container_name: cyberlab_prosyslab_bug_bench_heartbleeder_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  sealpapapa_heartbleed_latest:
+    image: sealpapapa/heartbleed:latest
+    container_name: cyberlab_sealpapapa_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

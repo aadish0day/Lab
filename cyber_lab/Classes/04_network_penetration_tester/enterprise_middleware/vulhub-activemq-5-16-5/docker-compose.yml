@@ -1,0 +1,8 @@
+services:
+  vulhub_activemq_5_16_5:
+    image: vulhub/activemq:5.16.5
+    container_name: cyberlab_vulhub_activemq_5_16_5
+    ports:
+      - "8161:8161"
+    restart: unless-stopped
+    mem_limit: 1024m

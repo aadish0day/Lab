@@ -1,0 +1,8 @@
+services:
+  vulhub_weblogic_latest:
+    image: vulhub/weblogic:latest
+    container_name: cyberlab_vulhub_weblogic_latest
+    ports:
+      - "7001:7001"
+    restart: unless-stopped
+    mem_limit: 1024m

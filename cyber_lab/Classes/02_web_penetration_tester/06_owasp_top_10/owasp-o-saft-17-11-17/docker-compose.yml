@@ -1,0 +1,8 @@
+services:
+  owasp_o_saft_17_11_17:
+    image: owasp/o-saft:17.11.17
+    container_name: cyberlab_owasp_o_saft_17_11_17
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

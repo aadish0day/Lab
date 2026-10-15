@@ -1,0 +1,8 @@
+services:
+  nsunina_to_check_fuzzing_https_heartbleed_latest:
+    image: nsunina/to-check-fuzzing-https-heartbleed:latest
+    container_name: cyberlab_nsunina_to_check_fuzzing_https_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

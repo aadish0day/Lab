@@ -1,0 +1,8 @@
+services:
+  gohwanxuan_heartbleed_latest:
+    image: gohwanxuan/heartbleed:latest
+    container_name: cyberlab_gohwanxuan_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  grafana_grafana_13_0_11_slim:
+    image: grafana/grafana:13.0.11-slim
+    container_name: cyberlab_grafana_grafana_13_0_11_slim
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

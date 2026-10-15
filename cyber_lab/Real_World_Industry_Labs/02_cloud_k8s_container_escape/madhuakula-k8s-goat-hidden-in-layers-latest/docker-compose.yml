@@ -1,0 +1,8 @@
+services:
+  madhuakula_k8s_goat_hidden_in_layers_latest:
+    image: madhuakula/k8s-goat-hidden-in-layers:latest
+    container_name: cyberlab_madhuakula_k8s_goat_hidden_in_layers_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

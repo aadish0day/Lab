@@ -1,0 +1,8 @@
+services:
+  muhammed123x_ctf_drupalgeddon_latest:
+    image: muhammed123x/ctf-drupalgeddon:latest
+    container_name: cyberlab_muhammed123x_ctf_drupalgeddon_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

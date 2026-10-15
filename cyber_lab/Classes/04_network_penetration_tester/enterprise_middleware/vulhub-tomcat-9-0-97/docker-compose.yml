@@ -1,0 +1,8 @@
+services:
+  vulhub_tomcat_9_0_97:
+    image: vulhub/tomcat:9.0.97
+    container_name: cyberlab_vulhub_tomcat_9_0_97
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  hashicorp_consul_2_0_2:
+    image: hashicorp/consul:2.0.2
+    container_name: cyberlab_hashicorp_consul_2_0_2
+    ports:
+      - "8500:8500"
+    restart: unless-stopped
+    mem_limit: 1024m

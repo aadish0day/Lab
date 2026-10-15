@@ -1,0 +1,8 @@
+services:
+  tooy_heartbleed_cve_2014_0160_latest:
+    image: tooy/heartbleed-cve_2014_0160:latest
+    container_name: cyberlab_tooy_heartbleed_cve_2014_0160_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

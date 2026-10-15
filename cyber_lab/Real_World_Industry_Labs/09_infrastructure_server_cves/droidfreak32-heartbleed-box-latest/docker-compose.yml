@@ -1,0 +1,8 @@
+services:
+  droidfreak32_heartbleed_box_latest:
+    image: droidfreak32/heartbleed-box:latest
+    container_name: cyberlab_droidfreak32_heartbleed_box_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

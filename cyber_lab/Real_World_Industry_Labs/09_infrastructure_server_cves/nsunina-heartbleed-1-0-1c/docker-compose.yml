@@ -1,0 +1,8 @@
+services:
+  nsunina_heartbleed_1_0_1c:
+    image: nsunina/heartbleed:1.0.1c
+    container_name: cyberlab_nsunina_heartbleed_1_0_1c
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

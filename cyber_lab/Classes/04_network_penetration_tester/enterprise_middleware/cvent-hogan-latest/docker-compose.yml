@@ -1,0 +1,8 @@
+services:
+  cvent_hogan_latest:
+    image: cvent/hogan:latest
+    container_name: cyberlab_cvent_hogan_latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

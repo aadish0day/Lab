@@ -1,0 +1,8 @@
+services:
+  timmydoomsday_heartbleed_latest:
+    image: timmydoomsday/heartbleed:latest
+    container_name: cyberlab_timmydoomsday_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  pekii_heartbleed_latest:
+    image: pekii/heartbleed:latest
+    container_name: cyberlab_pekii_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

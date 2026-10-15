@@ -1,0 +1,8 @@
+services:
+  jenkins_jenkins_2586_rhel_ubi9_jdk25:
+    image: jenkins/jenkins:2.586-rhel-ubi9-jdk25
+    container_name: cyberlab_jenkins_jenkins_2586_rhel_ubi9_jdk25
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

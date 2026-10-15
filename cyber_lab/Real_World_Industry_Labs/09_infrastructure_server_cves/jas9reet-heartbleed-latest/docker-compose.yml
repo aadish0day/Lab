@@ -1,0 +1,8 @@
+services:
+  jas9reet_heartbleed_latest:
+    image: jas9reet/heartbleed:latest
+    container_name: cyberlab_jas9reet_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

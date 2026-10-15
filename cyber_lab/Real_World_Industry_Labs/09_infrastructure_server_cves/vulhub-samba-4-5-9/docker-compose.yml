@@ -1,0 +1,8 @@
+services:
+  vulhub_samba_4_5_9:
+    image: vulhub/samba:4.5.9
+    container_name: cyberlab_vulhub_samba_4_5_9
+    ports:
+      - "445:445"
+    restart: unless-stopped
+    mem_limit: 1024m

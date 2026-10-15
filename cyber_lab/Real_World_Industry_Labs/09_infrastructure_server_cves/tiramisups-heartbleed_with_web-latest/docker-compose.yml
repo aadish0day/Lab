@@ -1,0 +1,8 @@
+services:
+  tiramisups_heartbleed_with_web_latest:
+    image: tiramisups/heartbleed_with_web:latest
+    container_name: cyberlab_tiramisups_heartbleed_with_web_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

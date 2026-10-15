@@ -1,0 +1,8 @@
+services:
+  vulhub_confluence_6_11_2:
+    image: vulhub/confluence:6.11.2
+    container_name: cyberlab_vulhub_confluence_6_11_2
+    ports:
+      - "8090:8090"
+    restart: unless-stopped
+    mem_limit: 1024m

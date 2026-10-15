@@ -1,0 +1,8 @@
+services:
+  prom_prometheus_main_busybox:
+    image: prom/prometheus:main-busybox
+    container_name: cyberlab_prom_prometheus_main_busybox
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    mem_limit: 1024m

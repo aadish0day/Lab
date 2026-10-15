@@ -1,0 +1,8 @@
+services:
+  vulhub_redis_6_0_8:
+    image: vulhub/redis:6.0.8
+    container_name: cyberlab_vulhub_redis_6_0_8
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    mem_limit: 1024m

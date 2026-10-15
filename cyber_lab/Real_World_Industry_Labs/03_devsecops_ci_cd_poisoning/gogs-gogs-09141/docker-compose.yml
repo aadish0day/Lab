@@ -1,0 +1,8 @@
+services:
+  gogs_gogs_09141:
+    image: gogs/gogs:0.9.141
+    container_name: cyberlab_gogs_gogs_09141
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

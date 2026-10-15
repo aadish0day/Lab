@@ -1,0 +1,8 @@
+services:
+  jenkins_jenkins_lts_slim_jdk25:
+    image: jenkins/jenkins:lts-slim-jdk25
+    container_name: cyberlab_jenkins_jenkins_lts_slim_jdk25
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

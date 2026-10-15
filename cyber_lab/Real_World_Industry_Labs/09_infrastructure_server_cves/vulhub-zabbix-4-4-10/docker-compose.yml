@@ -1,0 +1,8 @@
+services:
+  vulhub_zabbix_4_4_10:
+    image: vulhub/zabbix:4.4.10
+    container_name: cyberlab_vulhub_zabbix_4_4_10
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

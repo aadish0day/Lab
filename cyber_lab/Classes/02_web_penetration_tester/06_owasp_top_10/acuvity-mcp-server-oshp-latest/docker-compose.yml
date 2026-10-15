@@ -1,0 +1,8 @@
+services:
+  acuvity_mcp_server_oshp_latest:
+    image: acuvity/mcp-server-oshp:latest
+    container_name: cyberlab_acuvity_mcp_server_oshp_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

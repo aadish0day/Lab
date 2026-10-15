@@ -1,0 +1,8 @@
+services:
+  vulhub_struts:
+    image: vulhub/struts
+    container_name: cyberlab_vulhub_struts
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

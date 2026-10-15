@@ -1,0 +1,8 @@
+services:
+  zhuhe0321_owasp_latest:
+    image: zhuhe0321/owasp:latest
+    container_name: cyberlab_zhuhe0321_owasp_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

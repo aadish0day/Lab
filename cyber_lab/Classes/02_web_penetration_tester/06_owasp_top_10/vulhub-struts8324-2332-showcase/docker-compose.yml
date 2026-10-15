@@ -1,0 +1,8 @@
+services:
+  vulhub_struts8324_2332_showcase:
+    image: vulhub/struts"8324:2".3.32-showcase
+    container_name: cyberlab_vulhub_struts8324_2332_showcase
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  securecodebox_parser_kube_hunter_latest:
+    image: securecodebox/parser-kube-hunter:latest
+    container_name: cyberlab_securecodebox_parser_kube_hunter_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

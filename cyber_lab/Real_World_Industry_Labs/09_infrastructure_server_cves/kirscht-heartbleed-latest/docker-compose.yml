@@ -1,0 +1,8 @@
+services:
+  kirscht_heartbleed_latest:
+    image: kirscht/heartbleed:latest
+    container_name: cyberlab_kirscht_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

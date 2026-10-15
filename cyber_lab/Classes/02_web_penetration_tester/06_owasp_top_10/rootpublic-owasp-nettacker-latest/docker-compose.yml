@@ -1,0 +1,8 @@
+services:
+  rootpublic_owasp_nettacker_latest:
+    image: rootpublic/owasp-nettacker:latest
+    container_name: cyberlab_rootpublic_owasp_nettacker_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

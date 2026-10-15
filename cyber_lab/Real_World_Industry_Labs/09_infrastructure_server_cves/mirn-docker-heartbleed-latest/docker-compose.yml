@@ -1,0 +1,8 @@
+services:
+  mirn_docker_heartbleed_latest:
+    image: mirn/docker-heartbleed:latest
+    container_name: cyberlab_mirn_docker_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

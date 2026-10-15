@@ -1,0 +1,8 @@
+services:
+  vulhub_xxl_job_2_2_0_executor:
+    image: vulhub/xxl-job:2.2.0-executor
+    container_name: cyberlab_vulhub_xxl_job_2_2_0_executor
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

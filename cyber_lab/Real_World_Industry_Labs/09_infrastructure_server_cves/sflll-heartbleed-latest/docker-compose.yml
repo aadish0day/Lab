@@ -1,0 +1,8 @@
+services:
+  sflll_heartbleed_latest:
+    image: sflll/heartbleed:latest
+    container_name: cyberlab_sflll_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

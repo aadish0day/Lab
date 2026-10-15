@@ -1,0 +1,8 @@
+services:
+  vulhub_struts2_2512_rest_showcase8325_2512_rest_showcase:
+    image: vulhub/struts2:2.5.12-rest-showcase"8325:2".5.12-rest-showcase
+    container_name: cyberlab_vulhub_struts2_2512_rest_showcase8325_2512_rest_showcase
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

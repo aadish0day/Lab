@@ -1,0 +1,8 @@
+services:
+  cvedia_public_runtime_aarch64_2023_3_0_ea_nx:
+    image: cvedia/public:runtime-aarch64-2023.3.0-ea-nx
+    container_name: cyberlab_cvedia_public_runtime_aarch64_2023_3_0_ea_nx
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

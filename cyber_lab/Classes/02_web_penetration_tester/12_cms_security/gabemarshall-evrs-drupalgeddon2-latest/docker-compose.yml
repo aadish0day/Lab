@@ -1,0 +1,8 @@
+services:
+  gabemarshall_evrs_drupalgeddon2_latest:
+    image: gabemarshall/evrs-drupalgeddon2:latest
+    container_name: cyberlab_gabemarshall_evrs_drupalgeddon2_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  madhuakula_k8s_goat_poor_registry_latest:
+    image: madhuakula/k8s-goat-poor-registry:latest
+    container_name: cyberlab_madhuakula_k8s_goat_poor_registry_latest
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  securecodebox_auto_discovery_pull_secret_extractor_latest:
+    image: securecodebox/auto-discovery-pull-secret-extractor:latest
+    container_name: cyberlab_securecodebox_auto_discovery_pull_secret_extractor_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

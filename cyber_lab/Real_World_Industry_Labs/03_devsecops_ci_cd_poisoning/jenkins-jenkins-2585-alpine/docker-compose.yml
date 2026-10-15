@@ -1,0 +1,8 @@
+services:
+  jenkins_jenkins_2585_alpine:
+    image: jenkins/jenkins:2.585-alpine
+    container_name: cyberlab_jenkins_jenkins_2585_alpine
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

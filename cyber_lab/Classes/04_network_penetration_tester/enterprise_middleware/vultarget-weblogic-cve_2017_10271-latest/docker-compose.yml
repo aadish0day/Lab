@@ -1,0 +1,8 @@
+services:
+  vultarget_weblogic_cve_2017_10271_latest:
+    image: vultarget/weblogic-cve_2017_10271:latest
+    container_name: cyberlab_vultarget_weblogic_cve_2017_10271_latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

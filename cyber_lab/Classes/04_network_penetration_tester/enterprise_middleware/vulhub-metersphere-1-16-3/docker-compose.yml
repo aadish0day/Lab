@@ -1,0 +1,8 @@
+services:
+  vulhub_metersphere_1_16_3:
+    image: vulhub/metersphere:1.16.3
+    container_name: cyberlab_vulhub_metersphere_1_16_3
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+    mem_limit: 1024m

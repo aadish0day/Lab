@@ -1,0 +1,8 @@
+services:
+  yhu2032_heartbleed_latest:
+    image: yhu2032/heartbleed:latest
+    container_name: cyberlab_yhu2032_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

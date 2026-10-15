@@ -1,0 +1,8 @@
+services:
+  apache_airflow_latest:
+    image: apache/airflow:latest
+    container_name: cyberlab_apache_airflow_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

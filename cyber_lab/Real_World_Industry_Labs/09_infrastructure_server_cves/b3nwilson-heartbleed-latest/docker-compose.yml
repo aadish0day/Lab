@@ -1,0 +1,8 @@
+services:
+  b3nwilson_heartbleed_latest:
+    image: b3nwilson/heartbleed:latest
+    container_name: cyberlab_b3nwilson_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

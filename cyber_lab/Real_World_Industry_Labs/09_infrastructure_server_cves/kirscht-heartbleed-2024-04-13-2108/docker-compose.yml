@@ -1,0 +1,8 @@
+services:
+  kirscht_heartbleed_2024_04_13_2108:
+    image: kirscht/heartbleed:2024-04-13-2108
+    container_name: cyberlab_kirscht_heartbleed_2024_04_13_2108
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

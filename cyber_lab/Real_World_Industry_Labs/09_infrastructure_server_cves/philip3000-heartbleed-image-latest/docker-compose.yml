@@ -1,0 +1,8 @@
+services:
+  philip3000_heartbleed_image_latest:
+    image: philip3000/heartbleed-image:latest
+    container_name: cyberlab_philip3000_heartbleed_image_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

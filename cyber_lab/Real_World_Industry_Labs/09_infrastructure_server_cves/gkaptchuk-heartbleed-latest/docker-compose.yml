@@ -1,0 +1,8 @@
+services:
+  gkaptchuk_heartbleed_latest:
+    image: gkaptchuk/heartbleed:latest
+    container_name: cyberlab_gkaptchuk_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

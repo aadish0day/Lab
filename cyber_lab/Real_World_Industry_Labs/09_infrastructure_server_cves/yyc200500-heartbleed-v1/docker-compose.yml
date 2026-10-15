@@ -1,0 +1,8 @@
+services:
+  yyc200500_heartbleed_v1:
+    image: yyc200500/heartbleed:v1
+    container_name: cyberlab_yyc200500_heartbleed_v1
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

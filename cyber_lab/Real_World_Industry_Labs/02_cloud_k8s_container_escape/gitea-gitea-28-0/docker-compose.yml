@@ -1,0 +1,8 @@
+services:
+  gitea_gitea_28_0:
+    image: gitea/gitea:28.0
+    container_name: cyberlab_gitea_gitea_28_0
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

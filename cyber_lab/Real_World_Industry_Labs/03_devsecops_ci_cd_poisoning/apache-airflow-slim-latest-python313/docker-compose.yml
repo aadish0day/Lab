@@ -1,0 +1,8 @@
+services:
+  apache_airflow_slim_latest_python313:
+    image: apache/airflow:slim-latest-python3.13
+    container_name: cyberlab_apache_airflow_slim_latest_python313
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

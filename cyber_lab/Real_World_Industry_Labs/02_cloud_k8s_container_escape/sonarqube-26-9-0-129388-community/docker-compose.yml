@@ -1,0 +1,8 @@
+services:
+  sonarqube_26_9_0_129388_community:
+    image: sonarqube:26.9.0.129388-community
+    container_name: cyberlab_sonarqube_26_9_0_129388_community
+    ports:
+      - "9000:9000"
+    restart: unless-stopped
+    mem_limit: 1024m

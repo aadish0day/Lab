@@ -1,0 +1,8 @@
+services:
+  cvelasquez87_repositoriolinio_latest:
+    image: cvelasquez87/repositoriolinio:latest
+    container_name: cyberlab_cvelasquez87_repositoriolinio_latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

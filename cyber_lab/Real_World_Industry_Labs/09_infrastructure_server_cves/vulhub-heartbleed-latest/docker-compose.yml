@@ -1,0 +1,8 @@
+services:
+  vulhub_heartbleed_latest:
+    image: vulhub/heartbleed:latest
+    container_name: cyberlab_vulhub_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

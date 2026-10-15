@@ -1,0 +1,8 @@
+services:
+  owasp_railsgoat_fix_signup_password_confirmation_validation:
+    image: owasp/railsgoat:fix_signup-password-confirmation-validation
+    container_name: cyberlab_owasp_railsgoat_fix_signup_password_confirmation_validation
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

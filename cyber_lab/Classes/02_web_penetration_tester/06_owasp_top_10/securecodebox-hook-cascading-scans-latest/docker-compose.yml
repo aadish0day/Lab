@@ -1,0 +1,8 @@
+services:
+  securecodebox_hook_cascading_scans_latest:
+    image: securecodebox/hook-cascading-scans:latest
+    container_name: cyberlab_securecodebox_hook_cascading_scans_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

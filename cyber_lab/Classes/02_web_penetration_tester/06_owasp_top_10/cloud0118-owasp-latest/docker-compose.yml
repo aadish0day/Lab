@@ -1,0 +1,8 @@
+services:
+  cloud0118_owasp_latest:
+    image: cloud0118/owasp:latest
+    container_name: cyberlab_cloud0118_owasp_latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

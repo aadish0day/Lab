@@ -1,0 +1,8 @@
+services:
+  apache_airflow_slim_332_python312:
+    image: apache/airflow:slim-3.3.2-python3.12
+    container_name: cyberlab_apache_airflow_slim_332_python312
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

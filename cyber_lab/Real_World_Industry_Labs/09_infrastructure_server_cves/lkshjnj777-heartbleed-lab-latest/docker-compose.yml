@@ -1,0 +1,8 @@
+services:
+  lkshjnj777_heartbleed_lab_latest:
+    image: lkshjnj777/heartbleed-lab:latest
+    container_name: cyberlab_lkshjnj777_heartbleed_lab_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

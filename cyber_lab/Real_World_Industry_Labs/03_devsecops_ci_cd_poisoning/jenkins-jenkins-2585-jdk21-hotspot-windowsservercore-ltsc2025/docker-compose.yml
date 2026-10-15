@@ -1,0 +1,8 @@
+services:
+  jenkins_jenkins_2585_jdk21_hotspot_windowsservercore_ltsc2025:
+    image: jenkins/jenkins:2.585-jdk21-hotspot-windowsservercore-ltsc2025
+    container_name: cyberlab_jenkins_jenkins_2585_jdk21_hotspot_windowsservercore_ltsc2025
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

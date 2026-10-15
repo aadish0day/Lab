@@ -1,0 +1,8 @@
+services:
+  lxxxin_weblogic_rce_cve_2020_14882_latest:
+    image: lxxxin/weblogic_rce_cve_2020_14882:latest
+    container_name: cyberlab_lxxxin_weblogic_rce_cve_2020_14882_latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

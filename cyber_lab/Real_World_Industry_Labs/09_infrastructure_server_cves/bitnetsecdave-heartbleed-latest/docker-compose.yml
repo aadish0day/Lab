@@ -1,0 +1,8 @@
+services:
+  bitnetsecdave_heartbleed_latest:
+    image: bitnetsecdave/heartbleed:latest
+    container_name: cyberlab_bitnetsecdave_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

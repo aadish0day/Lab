@@ -1,0 +1,8 @@
+services:
+  ionagamed_ncs_final_heartbleed_latest:
+    image: ionagamed/ncs-final-heartbleed:latest
+    container_name: cyberlab_ionagamed_ncs_final_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

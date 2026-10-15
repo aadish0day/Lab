@@ -1,0 +1,8 @@
+services:
+  sbakshi_heartbleed_latest:
+    image: sbakshi/heartbleed:latest
+    container_name: cyberlab_sbakshi_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

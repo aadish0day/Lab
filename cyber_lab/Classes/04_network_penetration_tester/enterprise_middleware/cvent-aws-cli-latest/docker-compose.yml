@@ -1,0 +1,8 @@
+services:
+  cvent_aws_cli_latest:
+    image: cvent/aws-cli:latest
+    container_name: cyberlab_cvent_aws_cli_latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

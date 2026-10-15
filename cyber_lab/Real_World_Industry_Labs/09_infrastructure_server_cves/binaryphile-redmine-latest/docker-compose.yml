@@ -1,0 +1,8 @@
+services:
+  binaryphile_redmine_latest:
+    image: binaryphile/redmine:latest
+    container_name: cyberlab_binaryphile_redmine_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

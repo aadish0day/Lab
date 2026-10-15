@@ -1,0 +1,8 @@
+services:
+  vulhub_solr_8_6_1:
+    image: vulhub/solr:8.6.1
+    container_name: cyberlab_vulhub_solr_8_6_1
+    ports:
+      - "8983:8983"
+    restart: unless-stopped
+    mem_limit: 1024m

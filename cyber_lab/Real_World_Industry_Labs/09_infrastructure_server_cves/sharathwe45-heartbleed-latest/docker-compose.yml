@@ -1,0 +1,8 @@
+services:
+  sharathwe45_heartbleed_latest:
+    image: sharathwe45/heartbleed:latest
+    container_name: cyberlab_sharathwe45_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

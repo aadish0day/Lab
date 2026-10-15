@@ -1,0 +1,8 @@
+services:
+  portainer_portainer_ce_alpine_sts:
+    image: portainer/portainer-ce:alpine-sts
+    container_name: cyberlab_portainer_portainer_ce_alpine_sts
+    ports:
+      - "9000:9000"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  vulhub_nginx_1_14_0:
+    image: vulhub/nginx:1.14.0
+    container_name: cyberlab_vulhub_nginx_1_14_0
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

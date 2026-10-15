@@ -1,0 +1,8 @@
+services:
+  kk98kk0_heartbleed_nginx_latest:
+    image: kk98kk0/heartbleed_nginx:latest
+    container_name: cyberlab_kk98kk0_heartbleed_nginx_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

@@ -1,0 +1,8 @@
+services:
+  vultarget_weblogic_deploymentservice_fileupload_cve_2019_2618_latest:
+    image: vultarget/weblogic_deploymentservice_fileupload-cve_2019_2618:latest
+    container_name: cyberlab_vultarget_weblogic_deploymentservice_fileupload_cve_2019_2618_latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

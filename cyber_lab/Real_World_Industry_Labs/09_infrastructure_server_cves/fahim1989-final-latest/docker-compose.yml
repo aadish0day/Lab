@@ -1,0 +1,8 @@
+services:
+  fahim1989_final_latest:
+    image: fahim1989/final:latest
+    container_name: cyberlab_fahim1989_final_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

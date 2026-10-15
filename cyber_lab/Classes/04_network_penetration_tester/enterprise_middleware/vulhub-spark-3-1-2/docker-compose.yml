@@ -1,0 +1,8 @@
+services:
+  vulhub_spark_3_1_2:
+    image: vulhub/spark:3.1.2
+    container_name: cyberlab_vulhub_spark_3_1_2
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    mem_limit: 1024m

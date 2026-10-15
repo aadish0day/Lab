@@ -1,0 +1,8 @@
+services:
+  anmolparida_owasp_juice_shop:
+    image: anmolparida/owasp:juice-shop
+    container_name: cyberlab_anmolparida_owasp_juice_shop
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    mem_limit: 1024m

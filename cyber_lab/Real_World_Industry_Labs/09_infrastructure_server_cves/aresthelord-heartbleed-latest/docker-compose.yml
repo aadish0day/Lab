@@ -1,0 +1,8 @@
+services:
+  aresthelord_heartbleed_latest:
+    image: aresthelord/heartbleed:latest
+    container_name: cyberlab_aresthelord_heartbleed_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

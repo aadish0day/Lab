@@ -1,0 +1,8 @@
+services:
+  madhuakula_k8s_goat_home_latest:
+    image: madhuakula/k8s-goat-home:latest
+    container_name: cyberlab_madhuakula_k8s_goat_home_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

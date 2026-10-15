@@ -1,0 +1,8 @@
+services:
+  cyberxsecurity_heartbleed_new:
+    image: cyberxsecurity/heartbleed:new
+    container_name: cyberlab_cyberxsecurity_heartbleed_new
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

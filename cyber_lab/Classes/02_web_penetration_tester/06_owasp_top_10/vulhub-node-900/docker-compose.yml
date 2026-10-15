@@ -1,0 +1,8 @@
+services:
+  vulhub_node_900:
+    image: vulhub/node:9.0.0
+    container_name: cyberlab_vulhub_node_900
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

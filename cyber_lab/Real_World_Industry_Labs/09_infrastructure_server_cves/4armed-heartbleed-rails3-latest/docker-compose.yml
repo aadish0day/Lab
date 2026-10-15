@@ -1,0 +1,8 @@
+services:
+  4armed_heartbleed_rails3_latest:
+    image: 4armed/heartbleed-rails3:latest
+    container_name: cyberlab_4armed_heartbleed_rails3_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

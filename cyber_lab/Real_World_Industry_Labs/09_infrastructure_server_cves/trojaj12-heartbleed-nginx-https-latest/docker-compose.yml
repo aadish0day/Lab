@@ -1,0 +1,8 @@
+services:
+  trojaj12_heartbleed_nginx_https_latest:
+    image: trojaj12/heartbleed-nginx-https:latest
+    container_name: cyberlab_trojaj12_heartbleed_nginx_https_latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    mem_limit: 1024m

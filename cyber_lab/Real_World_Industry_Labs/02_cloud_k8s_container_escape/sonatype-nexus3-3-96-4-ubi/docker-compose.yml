@@ -1,0 +1,8 @@
+services:
+  sonatype_nexus3_3_96_4_ubi:
+    image: sonatype/nexus3:3.96.4-ubi
+    container_name: cyberlab_sonatype_nexus3_3_96_4_ubi
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+    mem_limit: 1024m
