@@ -857,6 +857,7 @@ print_help() {
   echo "Commands:"
   echo "  list               List all available labs and shortcuts"
   echo "  start <name>       Start a specific lab"
+  echo "  pull <name|dir>    Pull images for one lab, or every lab under a folder"
   echo "  stop <name>        Stop a specific lab"
   echo "  restart <name>     Restart a specific lab"
   echo "  shell <name>       Open bash/sh inside the lab container"
@@ -865,6 +866,7 @@ print_help() {
   echo ""
   echo "Examples:"
   echo "  ./lab start juice-shop"
+  echo "  ./lab pull Classes/01_cyber_security_ethical_hacking"
   echo "  ./lab start aws-localstack"
   echo "  ./lab start c2-sliver && ./lab shell c2-sliver"
   echo "  ./lab stop-all"
@@ -909,10 +911,44 @@ case "$cmd" in
       echo "Error: Unknown lab '$target'. Run './lab list' to check names."
       exit 1
     fi
-    echo " Pulling lab images: $target ($lab_path)..."
+    echo " Starting lab: $target ($lab_path)..."
     cd "$lab_path"
-    docker compose pull
-    echo " Lab '$target' images pulled (containers not started)."
+    docker compose up -d
+    echo " Lab '$target' is up! Check status with './lab status'."
+    ;;
+  pull)
+    if [[ -z "$target" ]]; then
+      echo "Error: Missing lab name or folder. Run './lab list' to see available labs."
+      exit 1
+    fi
+    # 1. Lab shortcut? Pull images for that single lab.
+    lab_path=$(get_lab_path "$target")
+    if [[ -n "$lab_path" && -d "$lab_path" ]]; then
+      echo " Pulling images for lab: $target ($lab_path)..."
+      ( cd "$lab_path" && docker compose pull ) || { echo "Error: Pull failed for '$target'."; exit 1; }
+      echo " Lab '$target' images pulled."
+      exit 0
+    fi
+    # 2. Directory path? Pull every Compose project found under it.
+    dir_path="$target"
+    [[ "$dir_path" != /* ]] && dir_path="$SCRIPT_DIR/$dir_path"
+    if [[ -d "$dir_path" ]]; then
+      found=0
+      while IFS= read -r lab_dir; do
+        [[ -z "$lab_dir" ]] && continue
+        echo " Pulling images in: ${lab_dir#"$SCRIPT_DIR"/} ..."
+        ( cd "$lab_dir" && docker compose pull ) || echo " ! Pull failed in ${lab_dir#"$SCRIPT_DIR"/} (continuing)"
+        found=1
+      done < <(find "$dir_path" -maxdepth 2 -type f \( -iname 'docker-compose.yml' -o -iname 'docker-compose.yaml' -o -iname 'compose.yml' -o -iname 'compose.yaml' \) -printf '%h\n' 2>/dev/null | sort -u)
+      if [[ "$found" -eq 0 ]]; then
+        echo "Error: No Compose files found under '$target'."
+        exit 1
+      fi
+      echo " Done. Images pulled for all labs under '$target'."
+      exit 0
+    fi
+    echo "Error: Unknown lab or folder '$target'. Run './lab list' to check names."
+    exit 1
     ;;
   stop)
     if [[ -z "$target" ]]; then
