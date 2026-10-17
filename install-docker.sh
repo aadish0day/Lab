@@ -111,12 +111,55 @@ else
     warn "systemd not detected; start Docker manually (e.g. 'sudo dockerd')."
 fi
 
+# Ensure the docker group exists and add $RUN_USER to it.
+# Tries usermod, then gpasswd, then adduser, then direct /etc/group edit.
+# This avoids failing on minimal Debian installs where usermod (passwd pkg)
+# is not installed.
+add_user_to_docker_group() {
+    local user="$1"
+
+    # Make sure the docker group exists.
+    if ! getent group docker >/dev/null 2>&1; then
+        if command -v groupadd >/dev/null 2>&1; then
+            $SUDO groupadd docker
+        else
+            local gid
+            gid="$(awk -F: '$3>0 && $3<60000{print $3}' /etc/group | sort -n | tail -n1)"
+            gid=$((gid + 1))
+            $SUDO sh -c "echo 'docker:x:${gid}:' >> /etc/group"
+        fi
+        log "Created docker group."
+    fi
+
+    # Already a member?
+    if id "$user" >/dev/null 2>&1 && groups "$user" | grep -qw docker; then
+        log "User '$user' is already in the docker group."
+        return 0
+    fi
+
+    if command -v usermod >/dev/null 2>&1; then
+        $SUDO usermod -aG docker "$user"
+    elif command -v gpasswd >/dev/null 2>&1; then
+        $SUDO gpasswd -a "$user" docker
+    elif command -v adduser >/dev/null 2>&1; then
+        $SUDO adduser "$user" docker
+    else
+        # Last resort: append user to the docker group line in /etc/group.
+        $SUDO sh -c "
+            if ! grep -q '^docker:[^:]*:[^:]*:.*\\b${user}\\b' /etc/group; then
+                if grep -q '^docker:[^:]*:[^:]*:$' /etc/group; then
+                    sed -i 's/^docker:\\([^:]*:[^:]*:)\$/\1${user}/' /etc/group
+                else
+                    sed -i 's/^docker:\\([^:]*:[^:]*:.*\\)\$/\1,${user}/' /etc/group
+                fi
+            fi
+        "
+    fi
+    log "Added user '$user' to the docker group."
+}
+
 log "Adding user '$RUN_USER' to the docker group..."
-if getent group docker &>/dev/null; then
-    $SUDO usermod -aG docker "$RUN_USER"
-else
-    warn "docker group not found."
-fi
+add_user_to_docker_group "$RUN_USER"
 
 log "=============================================="
 log "Docker installed successfully!"
