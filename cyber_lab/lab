@@ -909,10 +909,10 @@ case "$cmd" in
       echo "Error: Unknown lab '$target'. Run './lab list' to check names."
       exit 1
     fi
-    echo " Starting lab: $target ($lab_path)..."
+    echo " Pulling lab images: $target ($lab_path)..."
     cd "$lab_path"
-    docker compose up -d
-    echo " Lab '$target' is up! Check status with './lab status'."
+    docker compose pull
+    echo " Lab '$target' images pulled (containers not started)."
     ;;
   stop)
     if [[ -z "$target" ]]; then
