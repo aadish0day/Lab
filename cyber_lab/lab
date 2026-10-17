@@ -929,22 +929,36 @@ case "$cmd" in
       echo " Lab '$target' images pulled."
       exit 0
     fi
-    # 2. Directory path? Pull every Compose project found under it.
+    # 2. Directory path? Pull every Compose project found under it, in parallel.
     dir_path="$target"
     [[ "$dir_path" != /* ]] && dir_path="$SCRIPT_DIR/$dir_path"
     if [[ -d "$dir_path" ]]; then
-      found=0
-      while IFS= read -r lab_dir; do
-        [[ -z "$lab_dir" ]] && continue
-        echo " Pulling images in: ${lab_dir#"$SCRIPT_DIR"/} ..."
-        ( cd "$lab_dir" && docker compose pull ) || echo " ! Pull failed in ${lab_dir#"$SCRIPT_DIR"/} (continuing)"
-        found=1
-      done < <(find "$dir_path" -maxdepth 2 -type f \( -iname 'docker-compose.yml' -o -iname 'docker-compose.yaml' -o -iname 'compose.yml' -o -iname 'compose.yaml' \) -printf '%h\n' 2>/dev/null | sort -u)
-      if [[ "$found" -eq 0 ]]; then
+      mapfile -t lab_dirs < <(find "$dir_path" -maxdepth 2 -type f \( -iname 'docker-compose.yml' -o -iname 'docker-compose.yaml' -o -iname 'compose.yml' -o -iname 'compose.yaml' \) -printf '%h\n' 2>/dev/null | sort -u)
+      if [[ ${#lab_dirs[@]} -eq 0 ]]; then
         echo "Error: No Compose files found under '$target'."
         exit 1
       fi
-      echo " Done. Images pulled for all labs under '$target'."
+      echo " Pulling images for ${#lab_dirs[@]} lab(s) under '$target' in parallel..."
+      pids=()
+      names=()
+      for lab_dir in "${lab_dirs[@]}"; do
+        rel="${lab_dir#"$SCRIPT_DIR"/}"
+        echo "   -> $rel"
+        ( cd "$lab_dir" && docker compose pull ) &
+        pids+=("$!")
+        names+=("$rel")
+      done
+      ok=0
+      fail=0
+      for i in "${!pids[@]}"; do
+        if wait "${pids[$i]}"; then
+          ok=$((ok + 1))
+        else
+          fail=$((fail + 1))
+          echo " ! Pull failed in ${names[$i]}"
+        fi
+      done
+      echo " Done. $ok lab(s) pulled OK, $fail failed."
       exit 0
     fi
     echo "Error: Unknown lab or folder '$target'. Run './lab list' to check names."
