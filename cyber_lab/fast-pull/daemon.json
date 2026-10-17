@@ -1,0 +1,6 @@
+{
+  "registry-mirrors": ["https://mirror.gcr.io"],
+  "max-concurrent-downloads": 16,
+  "max-concurrent-uploads": 8,
+  "max-download-attempts": 10
+}
