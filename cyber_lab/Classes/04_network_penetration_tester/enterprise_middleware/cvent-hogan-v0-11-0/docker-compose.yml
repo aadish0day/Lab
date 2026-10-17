@@ -1,6 +1,7 @@
 services:
   cvent_hogan_v0_11_0:
     image: cvent/hogan:v0.11.0
+    pull_policy: missing
     container_name: cyberlab_cvent_hogan_v0_11_0
     ports:
       - "8080:8080"

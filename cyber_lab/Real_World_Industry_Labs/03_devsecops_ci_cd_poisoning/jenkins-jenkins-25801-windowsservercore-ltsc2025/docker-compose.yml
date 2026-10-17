@@ -1,6 +1,7 @@
 services:
   jenkins_jenkins_25801_windowsservercore_ltsc2025:
     image: jenkins/jenkins:2.580.1-windowsservercore-ltsc2025
+    pull_policy: missing
     container_name: cyberlab_jenkins_jenkins_25801_windowsservercore_ltsc2025
     ports:
       - "80:80"

@@ -1,6 +1,7 @@
 services:
   webmin_backdoor_rce:
     image: vulhub/webmin:1.910
+    pull_policy: missing
     container_name: cyberlab_04_webmin_backdoor_rce
     ports:
       - "8141:10000"

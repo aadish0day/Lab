@@ -2,5 +2,6 @@ version: '3'
 services:
   redis:
     image: vulhub/redis:5.0.7
+    pull_policy: missing
     ports:
       - "8232:6379"

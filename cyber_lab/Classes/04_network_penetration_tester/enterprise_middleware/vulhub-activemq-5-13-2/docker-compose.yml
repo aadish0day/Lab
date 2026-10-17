@@ -1,6 +1,7 @@
 services:
   vulhub_activemq_5_13_2:
     image: vulhub/activemq:5.13.2
+    pull_policy: missing
     container_name: cyberlab_vulhub_activemq_5_13_2
     ports:
       - "8161:8161"

@@ -1,6 +1,7 @@
 services:
   kibana_prototype_pollution_rce:
     image: vulhub/kibana:6.5.4
+    pull_policy: missing
     container_name: cyberlab_02_kibana_prototype_rce
     ports:
       - "8155:5601"

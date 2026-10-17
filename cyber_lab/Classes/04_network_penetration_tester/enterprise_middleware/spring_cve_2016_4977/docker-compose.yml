@@ -2,6 +2,7 @@ version: '2'
 services:
  spring:
    image: vulhub/spring-security-oauth2:2.0.8
+   pull_policy: missing
    mem_limit: 1024m
    restart: unless-stopped
    ports:

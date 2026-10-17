@@ -1,6 +1,7 @@
 services:
   katie233_heartbleed_docker_latest:
     image: katie233/heartbleed-docker:latest
+    pull_policy: missing
     container_name: cyberlab_katie233_heartbleed_docker_latest
     ports:
       - "80:80"

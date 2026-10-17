@@ -1,6 +1,7 @@
 services:
   gogs_hook_rce:
     image: vulhub/gogs:0.11.66
+    pull_policy: missing
     container_name: cyberlab_industry_gogs_hook_rce
     ports:
       - "8147:3000"

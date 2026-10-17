@@ -1,6 +1,7 @@
 services:
   securecodebox_arachni_latest:
     image: securecodebox/arachni:latest
+    pull_policy: missing
     container_name: cyberlab_securecodebox_arachni_latest
     ports:
       - "3000:3000"

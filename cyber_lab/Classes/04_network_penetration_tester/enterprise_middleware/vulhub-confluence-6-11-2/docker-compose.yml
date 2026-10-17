@@ -1,6 +1,7 @@
 services:
   vulhub_confluence_6_11_2:
     image: vulhub/confluence:6.11.2
+    pull_policy: missing
     container_name: cyberlab_vulhub_confluence_6_11_2
     ports:
       - "8090:8090"

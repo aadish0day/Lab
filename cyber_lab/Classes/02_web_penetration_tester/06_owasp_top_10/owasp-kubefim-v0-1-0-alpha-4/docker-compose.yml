@@ -1,6 +1,7 @@
 services:
   owasp_kubefim_v0_1_0_alpha_4:
     image: owasp/kubefim:v0.1.0-alpha.4
+    pull_policy: missing
     container_name: cyberlab_owasp_kubefim_v0_1_0_alpha_4
     ports:
       - "3000:3000"

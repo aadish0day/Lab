@@ -1,6 +1,7 @@
 services:
   owasp_threat_dragon_stable:
     image: owasp/threat-dragon:stable
+    pull_policy: missing
     container_name: cyberlab_owasp_threat_dragon_stable
     ports:
       - "3000:3000"

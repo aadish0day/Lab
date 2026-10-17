@@ -1,6 +1,7 @@
 services:
   crapi_crapi_identity_latest:
     image: crapi/crapi-identity:latest
+    pull_policy: missing
     container_name: cyberlab_crapi_crapi_identity_latest
     ports:
       - "80:80"

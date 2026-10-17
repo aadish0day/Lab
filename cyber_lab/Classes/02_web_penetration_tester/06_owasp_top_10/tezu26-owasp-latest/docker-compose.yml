@@ -1,6 +1,7 @@
 services:
   tezu26_owasp_latest:
     image: tezu26/owasp:latest
+    pull_policy: missing
     container_name: cyberlab_tezu26_owasp_latest
     ports:
       - "3000:3000"

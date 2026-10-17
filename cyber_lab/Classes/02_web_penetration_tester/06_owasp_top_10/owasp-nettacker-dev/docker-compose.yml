@@ -1,6 +1,7 @@
 services:
   owasp_nettacker_dev:
     image: owasp/nettacker:dev
+    pull_policy: missing
     container_name: cyberlab_owasp_nettacker_dev
     ports:
       - "3000:3000"

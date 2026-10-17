@@ -1,6 +1,7 @@
 services:
   geoserver:
     image: vulhub/geoserver:2.22.1
+    pull_policy: missing
     container_name: cyberlab_geoserver_cve_2023_25157
     mem_limit: 1024m
     restart: unless-stopped

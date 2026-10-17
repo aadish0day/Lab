@@ -1,6 +1,7 @@
 services:
   sonarqube_enterprise:
     image: sonarqube:enterprise
+    pull_policy: missing
     container_name: cyberlab_sonarqube_enterprise
     ports:
       - "9000:9000"

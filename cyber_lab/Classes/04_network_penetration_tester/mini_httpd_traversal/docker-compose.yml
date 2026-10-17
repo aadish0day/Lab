@@ -1,6 +1,7 @@
 services:
   mini_httpd_traversal:
     image: vulhub/mini_httpd:1.29
+    pull_policy: missing
     container_name: cyberlab_04_mini_httpd_traversal
     ports:
       - "8150:80"

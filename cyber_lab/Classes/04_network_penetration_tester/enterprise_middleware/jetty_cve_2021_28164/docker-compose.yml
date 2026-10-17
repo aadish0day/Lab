@@ -2,5 +2,6 @@ version: '3'
 services:
   jetty:
     image: vulhub/jetty:9.4.37
+    pull_policy: missing
     ports:
       - "8263:8080"

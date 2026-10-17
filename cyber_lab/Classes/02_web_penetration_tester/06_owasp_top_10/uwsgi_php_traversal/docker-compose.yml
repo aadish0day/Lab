@@ -1,6 +1,7 @@
 services:
   uwsgi_php_traversal:
     image: vulhub/uwsgi-php:2.0.16
+    pull_policy: missing
     container_name: cyberlab_02_uwsgi_php_traversal
     ports:
       - "8153:8080"

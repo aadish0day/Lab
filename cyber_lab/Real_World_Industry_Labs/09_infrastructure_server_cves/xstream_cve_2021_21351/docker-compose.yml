@@ -1,6 +1,7 @@
 services:
   xstream:
     image: vulhub/xstream:1.4.15
+    pull_policy: missing
     container_name: cyberlab_xstream_cve_2021_21351
     mem_limit: 1024m
     restart: unless-stopped

@@ -3,6 +3,7 @@ version: "3.8"
 services:
   laravel:
     image: vulhub/laravel:8.4.2
+    pull_policy: missing
     container_name: cyberlab_laravel
     restart: unless-stopped
     ports:

@@ -2,6 +2,7 @@ version: '2'
 services:
  ntopng:
    image: vulhub/ntopng:4.2
+   pull_policy: missing
    depends_on:
     - redis
    ports:
@@ -10,3 +11,4 @@ services:
     REDIS_SERVER: redis:6379
  redis:
    image: redis:6.2-alpine
+   pull_policy: missing

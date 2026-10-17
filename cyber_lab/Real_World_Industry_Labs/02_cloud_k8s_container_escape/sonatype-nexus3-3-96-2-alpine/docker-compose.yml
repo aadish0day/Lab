@@ -1,6 +1,7 @@
 services:
   sonatype_nexus3_3_96_2_alpine:
     image: sonatype/nexus3:3.96.2-alpine
+    pull_policy: missing
     container_name: cyberlab_sonatype_nexus3_3_96_2_alpine
     ports:
       - "8081:8081"

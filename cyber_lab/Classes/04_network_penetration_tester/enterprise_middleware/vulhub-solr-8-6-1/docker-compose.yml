@@ -1,6 +1,7 @@
 services:
   vulhub_solr_8_6_1:
     image: vulhub/solr:8.6.1
+    pull_policy: missing
     container_name: cyberlab_vulhub_solr_8_6_1
     ports:
       - "8983:8983"

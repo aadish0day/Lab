@@ -1,6 +1,7 @@
 services:
  spring:
    image: vulhub/spring-data-commons:2.0.5
+   pull_policy: missing
    mem_limit: 1024m
    restart: unless-stopped
    ports:

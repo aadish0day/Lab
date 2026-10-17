@@ -1,6 +1,7 @@
 services:
   skf:
     image: blabla1337/owasp-skf-lab:des-pickle
+    pull_policy: missing
     container_name: cyberlab_skf_des_pickle
     mem_limit: 1024m
     restart: unless-stopped

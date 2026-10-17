@@ -2,5 +2,6 @@ version: '2'
 services:
   coldfusion:
     image: vulhub/coldfusion:8.0.1
+    pull_policy: missing
     ports:
       - "8403:8500"

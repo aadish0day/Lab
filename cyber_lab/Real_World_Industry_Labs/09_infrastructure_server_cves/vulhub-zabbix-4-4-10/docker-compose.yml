@@ -1,6 +1,7 @@
 services:
   vulhub_zabbix_4_4_10:
     image: vulhub/zabbix:4.4.10
+    pull_policy: missing
     container_name: cyberlab_vulhub_zabbix_4_4_10
     ports:
       - "80:80"

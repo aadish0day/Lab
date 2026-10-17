@@ -3,6 +3,7 @@ version: "3.8"
 services:
   nexus:
     image: vulhub/nexus:3.14.0
+    pull_policy: missing
     container_name: cyberlab_nexus_el
     restart: unless-stopped
     ports:

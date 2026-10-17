@@ -2,5 +2,6 @@ version: '3'
 services:
   fastjson:
     image: vulhub/fastjson:1.2.83
+    pull_policy: missing
     ports:
       - "8254:8090"

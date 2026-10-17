@@ -1,6 +1,7 @@
 services:
   vulapps:
     image: medicean/vulapps:c_cmseasy_1
+    pull_policy: missing
     container_name: cyberlab_vulapps_cmseasy_c_1
     mem_limit: 1024m
     restart: unless-stopped

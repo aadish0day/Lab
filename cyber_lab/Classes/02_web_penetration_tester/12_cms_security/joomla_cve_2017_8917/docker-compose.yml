@@ -1,6 +1,7 @@
 services:
   joomla:
     image: vulhub/joomla:3.7.0
+    pull_policy: missing
     container_name: cyberlab_joomla_cve_2017_8917
     mem_limit: 1024m
     restart: unless-stopped

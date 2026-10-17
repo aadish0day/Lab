@@ -1,6 +1,7 @@
 services:
   vulapps:
     image: medicean/vulapps:r_redis_1
+    pull_policy: missing
     container_name: cyberlab_vulapps_redis_r_1
     mem_limit: 1024m
     restart: unless-stopped

@@ -1,6 +1,7 @@
 services:
   kirscht_heartbleed_2024_04_13_2108:
     image: kirscht/heartbleed:2024-04-13-2108
+    pull_policy: missing
     container_name: cyberlab_kirscht_heartbleed_2024_04_13_2108
     ports:
       - "80:80"

@@ -1,6 +1,7 @@
 services:
   cvet_jnlp_fonline_latest:
     image: cvet/jnlp-fonline:latest
+    pull_policy: missing
     container_name: cyberlab_cvet_jnlp_fonline_latest
     ports:
       - "8080:8080"

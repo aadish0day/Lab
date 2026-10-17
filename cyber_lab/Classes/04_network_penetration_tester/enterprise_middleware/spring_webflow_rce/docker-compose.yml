@@ -1,6 +1,7 @@
 services:
   spring_webflow_rce:
     image: vulhub/spring-webflow:2.4.4
+    pull_policy: missing
     container_name: cyberlab_04_spring_webflow_rce
     ports:
       - "8169:8080"

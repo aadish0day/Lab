@@ -1,6 +1,7 @@
 services:
   gitlist_argument_injection_rce:
     image: vulhub/gitlist:0.6.0
+    pull_policy: missing
     container_name: cyberlab_industry_gitlist_arg_injection
     ports:
       - "8157:80"

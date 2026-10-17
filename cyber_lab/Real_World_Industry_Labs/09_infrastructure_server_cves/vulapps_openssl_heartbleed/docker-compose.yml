@@ -1,6 +1,7 @@
 services:
   vulapps:
     image: medicean/vulapps:o_openssl_heartbleed_CVE-2014-0160
+    pull_policy: missing
     container_name: cyberlab_vulapps_openssl_heartbleed
     mem_limit: 1024m
     restart: unless-stopped

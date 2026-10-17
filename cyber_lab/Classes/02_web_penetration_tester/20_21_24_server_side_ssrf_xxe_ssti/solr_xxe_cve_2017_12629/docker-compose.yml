@@ -2,5 +2,6 @@ version: '3'
 services:
   solr:
     image: vulhub/solr:7.0.1
+    pull_policy: missing
     ports:
       - "8255:8983"

@@ -1,6 +1,7 @@
 services:
   skf:
     image: blabla1337/owasp-skf-lab:info-leakeage-metadata
+    pull_policy: missing
     container_name: cyberlab_skf_info_leak_metadata
     mem_limit: 1024m
     restart: unless-stopped

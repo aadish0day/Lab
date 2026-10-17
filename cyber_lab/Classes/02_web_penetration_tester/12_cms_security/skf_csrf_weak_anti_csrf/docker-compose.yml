@@ -1,6 +1,7 @@
 services:
   skf:
     image: blabla1337/owasp-skf-lab:csrf-weak-anti-csrf-token
+    pull_policy: missing
     container_name: cyberlab_skf_csrf_weak_anti_csrf
     mem_limit: 1024m
     restart: unless-stopped

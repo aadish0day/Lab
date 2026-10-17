@@ -1,6 +1,7 @@
 services:
   securecodebox_engine_latest:
     image: securecodebox/engine:latest
+    pull_policy: missing
     container_name: cyberlab_securecodebox_engine_latest
     ports:
       - "3000:3000"

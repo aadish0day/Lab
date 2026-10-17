@@ -2,5 +2,6 @@ version: '3'
 services:
   cxf:
     image: vulhub/apache-cxf:3.2.14
+    pull_policy: missing
     ports:
       - "8247:8080"

@@ -1,6 +1,7 @@
 services:
   vultarget_weblogic_test_page_fileupload_cve_2018_2894_latest:
     image: vultarget/weblogic_test_page_fileupload-cve_2018_2894:latest
+    pull_policy: missing
     container_name: cyberlab_vultarget_weblogic_test_page_fileupload_cve_2018_2894_latest
     ports:
       - "8080:8080"

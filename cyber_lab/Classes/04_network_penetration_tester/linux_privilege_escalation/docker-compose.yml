@@ -1,6 +1,7 @@
 services:
   linux-privesc:
     image: chenaotian/cve-2021-3156:latest
+    pull_policy: missing
     container_name: cyberlab_04_linux_privesc
     restart: unless-stopped
     stdin_open: true

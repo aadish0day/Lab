@@ -1,6 +1,7 @@
 services:
   owasp_glue_0_10_0:
     image: owasp/glue:0.10.0
+    pull_policy: missing
     container_name: cyberlab_owasp_glue_0_10_0
     ports:
       - "3000:3000"

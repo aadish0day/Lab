@@ -1,6 +1,7 @@
 services:
   forever07_heartbleed_v1:
     image: forever07/heartbleed:v1
+    pull_policy: missing
     container_name: cyberlab_forever07_heartbleed_v1
     ports:
       - "80:80"

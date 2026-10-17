@@ -1,6 +1,7 @@
 services:
   aria2_rpc_rce:
     image: vulhub/aria2:1.18.8
+    pull_policy: missing
     container_name: cyberlab_04_aria2_rpc_rce
     ports:
       - "8146:6800"

@@ -2,5 +2,6 @@ version: '2'
 services:
   smtpd:
     image: vulhub/opensmtpd:6.6.1p1
+    pull_policy: missing
     ports:
       - "8453:25"

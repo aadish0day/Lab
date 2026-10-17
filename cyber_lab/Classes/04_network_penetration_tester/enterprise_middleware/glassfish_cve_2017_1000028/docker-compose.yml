@@ -1,6 +1,7 @@
 services:
  glassfish:
    image: vulhub/glassfish:4.1
+   pull_policy: missing
    ports:
     - "8410:4848"
     - "5005:5005"

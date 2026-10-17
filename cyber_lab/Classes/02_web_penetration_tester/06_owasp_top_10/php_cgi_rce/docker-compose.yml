@@ -1,6 +1,7 @@
 services:
   php-cgi:
     image: vulhub/php:5.4.1-cgi
+    pull_policy: missing
     container_name: cyberlab_02_php_cgi_rce
     ports:
       - "8132:80"

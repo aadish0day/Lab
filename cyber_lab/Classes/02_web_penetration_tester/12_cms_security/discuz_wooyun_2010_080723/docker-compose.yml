@@ -1,6 +1,7 @@
 services:
   discuz:
     image: vulhub/discuz:7.2
+    pull_policy: missing
     container_name: cyberlab_discuz_wooyun_2010_080723
     mem_limit: 1024m
     restart: unless-stopped

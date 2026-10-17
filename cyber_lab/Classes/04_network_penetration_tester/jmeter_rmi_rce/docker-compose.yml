@@ -1,6 +1,7 @@
 services:
   jmeter_rmi_rce:
     image: vulhub/jmeter:3.3
+    pull_policy: missing
     container_name: cyberlab_04_jmeter_rmi_rce
     ports:
       - "8178:8178"

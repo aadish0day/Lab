@@ -1,6 +1,7 @@
 services:
   sqli-labs:
     image: acgpiano/sqli-labs:latest
+    pull_policy: missing
     container_name: cyberlab_02_sqli_labs
     ports:
       - "8086:80"

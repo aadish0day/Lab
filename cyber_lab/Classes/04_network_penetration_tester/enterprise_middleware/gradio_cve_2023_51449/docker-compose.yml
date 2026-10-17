@@ -1,6 +1,7 @@
 services:
   gradio:
     image: vulhub/gradio:4.10.0
+    pull_policy: missing
     container_name: cyberlab_gradio_cve_2023_51449
     mem_limit: 1024m
     restart: unless-stopped

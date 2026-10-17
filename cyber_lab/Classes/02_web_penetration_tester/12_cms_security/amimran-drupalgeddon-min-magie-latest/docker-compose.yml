@@ -1,6 +1,7 @@
 services:
   amimran_drupalgeddon_min_magie_latest:
     image: amimran/drupalgeddon-min-magie:latest
+    pull_policy: missing
     container_name: cyberlab_amimran_drupalgeddon_min_magie_latest
     ports:
       - "80:80"

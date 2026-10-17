@@ -2,6 +2,7 @@ version: '2'
 services:
   rocketchat:
     image: vulhub/rocketchat:3.12.1
+    pull_policy: missing
     command: >
       bash -c
         "for i in `seq 1 30`; do
@@ -24,6 +25,7 @@ services:
 
   mongo:
     image: mongo:4.0
+    pull_policy: missing
     restart: unless-stopped
     command: mongod --smallfiles --oplogSize 128 --replSet rs0 --storageEngine=mmapv1
     labels:
@@ -33,6 +35,7 @@ services:
   # it will run the command and remove himself (it will not stay running)
   mongo-init-replica:
     image: mongo:4.0
+    pull_policy: missing
     command: >
       bash -c
         "for i in `seq 1 30`; do

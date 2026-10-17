@@ -1,6 +1,7 @@
 services:
   cups_browsed:
     image: vulhub/cups-browsed:2.0.1
+    pull_policy: missing
     container_name: cyberlab_cups_browsed_cve_2024_47177
     mem_limit: 1024m
     restart: unless-stopped

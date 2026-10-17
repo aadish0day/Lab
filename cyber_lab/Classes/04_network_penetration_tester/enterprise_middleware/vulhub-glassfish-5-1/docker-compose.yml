@@ -1,6 +1,7 @@
 services:
   vulhub_glassfish_5_1:
     image: vulhub/glassfish:5.1
+    pull_policy: missing
     container_name: cyberlab_vulhub_glassfish_5_1
     ports:
       - "4848:4848"

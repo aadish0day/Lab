@@ -1,6 +1,7 @@
 services:
   securecodebox_hook_generic_webhook_latest:
     image: securecodebox/hook-generic-webhook:latest
+    pull_policy: missing
     container_name: cyberlab_securecodebox_hook_generic_webhook_latest
     ports:
       - "3000:3000"

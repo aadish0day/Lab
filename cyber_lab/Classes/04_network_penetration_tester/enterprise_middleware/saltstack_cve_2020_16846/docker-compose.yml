@@ -1,6 +1,7 @@
 services:
  saltstack:
    image: vulhub/saltstack:3002
+   pull_policy: missing
    mem_limit: 1024m
    restart: unless-stopped
    ports:

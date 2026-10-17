@@ -2,6 +2,7 @@ version: '2'
 services:
   web:
     image: blabla1337/owasp-skf-lab:des-yaml
+    pull_policy: missing
     mem_limit: 1024m
     restart: unless-stopped
     ports:

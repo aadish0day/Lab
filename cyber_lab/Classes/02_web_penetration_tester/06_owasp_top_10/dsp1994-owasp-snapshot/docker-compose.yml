@@ -1,6 +1,7 @@
 services:
   dsp1994_owasp_snapshot:
     image: dsp1994/owasp:snapshot
+    pull_policy: missing
     container_name: cyberlab_dsp1994_owasp_snapshot
     ports:
       - "3000:3000"

@@ -1,6 +1,7 @@
 services:
   python_311_slim:
     image: python:3.11-slim
+    pull_policy: missing
     container_name: cyberlab_python_311_slim
     ports:
       - "80:80"

@@ -1,6 +1,7 @@
 services:
   owasp_application_gateway_main_snapshot:
     image: owasp/application-gateway:main-SNAPSHOT
+    pull_policy: missing
     container_name: cyberlab_owasp_application_gateway_main_snapshot
     ports:
       - "3000:3000"

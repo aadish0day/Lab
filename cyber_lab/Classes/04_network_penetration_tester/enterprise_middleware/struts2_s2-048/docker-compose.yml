@@ -2,5 +2,6 @@ version: '2'
 services:
  struts2:
    image: vulhub/struts2:2.3.32-showcase
+   pull_policy: missing
    ports:
     - "8324:8080"

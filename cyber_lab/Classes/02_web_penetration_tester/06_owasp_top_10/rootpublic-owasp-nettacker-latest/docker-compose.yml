@@ -1,6 +1,7 @@
 services:
   rootpublic_owasp_nettacker_latest:
     image: rootpublic/owasp-nettacker:latest
+    pull_policy: missing
     container_name: cyberlab_rootpublic_owasp_nettacker_latest
     ports:
       - "3000:3000"

@@ -1,6 +1,7 @@
 services:
   wrongsecrets:
     image: jeroenwillemsen/wrongsecrets:latest-no-vault
+    pull_policy: missing
     container_name: cyberlab_wrongsecrets
     restart: unless-stopped
     ports:

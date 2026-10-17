@@ -1,6 +1,7 @@
 services:
   tomcat-put:
     image: vulhub/tomcat:8.5.19
+    pull_policy: missing
     container_name: cyberlab_02_tomcat_put_rce
     ports:
       - "8129:8080"

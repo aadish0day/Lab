@@ -1,6 +1,7 @@
 services:
   vulhub_metersphere_1_16_3_jar:
     image: vulhub/metersphere:1.16.3-jar
+    pull_policy: missing
     container_name: cyberlab_vulhub_metersphere_1_16_3_jar
     ports:
       - "8081:8081"

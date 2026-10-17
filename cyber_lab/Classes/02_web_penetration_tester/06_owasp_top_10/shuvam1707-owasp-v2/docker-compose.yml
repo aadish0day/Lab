@@ -1,6 +1,7 @@
 services:
   shuvam1707_owasp_v2:
     image: shuvam1707/owasp:v2
+    pull_policy: missing
     container_name: cyberlab_shuvam1707_owasp_v2
     ports:
       - "3000:3000"

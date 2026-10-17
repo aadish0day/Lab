@@ -1,6 +1,7 @@
 services:
   vulhub_elasticsearch_1_4_4:
     image: vulhub/elasticsearch:1.4.4
+    pull_policy: missing
     container_name: cyberlab_vulhub_elasticsearch_1_4_4
     ports:
       - "9200:9200"

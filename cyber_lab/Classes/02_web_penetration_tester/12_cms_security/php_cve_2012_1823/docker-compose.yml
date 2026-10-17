@@ -1,6 +1,7 @@
 services:
  php:
    image: vulhub/php:5.4.1-cgi
+   pull_policy: missing
    volumes:
     - ./www:/var/www/html
    ports:

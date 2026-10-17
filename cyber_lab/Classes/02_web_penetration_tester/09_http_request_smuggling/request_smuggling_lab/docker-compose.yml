@@ -1,6 +1,7 @@
 services:
   frontend:
     image: haproxy:alpine
+    pull_policy: missing
     container_name: cyberlab_smuggling_frontend
     ports:
       - "8108:80"

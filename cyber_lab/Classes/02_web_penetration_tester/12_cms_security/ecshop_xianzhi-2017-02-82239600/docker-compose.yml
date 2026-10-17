@@ -2,17 +2,20 @@ version: '2'
 services:
  ecshop27:
    image: vulhub/ecshop:2.7.3
+   pull_policy: missing
    depends_on:
     - mysql
    ports:
     - "8280:80"
  ecshop36:
    image: vulhub/ecshop:3.6.0
+   pull_policy: missing
    depends_on:
     - mysql
    ports:
     - "8081:80"
  mysql:
    image: mysql:5.5
+   pull_policy: missing
    environment: 
     - MYSQL_ROOT_PASSWORD=root

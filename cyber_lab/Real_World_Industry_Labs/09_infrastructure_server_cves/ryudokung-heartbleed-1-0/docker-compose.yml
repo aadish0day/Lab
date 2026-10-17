@@ -1,6 +1,7 @@
 services:
   ryudokung_heartbleed_1_0:
     image: ryudokung/heartbleed:1.0
+    pull_policy: missing
     container_name: cyberlab_ryudokung_heartbleed_1_0
     ports:
       - "80:80"

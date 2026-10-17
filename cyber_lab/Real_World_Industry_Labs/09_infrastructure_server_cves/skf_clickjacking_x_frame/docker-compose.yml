@@ -1,6 +1,7 @@
 services:
   skf:
     image: blabla1337/owasp-skf-lab:clickjacking-x-frame-options
+    pull_policy: missing
     container_name: cyberlab_skf_clickjacking_x_frame
     mem_limit: 1024m
     restart: unless-stopped

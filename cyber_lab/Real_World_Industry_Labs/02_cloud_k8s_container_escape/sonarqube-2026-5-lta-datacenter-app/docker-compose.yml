@@ -1,6 +1,7 @@
 services:
   sonarqube_2026_5_lta_datacenter_app:
     image: sonarqube:2026.5-lta-datacenter-app
+    pull_policy: missing
     container_name: cyberlab_sonarqube_2026_5_lta_datacenter_app
     ports:
       - "9000:9000"

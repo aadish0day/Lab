@@ -1,6 +1,7 @@
 services:
   ffmpeg_hls_ssrf:
     image: vulhub/ffmpeg:2.8.4-with-php
+    pull_policy: missing
     container_name: cyberlab_02_ffmpeg_hls_ssrf
     ports:
       - "8165:80"

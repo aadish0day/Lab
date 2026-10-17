@@ -1,6 +1,7 @@
 services:
   struts2:
     image: vulhub/struts2:2.3.30
+    pull_policy: missing
     container_name: cyberlab_04_struts2_s2045
     ports:
       - "8121:8080"

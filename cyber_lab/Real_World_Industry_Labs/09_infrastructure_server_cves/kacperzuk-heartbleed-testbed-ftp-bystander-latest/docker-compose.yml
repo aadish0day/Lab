@@ -1,6 +1,7 @@
 services:
   kacperzuk_heartbleed_testbed_ftp_bystander_latest:
     image: kacperzuk/heartbleed-testbed-ftp-bystander:latest
+    pull_policy: missing
     container_name: cyberlab_kacperzuk_heartbleed_testbed_ftp_bystander_latest
     ports:
       - "80:80"

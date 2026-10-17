@@ -1,6 +1,7 @@
 services:
   owasp_railsgoat_chore_remove_empty_scaffold_specs:
     image: owasp/railsgoat:chore_remove-empty-scaffold-specs
+    pull_policy: missing
     container_name: cyberlab_owasp_railsgoat_chore_remove_empty_scaffold_specs
     ports:
       - "3000:3000"

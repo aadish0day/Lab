@@ -1,6 +1,7 @@
 services:
   k8s-goat:
     image: rancher/k3s:v1.28.2-k3s1
+    pull_policy: missing
     container_name: cyberlab_k8s_goat
     privileged: true
     restart: unless-stopped

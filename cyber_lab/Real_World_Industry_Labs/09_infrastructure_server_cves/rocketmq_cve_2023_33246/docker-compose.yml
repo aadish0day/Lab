@@ -1,6 +1,7 @@
 services:
   rocketmq:
     image: vulhub/rocketmq:5.1.0
+    pull_policy: missing
     container_name: cyberlab_rocketmq_cve_2023_33246
     mem_limit: 1024m
     restart: unless-stopped

@@ -1,6 +1,7 @@
 services:
   vulhub_hadoop_3_2_1:
     image: vulhub/hadoop:3.2.1
+    pull_policy: missing
     container_name: cyberlab_vulhub_hadoop_3_2_1
     ports:
       - "8088:8088"

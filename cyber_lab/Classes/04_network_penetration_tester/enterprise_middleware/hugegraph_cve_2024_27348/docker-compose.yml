@@ -2,5 +2,6 @@ version: '3'
 services:
   hugegraph:
     image: vulhub/hugegraph:1.2.0
+    pull_policy: missing
     ports:
       - "8242:8080"

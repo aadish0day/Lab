@@ -1,6 +1,7 @@
 services:
   apache_airflow_slim_332:
     image: apache/airflow:slim-3.3.2
+    pull_policy: missing
     container_name: cyberlab_apache_airflow_slim_332
     ports:
       - "80:80"

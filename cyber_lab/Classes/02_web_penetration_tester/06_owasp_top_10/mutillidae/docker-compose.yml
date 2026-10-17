@@ -1,6 +1,7 @@
 services:
   mutillidae:
     image: webpwnized/mutillidae:www
+    pull_policy: missing
     container_name: cyberlab_02_mutillidae
     ports:
       - "8116:80"

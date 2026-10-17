@@ -1,6 +1,7 @@
 services:
   prom_prometheus_v3_13_4_distroless:
     image: prom/prometheus:v3.13.4-distroless
+    pull_policy: missing
     container_name: cyberlab_prom_prometheus_v3_13_4_distroless
     ports:
       - "9090:9090"

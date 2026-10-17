@@ -3,6 +3,7 @@ version: "3.8"
 services:
   spring_data_rest:
     image: vulhub/spring-rest-data:2.6.6
+    pull_policy: missing
     container_name: cyberlab_spring_data_rest
     restart: unless-stopped
     ports:

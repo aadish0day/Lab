@@ -1,6 +1,7 @@
 services:
   vulapps:
     image: medicean/vulapps:g_git_1
+    pull_policy: missing
     container_name: cyberlab_vulapps_git_g_1
     mem_limit: 1024m
     restart: unless-stopped

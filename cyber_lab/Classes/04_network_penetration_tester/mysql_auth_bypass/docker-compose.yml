@@ -1,6 +1,7 @@
 services:
   mysql_auth_bypass:
     image: vulhub/mysql:5.5.23
+    pull_policy: missing
     container_name: cyberlab_04_mysql_auth_bypass
     ports:
       - "8179:3306"

@@ -1,6 +1,7 @@
 services:
   vulapps:
     image: medicean/vulapps:w_wordpress_6
+    pull_policy: missing
     container_name: cyberlab_vulapps_wordpress_w_6
     mem_limit: 1024m
     restart: unless-stopped

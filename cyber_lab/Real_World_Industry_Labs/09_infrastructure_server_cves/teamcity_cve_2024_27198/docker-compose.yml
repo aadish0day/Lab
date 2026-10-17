@@ -1,6 +1,7 @@
 services:
   teamcity:
     image: vulhub/teamcity:2023.11.3
+    pull_policy: missing
     container_name: cyberlab_teamcity_cve_2024_27198
     mem_limit: 1024m
     restart: unless-stopped

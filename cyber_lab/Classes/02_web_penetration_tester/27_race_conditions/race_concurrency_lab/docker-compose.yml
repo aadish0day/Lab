@@ -1,6 +1,7 @@
 services:
   race-condition-target:
     image: python:3.11-alpine
+    pull_policy: missing
     container_name: cyberlab_web_race_conditions
     working_dir: /app
     ports:

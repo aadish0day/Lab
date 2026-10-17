@@ -1,6 +1,7 @@
 services:
   bkimminich_juice_shop_v20_3_0:
     image: bkimminich/juice-shop:v20.3.0
+    pull_policy: missing
     container_name: cyberlab_bkimminich_juice_shop_v20_3_0
     ports:
       - "3000:3000"

@@ -1,6 +1,7 @@
 services:
   minio:
     image: vulhub/minio:2023-02-27T18-10-45Z
+    pull_policy: missing
     container_name: cyberlab_realworld_minio_leak
     ports:
       - "9000:9000"

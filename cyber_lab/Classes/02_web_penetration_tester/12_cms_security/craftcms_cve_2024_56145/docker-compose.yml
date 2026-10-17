@@ -1,6 +1,7 @@
 services:
   craftcms:
     image: vulhub/craftcms:5.5.1.1
+    pull_policy: missing
     container_name: cyberlab_craftcms_cve_2024_56145
     mem_limit: 1024m
     restart: unless-stopped

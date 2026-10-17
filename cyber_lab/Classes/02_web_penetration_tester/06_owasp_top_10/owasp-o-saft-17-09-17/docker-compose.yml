@@ -1,6 +1,7 @@
 services:
   owasp_o_saft_17_09_17:
     image: owasp/o-saft:17.09.17
+    pull_policy: missing
     container_name: cyberlab_owasp_o_saft_17_09_17
     ports:
       - "3000:3000"

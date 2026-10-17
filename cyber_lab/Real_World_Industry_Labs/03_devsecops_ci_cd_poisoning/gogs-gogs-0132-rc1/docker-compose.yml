@@ -1,6 +1,7 @@
 services:
   gogs_gogs_0132_rc1:
     image: gogs/gogs:0.13.2-rc.1
+    pull_policy: missing
     container_name: cyberlab_gogs_gogs_0132_rc1
     ports:
       - "80:80"

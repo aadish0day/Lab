@@ -1,6 +1,7 @@
 services:
   apache_apisix_3_17_0_redhat:
     image: apache/apisix:3.17.0-redhat
+    pull_policy: missing
     container_name: cyberlab_apache_apisix_3_17_0_redhat
     ports:
       - "9080:9080"

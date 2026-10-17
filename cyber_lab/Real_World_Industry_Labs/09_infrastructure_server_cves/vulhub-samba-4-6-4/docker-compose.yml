@@ -1,6 +1,7 @@
 services:
   vulhub_samba_4_6_4:
     image: vulhub/samba:4.6.4
+    pull_policy: missing
     container_name: cyberlab_vulhub_samba_4_6_4
     ports:
       - "445:445"

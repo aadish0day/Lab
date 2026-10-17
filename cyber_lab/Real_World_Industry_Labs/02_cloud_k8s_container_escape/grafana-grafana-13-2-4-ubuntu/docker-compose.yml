@@ -1,6 +1,7 @@
 services:
   grafana_grafana_13_2_4_ubuntu:
     image: grafana/grafana:13.2.4-ubuntu
+    pull_policy: missing
     container_name: cyberlab_grafana_grafana_13_2_4_ubuntu
     ports:
       - "3000:3000"

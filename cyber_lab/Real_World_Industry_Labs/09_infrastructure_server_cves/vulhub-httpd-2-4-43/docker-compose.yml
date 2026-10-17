@@ -1,6 +1,7 @@
 services:
   vulhub_httpd_2_4_43:
     image: vulhub/httpd:2.4.43
+    pull_policy: missing
     container_name: cyberlab_vulhub_httpd_2_4_43
     ports:
       - "80:80"

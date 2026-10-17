@@ -1,6 +1,7 @@
 services:
   jesusfcr_vulcan_heartbleed_experimental_latest:
     image: jesusfcr/vulcan-heartbleed-experimental:latest
+    pull_policy: missing
     container_name: cyberlab_jesusfcr_vulcan_heartbleed_experimental_latest
     ports:
       - "80:80"

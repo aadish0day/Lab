@@ -1,6 +1,7 @@
 services:
   web:
     image: vulhub/wordpress:6.9.4
+    pull_policy: missing
     mem_limit: 1024m
     restart: unless-stopped
     depends_on:
@@ -17,6 +18,7 @@ services:
       - "8467:80"
   db:
     image: mysql:8.0
+    pull_policy: missing
     mem_limit: 1024m
     restart: unless-stopped
     environment:

@@ -1,6 +1,7 @@
 services:
   web:
     image: vulhub/langflow:1.8.1
+    pull_policy: missing
     ports:
       - "8381:7860"
     environment:

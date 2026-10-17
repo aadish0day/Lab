@@ -1,6 +1,7 @@
 services:
   spring-gateway:
     image: vulhub/spring-cloud-gateway:3.1.0
+    pull_policy: missing
     container_name: cyberlab_04_spring_gateway_rce
     ports:
       - "8125:8080"

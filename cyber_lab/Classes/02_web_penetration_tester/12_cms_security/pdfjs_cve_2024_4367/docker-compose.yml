@@ -2,6 +2,7 @@ version: '2'
 services:
  web:
    image: vulhub/pdfjs:4.1.392
+   pull_policy: missing
    volumes:
     - ./index.php:/var/www/html/index.php
    ports:

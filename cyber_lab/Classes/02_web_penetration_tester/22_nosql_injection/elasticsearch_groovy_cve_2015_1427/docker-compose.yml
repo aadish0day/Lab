@@ -2,5 +2,6 @@ version: '3'
 services:
   elasticsearch:
     image: vulhub/elasticsearch:1.4.2
+    pull_policy: missing
     ports:
       - "8253:9200"

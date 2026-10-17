@@ -1,6 +1,7 @@
 services:
   confluence:
     image: vulhub/confluence:8.5.3
+    pull_policy: missing
     container_name: cyberlab_confluence_cve_2023_22527
     mem_limit: 1024m
     restart: unless-stopped

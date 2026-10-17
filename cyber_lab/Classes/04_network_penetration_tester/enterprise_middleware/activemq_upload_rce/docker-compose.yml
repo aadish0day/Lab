@@ -1,6 +1,7 @@
 services:
   activemq:
     image: vulhub/activemq:5.11.1
+    pull_policy: missing
     container_name: cyberlab_04_activemq_upload_rce
     ports:
       - "8126:8161"

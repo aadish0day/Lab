@@ -1,6 +1,7 @@
 services:
  web:
    image: vulhub/thinkphp:5.0.23
+   pull_policy: missing
    mem_limit: 1024m
    restart: unless-stopped
    ports:

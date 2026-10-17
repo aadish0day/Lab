@@ -1,6 +1,7 @@
 services:
  web:
    image: vulhub/shiro:1.0.0
+   pull_policy: missing
    mem_limit: 1024m
    restart: unless-stopped
    ports:

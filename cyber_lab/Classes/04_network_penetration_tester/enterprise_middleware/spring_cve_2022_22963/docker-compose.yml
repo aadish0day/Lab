@@ -1,6 +1,7 @@
 services:
  spring:
    image: vulhub/spring-cloud-function:3.2.2
+   pull_policy: missing
    mem_limit: 1024m
    restart: unless-stopped
    ports:

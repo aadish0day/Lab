@@ -1,6 +1,7 @@
 services:
   interactsh-server:
     image: projectdiscovery/interactsh-server:latest
+    pull_policy: missing
     container_name: cyberlab_interactsh
     command: -listen-ip 0.0.0.0 -http-port 8090 -dns-port 5354
     ports:

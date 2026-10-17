@@ -1,6 +1,7 @@
 services:
  struts2:
    image: vulhub/struts2:s2-067
+   pull_policy: missing
    ports:
     - "8328:8080"
     - "5005:5005"

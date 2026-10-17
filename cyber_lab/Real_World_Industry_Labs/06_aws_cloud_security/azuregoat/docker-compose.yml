@@ -1,6 +1,7 @@
 services:
   azuregoat:
     image: mcr.microsoft.com/azure-cli:latest
+    pull_policy: missing
     container_name: cyberlab_azuregoat
     restart: unless-stopped
     stdin_open: true

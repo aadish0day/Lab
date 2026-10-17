@@ -1,6 +1,7 @@
 services:
   web:
     image: vulhub/nginx-ui:2.3.2
+    pull_policy: missing
     ports:
       - "8424:9000"
     environment:

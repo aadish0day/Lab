@@ -1,6 +1,7 @@
 services:
   vulhub_tomcat_6:
     image: vulhub/tomcat:6
+    pull_policy: missing
     container_name: cyberlab_vulhub_tomcat_6
     ports:
       - "8080:8080"

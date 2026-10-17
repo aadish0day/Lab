@@ -1,6 +1,7 @@
 services:
   jennj0i_owasp_adminuser:
     image: jennj0i/owasp:adminuser
+    pull_policy: missing
     container_name: cyberlab_jennj0i_owasp_adminuser
     ports:
       - "3000:3000"

@@ -1,5 +1,6 @@
 services:
  php:
    image: vulhub/php:7.1.3-fpm
+   pull_policy: missing
    ports:
     - "8293:9000"

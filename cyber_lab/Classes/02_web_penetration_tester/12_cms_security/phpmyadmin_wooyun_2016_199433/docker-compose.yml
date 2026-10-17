@@ -1,6 +1,7 @@
 services:
   phpmyadmin:
     image: vulhub/phpmyadmin:2.8.0.4
+    pull_policy: missing
     container_name: cyberlab_phpmyadmin_wooyun_2016_199433
     mem_limit: 1024m
     restart: unless-stopped

@@ -3,6 +3,7 @@ version: "3.8"
 services:
   ofbiz:
     image: vulhub/ofbiz:17.12.01
+    pull_policy: missing
     container_name: cyberlab_ofbiz_9496
     restart: unless-stopped
     ports:

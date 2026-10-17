@@ -3,6 +3,7 @@ version: "3.8"
 services:
   h2database:
     image: vulhub/spring-with-h2database:2.0.204
+    pull_policy: missing
     container_name: cyberlab_h2database
     restart: unless-stopped
     ports:

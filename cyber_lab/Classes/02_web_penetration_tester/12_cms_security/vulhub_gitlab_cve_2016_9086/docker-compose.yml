@@ -1,6 +1,7 @@
 services:
   vulhub:
     image: vulhub/gitlab:8.13.0
+    pull_policy: missing
     container_name: cyberlab_vulhub_gitlab_cve_2016_9086
     mem_limit: 1024m
     restart: unless-stopped

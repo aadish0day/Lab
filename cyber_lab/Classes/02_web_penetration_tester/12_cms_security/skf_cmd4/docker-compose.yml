@@ -1,6 +1,7 @@
 services:
   skf:
     image: blabla1337/owasp-skf-lab:cmd4
+    pull_policy: missing
     container_name: cyberlab_skf_cmd4
     mem_limit: 1024m
     restart: unless-stopped

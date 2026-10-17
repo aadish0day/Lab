@@ -1,6 +1,7 @@
 services:
   prototype-pollution:
     image: node:18-alpine
+    pull_policy: missing
     container_name: cyberlab_web_prototype_pollution
     working_dir: /app
     ports:

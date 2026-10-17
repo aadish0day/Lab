@@ -2,10 +2,12 @@ version: '2'
 services:
   redis:
     image: redis
+    pull_policy: missing
     ports:
       - "8346:6379"
   celery:
     image: vulhub/celery:3.1.23
+    pull_policy: missing
     volumes:
       - .:/home/user
     command: "celery -A tasks worker -l debug"

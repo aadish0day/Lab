@@ -1,6 +1,7 @@
 services:
   owasp_nest_test_fuzz_backend_cache:
     image: owasp/nest:test-fuzz-backend-cache
+    pull_policy: missing
     container_name: cyberlab_owasp_nest_test_fuzz_backend_cache
     ports:
       - "3000:3000"

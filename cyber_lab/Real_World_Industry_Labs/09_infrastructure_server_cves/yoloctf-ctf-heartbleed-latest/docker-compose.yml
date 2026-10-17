@@ -1,6 +1,7 @@
 services:
   yoloctf_ctf_heartbleed_latest:
     image: yoloctf/ctf-heartbleed:latest
+    pull_policy: missing
     container_name: cyberlab_yoloctf_ctf_heartbleed_latest
     ports:
       - "80:80"

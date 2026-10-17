@@ -1,6 +1,7 @@
 services:
   spring_messaging_rce:
     image: vulhub/spring-messaging:5.0.4
+    pull_policy: missing
     container_name: cyberlab_04_spring_messaging_rce
     ports:
       - "8151:8080"

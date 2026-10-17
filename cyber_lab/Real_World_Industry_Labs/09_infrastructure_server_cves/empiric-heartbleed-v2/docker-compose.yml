@@ -1,6 +1,7 @@
 services:
   empiric_heartbleed_v2:
     image: empiric/heartbleed:v2
+    pull_policy: missing
     container_name: cyberlab_empiric_heartbleed_v2
     ports:
       - "80:80"

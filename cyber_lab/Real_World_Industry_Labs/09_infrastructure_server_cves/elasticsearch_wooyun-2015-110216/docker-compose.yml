@@ -1,6 +1,7 @@
 services:
  es:
    image: vulhub/elasticsearch:1.5.1-with-tomcat
+   pull_policy: missing
    ports:
     - "8352:9200"
     - "8080:8080"

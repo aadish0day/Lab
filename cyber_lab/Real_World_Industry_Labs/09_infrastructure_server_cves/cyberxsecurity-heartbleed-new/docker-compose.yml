@@ -1,6 +1,7 @@
 services:
   cyberxsecurity_heartbleed_new:
     image: cyberxsecurity/heartbleed:new
+    pull_policy: missing
     container_name: cyberlab_cyberxsecurity_heartbleed_new
     ports:
       - "80:80"

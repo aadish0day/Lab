@@ -3,6 +3,7 @@ version: "3.8"
 services:
   grafana:
     image: vulhub/grafana:8.2.6
+    pull_policy: missing
     container_name: cyberlab_grafana
     restart: unless-stopped
     ports:

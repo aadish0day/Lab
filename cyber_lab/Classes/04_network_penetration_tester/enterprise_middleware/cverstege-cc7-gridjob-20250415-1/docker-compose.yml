@@ -1,6 +1,7 @@
 services:
   cverstege_cc7_gridjob_20250415_1:
     image: cverstege/cc7-gridjob:20250415-1
+    pull_policy: missing
     container_name: cyberlab_cverstege_cc7_gridjob_20250415_1
     ports:
       - "8080:8080"

@@ -1,6 +1,7 @@
 services:
   jboss:
     image: vulhub/jboss:as-6.1.0
+    pull_policy: missing
     ports:
       - "8419:9990"
       - "8080:8080"

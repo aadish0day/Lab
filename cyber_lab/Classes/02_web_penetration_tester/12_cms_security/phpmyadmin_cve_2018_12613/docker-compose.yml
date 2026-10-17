@@ -2,6 +2,7 @@ version: '2'
 services:
  web:
    image: vulhub/phpmyadmin:4.8.1
+   pull_policy: missing
    volumes:
     - ./config.inc.php:/var/www/html/config.inc.php
    ports:
@@ -10,6 +11,7 @@ services:
     - mysql
  mysql:
    image: mysql:5.5
+   pull_policy: missing
    environment: 
     - MYSQL_RANDOM_ROOT_PASSWORD=yes
     - MYSQL_DATABASE=test

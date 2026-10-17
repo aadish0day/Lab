@@ -1,6 +1,7 @@
 services:
   vulhub_thinkphp_5_0_22:
     image: vulhub/thinkphp:5.0.22
+    pull_policy: missing
     container_name: cyberlab_vulhub_thinkphp_5_0_22
     ports:
       - "80:80"

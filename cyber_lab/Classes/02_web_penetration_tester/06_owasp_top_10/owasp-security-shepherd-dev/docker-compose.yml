@@ -1,6 +1,7 @@
 services:
   owasp_security_shepherd_dev:
     image: owasp/security-shepherd:dev
+    pull_policy: missing
     container_name: cyberlab_owasp_security_shepherd_dev
     ports:
       - "3000:3000"

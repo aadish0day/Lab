@@ -1,6 +1,7 @@
 services:
   cverstege_alma9_gridjob_20241101_1:
     image: cverstege/alma9-gridjob:20241101-1
+    pull_policy: missing
     container_name: cyberlab_cverstege_alma9_gridjob_20241101_1
     ports:
       - "8080:8080"

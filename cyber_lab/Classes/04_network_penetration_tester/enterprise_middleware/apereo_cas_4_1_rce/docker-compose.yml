@@ -1,6 +1,7 @@
 services:
   apereo_cas:
     image: vulhub/apereo-cas:4.1.5
+    pull_policy: missing
     container_name: cyberlab_apereo_cas_4_1_rce
     mem_limit: 1024m
     restart: unless-stopped

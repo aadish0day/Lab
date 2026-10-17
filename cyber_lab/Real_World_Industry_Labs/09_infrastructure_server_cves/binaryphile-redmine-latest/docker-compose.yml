@@ -1,6 +1,7 @@
 services:
   binaryphile_redmine_latest:
     image: binaryphile/redmine:latest
+    pull_policy: missing
     container_name: cyberlab_binaryphile_redmine_latest
     ports:
       - "80:80"

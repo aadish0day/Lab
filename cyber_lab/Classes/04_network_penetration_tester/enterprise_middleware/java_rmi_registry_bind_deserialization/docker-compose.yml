@@ -1,6 +1,7 @@
 services:
   rmi:
     image: vulhub/j2ee:8u131
+    pull_policy: missing
     ports:
       - "8418:1099"
     environment:

@@ -1,6 +1,7 @@
 services:
   owasp_application_gateway_v0_7_1:
     image: owasp/application-gateway:v0.7.1
+    pull_policy: missing
     container_name: cyberlab_owasp_application_gateway_v0_7_1
     ports:
       - "3000:3000"

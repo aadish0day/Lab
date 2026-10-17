@@ -2,6 +2,7 @@ version: '3'
 services:
   xxl-job-admin:
     image: vulhub/xxl-job:2.2.0-admin
+    pull_policy: missing
     ports:
       - "8231:8080"
     depends_on:
@@ -9,5 +10,6 @@ services:
 
   mysql:
     image: mysql:5.7
+    pull_policy: missing
     environment:
       - MYSQL_ROOT_PASSWORD=root

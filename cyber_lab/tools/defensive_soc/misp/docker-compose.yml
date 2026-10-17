@@ -1,6 +1,7 @@
 services:
   misp-web:
     image: ghcr.io/misp/misp-docker/misp-nginx:latest
+    pull_policy: missing
     container_name: cyberlab_misp_web
     restart: unless-stopped
     ports:
@@ -14,6 +15,7 @@ services:
 
   misp-core:
     image: ghcr.io/misp/misp-docker/misp-core:latest
+    pull_policy: missing
     container_name: cyberlab_misp_core
     restart: unless-stopped
     depends_on:
@@ -45,6 +47,7 @@ services:
 
   misp-db:
     image: mariadb:10.11
+    pull_policy: missing
     container_name: cyberlab_misp_db
     restart: unless-stopped
     environment:
@@ -58,6 +61,7 @@ services:
 
   misp-redis:
     image: valkey/valkey:7.2
+    pull_policy: missing
     container_name: cyberlab_misp_redis
     restart: unless-stopped
     command: valkey-server --requirepass "redispassword"
@@ -69,6 +73,7 @@ services:
 
   misp-modules:
     image: ghcr.io/misp/misp-docker/misp-modules:latest
+    pull_policy: missing
     container_name: cyberlab_misp_modules
     restart: unless-stopped
     environment:

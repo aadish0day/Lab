@@ -1,6 +1,7 @@
 services:
   owasp_nest_test_fuzz_backend_latest:
     image: owasp/nest:test-fuzz-backend-latest
+    pull_policy: missing
     container_name: cyberlab_owasp_nest_test_fuzz_backend_latest
     ports:
       - "3000:3000"

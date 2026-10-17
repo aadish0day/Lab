@@ -1,6 +1,7 @@
 services:
   securecodebox_dummy_ssh_latest:
     image: securecodebox/dummy-ssh:latest
+    pull_policy: missing
     container_name: cyberlab_securecodebox_dummy_ssh_latest
     ports:
       - "3000:3000"

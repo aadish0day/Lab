@@ -1,6 +1,7 @@
 services:
   activemq:
     image: vulhub/activemq:6.2.2
+    pull_policy: missing
     ports:
       - "8398:61616"
       - "8161:8161"

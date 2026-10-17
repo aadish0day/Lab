@@ -1,6 +1,7 @@
 services:
   thinkphp:
     image: vulhub/thinkphp:5.0.20
+    pull_policy: missing
     container_name: cyberlab_thinkphp_5_rce
     mem_limit: 1024m
     restart: unless-stopped

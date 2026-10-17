@@ -1,6 +1,7 @@
 services:
   gitea_gitea_1_27_rootless:
     image: gitea/gitea:1.27-rootless
+    pull_policy: missing
     container_name: cyberlab_gitea_gitea_1_27_rootless
     ports:
       - "3000:3000"

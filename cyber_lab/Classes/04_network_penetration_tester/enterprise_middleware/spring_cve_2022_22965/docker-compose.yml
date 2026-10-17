@@ -1,6 +1,7 @@
 services:
  spring:
    image: vulhub/spring-webmvc:5.3.17
+   pull_policy: missing
    mem_limit: 1024m
    restart: unless-stopped
    ports:

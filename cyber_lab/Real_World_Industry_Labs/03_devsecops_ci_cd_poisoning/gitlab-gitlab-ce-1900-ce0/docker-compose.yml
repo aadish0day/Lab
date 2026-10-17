@@ -1,6 +1,7 @@
 services:
   gitlab_gitlab_ce_1900_ce0:
     image: gitlab/gitlab-ce:19.0.0-ce.0
+    pull_policy: missing
     container_name: cyberlab_gitlab_gitlab_ce_1900_ce0
     ports:
       - "80:80"

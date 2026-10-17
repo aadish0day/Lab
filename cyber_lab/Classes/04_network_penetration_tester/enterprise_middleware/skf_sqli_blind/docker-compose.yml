@@ -1,6 +1,7 @@
 services:
   skf:
     image: blabla1337/owasp-skf-lab:sqli-blind
+    pull_policy: missing
     container_name: cyberlab_skf_sqli_blind
     mem_limit: 1024m
     restart: unless-stopped

@@ -1,6 +1,7 @@
 services:
   elasticsearch:
     image: vulhub/elasticsearch:1.5.1-with-tomcat
+    pull_policy: missing
     container_name: cyberlab_elasticsearch_wooyun_2015_110216
     mem_limit: 1024m
     restart: unless-stopped

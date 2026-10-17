@@ -1,6 +1,7 @@
 services:
   kkfileview:
     image: vulhub/kkfileview:4.3.0
+    pull_policy: missing
     container_name: cyberlab_kkfileview_4_3_zipslip_rce
     mem_limit: 1024m
     restart: unless-stopped

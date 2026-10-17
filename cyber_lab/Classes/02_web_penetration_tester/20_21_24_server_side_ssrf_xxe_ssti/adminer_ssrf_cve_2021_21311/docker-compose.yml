@@ -2,5 +2,6 @@ version: '3'
 services:
   adminer:
     image: vulhub/adminer:4.7.8
+    pull_policy: missing
     ports:
       - "8258:8080"

@@ -1,6 +1,7 @@
 services:
   vulhub_jenkins_2_138_1:
     image: vulhub/jenkins:2.138.1
+    pull_policy: missing
     container_name: cyberlab_vulhub_jenkins_2_138_1
     ports:
       - "8080:8080"

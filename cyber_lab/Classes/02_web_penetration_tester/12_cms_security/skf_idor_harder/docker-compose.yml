@@ -1,6 +1,7 @@
 services:
   skf:
     image: blabla1337/owasp-skf-lab:idor-harder
+    pull_policy: missing
     container_name: cyberlab_skf_idor_harder
     mem_limit: 1024m
     restart: unless-stopped

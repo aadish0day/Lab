@@ -2,6 +2,7 @@ version: '3'
 services:
   nginx:
     image: nginx:1
+    pull_policy: missing
     ports:
       - "8267:80"
     depends_on:
@@ -9,3 +10,4 @@ services:
 
   php:
     image: vulhub/php:7.2.10-fpm
+    pull_policy: missing

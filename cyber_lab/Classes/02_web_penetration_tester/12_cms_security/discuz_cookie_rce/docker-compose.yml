@@ -1,6 +1,7 @@
 services:
   discuz_cookie_rce:
     image: vulhub/discuz:7.2
+    pull_policy: missing
     container_name: cyberlab_02_discuz_cookie_rce
     ports:
       - "8173:80"

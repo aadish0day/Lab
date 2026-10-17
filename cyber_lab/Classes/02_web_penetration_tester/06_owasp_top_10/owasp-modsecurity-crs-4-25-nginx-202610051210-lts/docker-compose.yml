@@ -1,6 +1,7 @@
 services:
   owasp_modsecurity_crs_4_25_nginx_202610051210_lts:
     image: owasp/modsecurity-crs:4.25-nginx-202610051210-lts
+    pull_policy: missing
     container_name: cyberlab_owasp_modsecurity_crs_4_25_nginx_202610051210_lts
     ports:
       - "3000:3000"

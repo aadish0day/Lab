@@ -1,6 +1,7 @@
 services:
   121467570_heartbleed_https:
     image: 121467570/heartbleed:https
+    pull_policy: missing
     container_name: cyberlab_121467570_heartbleed_https
     ports:
       - "80:80"

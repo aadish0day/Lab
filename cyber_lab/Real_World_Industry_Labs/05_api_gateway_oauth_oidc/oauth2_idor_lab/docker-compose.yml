@@ -1,6 +1,7 @@
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
+    pull_policy: missing
     container_name: cyberlab_realworld_oauth_keycloak
     environment:
       - KEYCLOAK_ADMIN=admin

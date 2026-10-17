@@ -1,6 +1,7 @@
 services:
   ssti-target:
     image: d4rk10rd/ssti:latest
+    pull_policy: missing
     container_name: cyberlab_web_ssti_jinja2
     ports:
       - "8094:5000"

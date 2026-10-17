@@ -1,10 +1,12 @@
 services:
   pgsql:
     image: postgres:17-alpine
+    pull_policy: missing
     environment:
       POSTGRES_USER: vulhub
       POSTGRES_PASSWORD: vulhub
   web:
     image: vulhub/pgadmin:9.1
+    pull_policy: missing
     ports:
       - "8429:5050"

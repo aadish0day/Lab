@@ -1,6 +1,7 @@
 services:
   zl407777853_heartbleed_v1:
     image: zl407777853/heartbleed:v1
+    pull_policy: missing
     container_name: cyberlab_zl407777853_heartbleed_v1
     ports:
       - "80:80"

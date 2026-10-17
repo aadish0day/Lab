@@ -1,6 +1,7 @@
 services:
   vulhub_struts:
     image: vulhub/struts
+    pull_policy: missing
     container_name: cyberlab_vulhub_struts
     ports:
       - "80:80"

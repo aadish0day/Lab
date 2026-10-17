@@ -1,6 +1,7 @@
 services:
   gitea_gitea_1262_rootless:
     image: gitea/gitea:1.26.2-rootless
+    pull_policy: missing
     container_name: cyberlab_gitea_gitea_1262_rootless
     ports:
       - "80:80"

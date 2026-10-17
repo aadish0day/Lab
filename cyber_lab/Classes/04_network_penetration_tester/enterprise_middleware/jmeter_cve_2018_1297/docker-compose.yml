@@ -2,5 +2,6 @@ version: '2'
 services:
  jmeter:
    image: vulhub/jmeter:3.3
+   pull_policy: missing
    ports:
     - "8421:1099"

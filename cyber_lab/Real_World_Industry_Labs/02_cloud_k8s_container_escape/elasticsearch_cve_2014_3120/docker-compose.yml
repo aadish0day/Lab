@@ -1,6 +1,7 @@
 services:
  es:
    image: vulhub/elasticsearch:1.1.1
+   pull_policy: missing
    ports:
     - "8393:9200"
     - "9300:9300"

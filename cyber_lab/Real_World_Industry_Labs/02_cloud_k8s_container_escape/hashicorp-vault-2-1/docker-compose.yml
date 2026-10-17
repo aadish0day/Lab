@@ -1,6 +1,7 @@
 services:
   hashicorp_vault_2_1:
     image: hashicorp/vault:2.1
+    pull_policy: missing
     container_name: cyberlab_hashicorp_vault_2_1
     ports:
       - "8200:8200"

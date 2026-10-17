@@ -1,6 +1,7 @@
 services:
   portainer_portainer_ce_alpine_sts:
     image: portainer/portainer-ce:alpine-sts
+    pull_policy: missing
     container_name: cyberlab_portainer_portainer_ce_alpine_sts
     ports:
       - "9000:9000"

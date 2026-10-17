@@ -3,6 +3,7 @@ version: "3.8"
 services:
   saltstack:
     image: vulhub/saltstack:2019.2.3
+    pull_policy: missing
     container_name: cyberlab_saltstack_clearfuncs
     restart: unless-stopped
     ports:

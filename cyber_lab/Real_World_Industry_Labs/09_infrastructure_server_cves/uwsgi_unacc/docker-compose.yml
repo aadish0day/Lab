@@ -1,6 +1,7 @@
 services:
   uwsgi:
     image: nginx:1-alpine
+    pull_policy: missing
     container_name: cyberlab_uwsgi_unacc
     mem_limit: 1024m
     restart: unless-stopped

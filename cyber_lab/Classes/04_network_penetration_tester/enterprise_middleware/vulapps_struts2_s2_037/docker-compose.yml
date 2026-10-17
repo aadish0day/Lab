@@ -1,6 +1,7 @@
 services:
   vulapps:
     image: medicean/vulapps:s_struts2_s2-037
+    pull_policy: missing
     container_name: cyberlab_vulapps_struts2_s2_037
     mem_limit: 1024m
     restart: unless-stopped

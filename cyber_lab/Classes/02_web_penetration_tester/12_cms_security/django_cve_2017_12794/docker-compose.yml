@@ -1,6 +1,7 @@
 services:
   django:
     image: vulhub/django:1.11.4
+    pull_policy: missing
     container_name: cyberlab_django_cve_2017_12794
     mem_limit: 1024m
     restart: unless-stopped

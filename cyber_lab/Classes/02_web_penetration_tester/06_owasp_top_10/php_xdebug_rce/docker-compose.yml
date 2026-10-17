@@ -2,5 +2,6 @@ version: '3'
 services:
   web:
     image: vulhub/php:7.1-xdebug
+    pull_policy: missing
     ports:
       - "8250:80"

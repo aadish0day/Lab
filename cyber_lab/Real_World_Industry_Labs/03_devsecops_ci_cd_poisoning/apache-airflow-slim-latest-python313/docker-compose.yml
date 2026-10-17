@@ -1,6 +1,7 @@
 services:
   apache_airflow_slim_latest_python313:
     image: apache/airflow:slim-latest-python3.13
+    pull_policy: missing
     container_name: cyberlab_apache_airflow_slim_latest_python313
     ports:
       - "80:80"

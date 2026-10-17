@@ -1,6 +1,7 @@
 services:
   apache-traversal:
     image: vulhub/httpd:2.4.49
+    pull_policy: missing
     container_name: cyberlab_02_apache_traversal
     ports:
       - "8138:80"

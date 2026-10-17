@@ -1,6 +1,7 @@
 services:
   vulhub_goahead_3_6_5:
     image: vulhub/goahead:3.6.5
+    pull_policy: missing
     container_name: cyberlab_vulhub_goahead_3_6_5
     ports:
       - "80:80"

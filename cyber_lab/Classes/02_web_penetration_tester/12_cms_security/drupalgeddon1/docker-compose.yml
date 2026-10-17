@@ -1,6 +1,7 @@
 services:
   drupalgeddon1:
     image: vulhub/drupal:7.31
+    pull_policy: missing
     container_name: cyberlab_02_drupalgeddon1
     ports:
       - "8166:80"

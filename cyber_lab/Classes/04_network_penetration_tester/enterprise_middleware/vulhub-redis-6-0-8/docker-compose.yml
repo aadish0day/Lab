@@ -1,6 +1,7 @@
 services:
   vulhub_redis_6_0_8:
     image: vulhub/redis:6.0.8
+    pull_policy: missing
     container_name: cyberlab_vulhub_redis_6_0_8
     ports:
       - "6379:6379"

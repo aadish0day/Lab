@@ -1,6 +1,7 @@
 services:
   ecshop_deserialization_rce:
     image: vulhub/ecshop:2.7.3
+    pull_policy: missing
     container_name: cyberlab_02_ecshop_deserialization
     ports:
       - "8172:80"

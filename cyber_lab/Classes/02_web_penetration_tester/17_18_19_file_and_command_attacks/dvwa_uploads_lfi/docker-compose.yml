@@ -1,6 +1,7 @@
 services:
   dvwa-lfi-upload:
     image: vulnerables/web-dvwa:latest
+    pull_policy: missing
     container_name: cyberlab_02_dvwa_lfi_upload
     ports:
       - "8087:80"

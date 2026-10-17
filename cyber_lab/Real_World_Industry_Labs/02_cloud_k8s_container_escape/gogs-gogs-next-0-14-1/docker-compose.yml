@@ -1,6 +1,7 @@
 services:
   gogs_gogs_next_0_14_1:
     image: gogs/gogs:next-0.14.1
+    pull_policy: missing
     container_name: cyberlab_gogs_gogs_next_0_14_1
     ports:
       - "3000:3000"

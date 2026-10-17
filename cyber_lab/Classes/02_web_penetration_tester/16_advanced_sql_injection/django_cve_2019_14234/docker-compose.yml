@@ -2,6 +2,7 @@ version: '3'
 services:
   django:
     image: vulhub/django:2.2.3
+    pull_policy: missing
     ports:
       - "8236:8000"
     depends_on:
@@ -9,6 +10,7 @@ services:
 
   db:
     image: postgres:9.6-alpine
+    pull_policy: missing
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=django

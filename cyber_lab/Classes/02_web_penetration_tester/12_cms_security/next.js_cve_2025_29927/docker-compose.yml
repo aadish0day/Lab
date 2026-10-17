@@ -1,6 +1,7 @@
 services:
   web:
     image: vulhub/nextjs:15.2.2
+    pull_policy: missing
     ports:
       - "8423:3000"
     environment:

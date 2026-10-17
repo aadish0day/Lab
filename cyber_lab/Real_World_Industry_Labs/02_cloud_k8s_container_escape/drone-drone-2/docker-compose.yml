@@ -1,6 +1,7 @@
 services:
   drone_drone_2:
     image: drone/drone:2
+    pull_policy: missing
     container_name: cyberlab_drone_drone_2
     ports:
       - "80:80"

@@ -1,6 +1,7 @@
 services:
   prom_prometheus_main_busybox:
     image: prom/prometheus:main-busybox
+    pull_policy: missing
     container_name: cyberlab_prom_prometheus_main_busybox
     ports:
       - "9090:9090"

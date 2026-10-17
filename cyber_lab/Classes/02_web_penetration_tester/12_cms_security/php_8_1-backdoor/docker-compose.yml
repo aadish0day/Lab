@@ -2,6 +2,7 @@ version: '2'
 services:
  web:
    image: vulhub/php:8.1-backdoor
+   pull_policy: missing
    volumes:
     - ./index.php:/var/www/html/index.php
    ports:

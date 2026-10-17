@@ -2,6 +2,7 @@ version: '3'
 services:
   unomi:
     image: vulhub/unomi:1.5.1
+    pull_policy: missing
     ports:
       - "8241:8181"
     depends_on:
@@ -9,6 +10,7 @@ services:
 
   elasticsearch:
     image: elasticsearch:7.9.3
+    pull_policy: missing
     environment:
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms256m -Xmx256m"

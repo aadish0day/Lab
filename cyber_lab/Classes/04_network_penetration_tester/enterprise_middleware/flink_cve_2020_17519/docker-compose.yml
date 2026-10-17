@@ -1,6 +1,7 @@
 services:
  flink:
    image: vulhub/flink:1.11.2
+   pull_policy: missing
    command: jobmanager
    ports:
     - "8408:8081"

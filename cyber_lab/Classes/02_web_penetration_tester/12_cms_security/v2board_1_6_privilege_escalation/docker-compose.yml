@@ -2,6 +2,7 @@ version: '2'
 services:
   web:
     image: vulhub/v2board:1.6.1
+    pull_policy: missing
     mem_limit: 1024m
     restart: unless-stopped
     ports:
@@ -17,6 +18,7 @@ services:
     command: apache2-foreground
   db:
    image: mysql:5.7
+   pull_policy: missing
    mem_limit: 1024m
    restart: unless-stopped
    environment:
@@ -24,5 +26,6 @@ services:
     - MYSQL_DATABASE=v2board
   redis:
    image: redis:7-alpine
+   pull_policy: missing
    mem_limit: 1024m
    restart: unless-stopped

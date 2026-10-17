@@ -2,6 +2,7 @@ version: '3'
 services:
   dubbo:
     image: vulhub/dubbo:2.7.3
+    pull_policy: missing
     ports:
       - "8240:8080"
     depends_on:
@@ -9,3 +10,4 @@ services:
 
   zookeeper:
     image: zookeeper:3.7.0
+    pull_policy: missing

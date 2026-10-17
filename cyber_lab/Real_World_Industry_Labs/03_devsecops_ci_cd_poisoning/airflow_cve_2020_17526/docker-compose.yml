@@ -2,6 +2,7 @@ version: '3'
 services:
   airflow:
     image: vulhub/airflow:1.10.10
+    pull_policy: missing
     environment:
       - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqUCho=
       - EXECUTOR=Celery
@@ -14,6 +15,7 @@ services:
 
   postgres:
     image: postgres:13-alpine
+    pull_policy: missing
     environment:
       - POSTGRES_USER=airflow
       - POSTGRES_PASSWORD=airflow
@@ -21,3 +23,4 @@ services:
 
   redis:
     image: redis:5-alpine
+    pull_policy: missing

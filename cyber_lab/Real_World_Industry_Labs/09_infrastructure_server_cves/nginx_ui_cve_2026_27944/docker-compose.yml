@@ -1,6 +1,7 @@
 services:
   nginx_ui:
     image: vulhub/nginx-ui:2.3.2
+    pull_policy: missing
     container_name: cyberlab_nginx_ui_cve_2026_27944
     mem_limit: 1024m
     restart: unless-stopped

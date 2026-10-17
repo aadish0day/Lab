@@ -1,6 +1,7 @@
 services:
   vulhub:
     image: vulhub/mojarra:2.1.29
+    pull_policy: missing
     container_name: cyberlab_vulhub_mojarra_jsf_deserialization
     mem_limit: 1024m
     restart: unless-stopped

@@ -1,6 +1,7 @@
 services:
   cmsms:
     image: vulhub/cmsms:2.2.9.1
+    pull_policy: missing
     container_name: cyberlab_cmsms_cve_2019_9053
     mem_limit: 1024m
     restart: unless-stopped

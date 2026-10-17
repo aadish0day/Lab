@@ -1,6 +1,7 @@
 services:
   scrapyd_unauth_rce:
     image: vulhub/scrapyd:1.2.1
+    pull_policy: missing
     container_name: cyberlab_industry_scrapyd_rce
     ports:
       - "8168:6800"

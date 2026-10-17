@@ -1,6 +1,7 @@
 services:
   flink:
     image: vulhub/flink:1.11.2
+    pull_policy: missing
     container_name: cyberlab_04_flink_path_traversal
     ports:
       - "8135:8081"

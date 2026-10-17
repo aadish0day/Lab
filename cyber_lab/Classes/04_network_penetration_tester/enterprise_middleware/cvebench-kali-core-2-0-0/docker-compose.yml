@@ -1,6 +1,7 @@
 services:
   cvebench_kali_core_2_0_0:
     image: cvebench/kali-core:2.0.0
+    pull_policy: missing
     container_name: cyberlab_cvebench_kali_core_2_0_0
     ports:
       - "8080:8080"

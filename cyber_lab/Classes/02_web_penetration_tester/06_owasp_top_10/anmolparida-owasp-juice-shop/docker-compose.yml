@@ -1,6 +1,7 @@
 services:
   anmolparida_owasp_juice_shop:
     image: anmolparida/owasp:juice-shop
+    pull_policy: missing
     container_name: cyberlab_anmolparida_owasp_juice_shop
     ports:
       - "3000:3000"

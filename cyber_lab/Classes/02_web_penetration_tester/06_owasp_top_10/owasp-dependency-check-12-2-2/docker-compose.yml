@@ -1,6 +1,7 @@
 services:
   owasp_dependency_check_12_2_2:
     image: owasp/dependency-check:12.2.2
+    pull_policy: missing
     container_name: cyberlab_owasp_dependency_check_12_2_2
     ports:
       - "3000:3000"

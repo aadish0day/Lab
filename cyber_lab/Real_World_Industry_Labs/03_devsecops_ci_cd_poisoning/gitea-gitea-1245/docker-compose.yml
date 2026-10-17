@@ -1,6 +1,7 @@
 services:
   gitea_gitea_1245:
     image: gitea/gitea:1.24.5
+    pull_policy: missing
     container_name: cyberlab_gitea_gitea_1245
     ports:
       - "80:80"

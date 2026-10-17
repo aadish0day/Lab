@@ -1,6 +1,7 @@
 services:
   jenkins:
     image: vulhub/jenkins:2.441
+    pull_policy: missing
     container_name: cyberlab_04_jenkins_cve
     ports:
       - "8122:8080"

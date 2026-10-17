@@ -1,6 +1,7 @@
 services:
   yapi:
     image: mongo:5.0.6
+    pull_policy: missing
     container_name: cyberlab_yapi_unacc
     mem_limit: 1024m
     restart: unless-stopped

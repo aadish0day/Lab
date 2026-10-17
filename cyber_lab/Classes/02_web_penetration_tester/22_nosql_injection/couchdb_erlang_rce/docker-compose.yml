@@ -1,6 +1,7 @@
 services:
   couchdb:
     image: vulhub/couchdb:2.1.0
+    pull_policy: missing
     container_name: cyberlab_02_couchdb_erlang_rce
     ports:
       - "5984:5984"

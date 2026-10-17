@@ -1,6 +1,7 @@
 services:
   mongo_express_rce:
     image: vulhub/mongo-express:0.53.0
+    pull_policy: missing
     container_name: cyberlab_02_mongo_express_rce
     ports:
       - "8140:8081"

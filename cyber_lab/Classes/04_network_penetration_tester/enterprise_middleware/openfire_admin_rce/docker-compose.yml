@@ -3,6 +3,7 @@ version: "3.8"
 services:
   openfire:
     image: vulhub/openfire:4.7.4
+    pull_policy: missing
     container_name: cyberlab_openfire
     restart: unless-stopped
     ports:

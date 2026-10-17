@@ -1,6 +1,7 @@
 services:
   solr:
     image: vulhub/solr:8.2.0
+    pull_policy: missing
     container_name: cyberlab_02_solr_velocity_ssti
     ports:
       - "8130:8983"

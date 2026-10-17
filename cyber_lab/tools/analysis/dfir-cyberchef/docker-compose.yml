@@ -1,6 +1,7 @@
 services:
   cyberchef:
     image: mpepping/cyberchef:latest
+    pull_policy: missing
     container_name: cyberlab_dfir_cyberchef
     restart: unless-stopped
     ports:
@@ -8,6 +9,7 @@ services:
 
   volatility:
     image: cincan/volatility3:latest
+    pull_policy: missing
     container_name: cyberlab_dfir_volatility
     restart: unless-stopped
     stdin_open: true

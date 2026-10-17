@@ -1,6 +1,7 @@
 services:
   web:
     image: vulhub/vite:2.1.5
+    pull_policy: missing
     mem_limit: 1024m
     restart: unless-stopped
     ports:

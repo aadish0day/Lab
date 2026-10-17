@@ -1,6 +1,7 @@
 services:
   securecodebox_unsafe_https_latest:
     image: securecodebox/unsafe-https:latest
+    pull_policy: missing
     container_name: cyberlab_securecodebox_unsafe_https_latest
     ports:
       - "3000:3000"

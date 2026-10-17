@@ -1,6 +1,7 @@
 services:
   gitlab_gitlab_ce_nightly:
     image: gitlab/gitlab-ce:nightly
+    pull_policy: missing
     container_name: cyberlab_gitlab_gitlab_ce_nightly
     ports:
       - "80:80"

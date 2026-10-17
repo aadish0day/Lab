@@ -1,6 +1,7 @@
 services:
   sonarqube_26_10_0_133078_community:
     image: sonarqube:26.10.0.133078-community
+    pull_policy: missing
     container_name: cyberlab_sonarqube_26_10_0_133078_community
     ports:
       - "9000:9000"

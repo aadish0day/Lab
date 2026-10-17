@@ -1,6 +1,7 @@
 services:
   hadoop_yarn_rce:
     image: vulhub/hadoop:2.8.1
+    pull_policy: missing
     container_name: cyberlab_industry_hadoop_yarn_rce
     ports:
       - "8162:8088"

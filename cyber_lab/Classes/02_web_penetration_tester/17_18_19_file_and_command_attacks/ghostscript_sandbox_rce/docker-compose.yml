@@ -1,6 +1,7 @@
 services:
   ghostscript:
     image: vulhub/ghostscript:9.23-with-flask
+    pull_policy: missing
     container_name: cyberlab_02_ghostscript_rce
     ports:
       - "8134:8080"

@@ -1,6 +1,7 @@
 services:
   owasp_railsgoat_main:
     image: owasp/railsgoat:main
+    pull_policy: missing
     container_name: cyberlab_owasp_railsgoat_main
     ports:
       - "3000:3000"

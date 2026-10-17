@@ -1,6 +1,7 @@
 services:
   grafana:
     image: vulhub/grafana:11.0.0
+    pull_policy: missing
     container_name: cyberlab_grafana_cve_2024_9264
     mem_limit: 1024m
     restart: unless-stopped

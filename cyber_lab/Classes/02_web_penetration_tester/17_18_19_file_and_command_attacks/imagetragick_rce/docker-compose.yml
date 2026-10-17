@@ -1,6 +1,7 @@
 services:
   imagetragick:
     image: vulhub/imagemagick:6.9.2-10-php
+    pull_policy: missing
     container_name: cyberlab_02_imagetragick_rce
     ports:
       - "8133:80"

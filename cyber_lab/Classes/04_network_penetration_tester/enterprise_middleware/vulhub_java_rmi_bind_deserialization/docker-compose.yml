@@ -1,6 +1,7 @@
 services:
   vulhub:
     image: vulhub/java:rmi-bind
+    pull_policy: missing
     container_name: cyberlab_vulhub_java_rmi_bind_deserialization
     mem_limit: 1024m
     restart: unless-stopped

@@ -1,6 +1,7 @@
 services:
   citizenstig_owaspbricks_latest:
     image: citizenstig/owaspbricks:latest
+    pull_policy: missing
     container_name: cyberlab_citizenstig_owaspbricks_latest
     ports:
       - "80:80"

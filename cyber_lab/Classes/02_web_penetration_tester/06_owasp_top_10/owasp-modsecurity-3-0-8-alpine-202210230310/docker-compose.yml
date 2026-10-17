@@ -1,6 +1,7 @@
 services:
   owasp_modsecurity_3_0_8_alpine_202210230310:
     image: owasp/modsecurity:3.0.8-alpine-202210230310
+    pull_policy: missing
     container_name: cyberlab_owasp_modsecurity_3_0_8_alpine_202210230310
     ports:
       - "3000:3000"

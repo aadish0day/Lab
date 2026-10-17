@@ -1,6 +1,7 @@
 services:
  flask:
    image: vulhub/flask:1.1.1
+   pull_policy: missing
    volumes:
     - ./app.py:/app/app.py
    ports:

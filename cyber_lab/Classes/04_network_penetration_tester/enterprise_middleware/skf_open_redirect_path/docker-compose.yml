@@ -1,6 +1,7 @@
 services:
   skf:
     image: blabla1337/owasp-skf-lab:open-redirect-path
+    pull_policy: missing
     container_name: cyberlab_skf_open_redirect_path
     mem_limit: 1024m
     restart: unless-stopped

@@ -1,6 +1,7 @@
 services:
  solr:
    image: vulhub/solr:8.8.1
+   pull_policy: missing
    ports:
     - "8322:8983"
     - "5005:5005"

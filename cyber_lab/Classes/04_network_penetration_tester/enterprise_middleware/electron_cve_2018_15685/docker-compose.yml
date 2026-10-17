@@ -1,6 +1,7 @@
 services:
   electron:
     image: vulhub/electron:wine
+    pull_policy: missing
     container_name: cyberlab_electron_cve_2018_15685
     mem_limit: 1024m
     restart: unless-stopped

@@ -1,6 +1,7 @@
 services:
   discuz:
     image: vulhub/discuz:x3.4
+    pull_policy: missing
     container_name: cyberlab_discuz_x3_4_arbitrary_file_deletion
     mem_limit: 1024m
     restart: unless-stopped

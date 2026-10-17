@@ -1,6 +1,7 @@
 services:
   skf:
     image: blabla1337/owasp-skf-lab:auth-bypass-timing
+    pull_policy: missing
     container_name: cyberlab_skf_auth_bypass_timing
     mem_limit: 1024m
     restart: unless-stopped

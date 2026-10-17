@@ -1,6 +1,7 @@
 services:
   drone_drone_linux_amd64:
     image: drone/drone:linux-amd64
+    pull_policy: missing
     container_name: cyberlab_drone_drone_linux_amd64
     ports:
       - "80:80"

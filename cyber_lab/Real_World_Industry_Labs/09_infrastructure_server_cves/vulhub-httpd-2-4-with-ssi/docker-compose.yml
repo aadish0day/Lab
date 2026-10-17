@@ -1,6 +1,7 @@
 services:
   vulhub_httpd_2_4_with_ssi:
     image: vulhub/httpd:2.4-with-ssi
+    pull_policy: missing
     container_name: cyberlab_vulhub_httpd_2_4_with_ssi
     ports:
       - "80:80"

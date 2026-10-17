@@ -3,6 +3,7 @@ version: "3.8"
 services:
   saltstack:
     image: vulhub/saltstack:3002
+    pull_policy: missing
     container_name: cyberlab_saltstack
     restart: unless-stopped
     ports:

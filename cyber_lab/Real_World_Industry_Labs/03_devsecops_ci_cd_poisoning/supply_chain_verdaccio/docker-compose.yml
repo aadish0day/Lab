@@ -1,6 +1,7 @@
 services:
   verdaccio:
     image: verdaccio/verdaccio:latest
+    pull_policy: missing
     container_name: cyberlab_verdaccio_registry
     ports:
       - "8110:4873"

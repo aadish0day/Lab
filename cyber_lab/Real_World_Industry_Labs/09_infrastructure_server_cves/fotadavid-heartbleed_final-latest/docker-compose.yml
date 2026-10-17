@@ -1,6 +1,7 @@
 services:
   fotadavid_heartbleed_final_latest:
     image: fotadavid/heartbleed_final:latest
+    pull_policy: missing
     container_name: cyberlab_fotadavid_heartbleed_final_latest
     ports:
       - "80:80"

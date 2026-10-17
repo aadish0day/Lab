@@ -1,6 +1,7 @@
 services:
   inetutils:
     image: vulhub/inetutils:2.5
+    pull_policy: missing
     container_name: cyberlab_inetutils_cve_2026_24061
     mem_limit: 1024m
     restart: unless-stopped

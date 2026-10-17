@@ -3,6 +3,7 @@ version: "3.8"
 services:
   struts2_s2057:
     image: vulhub/struts2:2.3.34-showcase
+    pull_policy: missing
     container_name: cyberlab_struts2_s2057
     restart: unless-stopped
     ports:

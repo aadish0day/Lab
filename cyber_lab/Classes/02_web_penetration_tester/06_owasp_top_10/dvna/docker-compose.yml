@@ -1,6 +1,7 @@
 services:
   dvna:
     image: appsecco/dvna:sqlite
+    pull_policy: missing
     container_name: cyberlab_02_dvna_node
     ports:
       - "8117:9090"

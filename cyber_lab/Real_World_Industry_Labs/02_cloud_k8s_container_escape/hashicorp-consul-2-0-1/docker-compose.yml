@@ -1,6 +1,7 @@
 services:
   hashicorp_consul_2_0_1:
     image: hashicorp/consul:2.0.1
+    pull_policy: missing
     container_name: cyberlab_hashicorp_consul_2_0_1
     ports:
       - "8500:8500"

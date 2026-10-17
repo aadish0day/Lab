@@ -1,6 +1,7 @@
 services:
  spring:
    image: vulhub/spring-cloud-gateway:3.1.0
+   pull_policy: missing
    mem_limit: 1024m
    restart: unless-stopped
    ports:

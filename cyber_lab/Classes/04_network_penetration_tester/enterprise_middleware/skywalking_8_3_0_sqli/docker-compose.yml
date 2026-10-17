@@ -2,11 +2,13 @@ version: '3.5'
 services:
   oap:
     image: vulhub/skywalking:8.3.0
+    pull_policy: missing
     mem_limit: 1024m
     restart: unless-stopped
     command: bash bin/oap-service.sh
   web:
     image: vulhub/skywalking:8.3.0
+    pull_policy: missing
     mem_limit: 1024m
     restart: unless-stopped
     command: bash bin/web-server.sh

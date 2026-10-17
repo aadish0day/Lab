@@ -1,6 +1,7 @@
 services:
   vulapps:
     image: medicean/vulapps:d_drupal_1
+    pull_policy: missing
     container_name: cyberlab_vulapps_drupal_d_1
     mem_limit: 1024m
     restart: unless-stopped

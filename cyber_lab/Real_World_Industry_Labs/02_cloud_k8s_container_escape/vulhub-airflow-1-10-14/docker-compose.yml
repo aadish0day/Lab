@@ -1,6 +1,7 @@
 services:
   vulhub_airflow_1_10_14:
     image: vulhub/airflow:1.10.14
+    pull_policy: missing
     container_name: cyberlab_vulhub_airflow_1_10_14
     ports:
       - "8080:8080"

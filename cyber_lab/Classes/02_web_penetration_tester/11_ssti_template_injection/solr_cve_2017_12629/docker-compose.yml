@@ -3,6 +3,7 @@ version: "3.8"
 services:
   solr:
     image: vulhub/solr:7.0.1
+    pull_policy: missing
     container_name: cyberlab_solr_rce
     restart: unless-stopped
     ports:

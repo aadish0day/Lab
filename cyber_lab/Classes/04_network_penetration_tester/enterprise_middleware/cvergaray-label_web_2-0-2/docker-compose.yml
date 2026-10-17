@@ -1,6 +1,7 @@
 services:
   cvergaray_label_web_2_0_2:
     image: cvergaray/label_web_2:0.2
+    pull_policy: missing
     container_name: cyberlab_cvergaray_label_web_2_0_2
     ports:
       - "8080:8080"

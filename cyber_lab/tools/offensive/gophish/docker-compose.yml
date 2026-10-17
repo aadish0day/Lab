@@ -1,6 +1,7 @@
 services:
   gophish:
     image: gophish/gophish:latest
+    pull_policy: missing
     container_name: cyberlab_realworld_gophish
     ports:
       - "3333:3333"

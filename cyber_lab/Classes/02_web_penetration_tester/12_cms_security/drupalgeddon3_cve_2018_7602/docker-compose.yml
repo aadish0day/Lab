@@ -2,5 +2,6 @@ version: '3'
 services:
   drupal:
     image: vulhub/drupal:7.57
+    pull_policy: missing
     ports:
       - "8233:80"

@@ -3,6 +3,7 @@ version: "3.8"
 services:
   activemq:
     image: vulhub/activemq:5.17.3
+    pull_policy: missing
     container_name: cyberlab_activemq_46604
     restart: unless-stopped
     ports:

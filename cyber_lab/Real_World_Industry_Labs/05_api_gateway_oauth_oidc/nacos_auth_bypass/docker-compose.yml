@@ -3,6 +3,7 @@ version: "3.8"
 services:
   nacos:
     image: vulhub/nacos:1.4.0
+    pull_policy: missing
     container_name: cyberlab_nacos
     restart: unless-stopped
     ports:

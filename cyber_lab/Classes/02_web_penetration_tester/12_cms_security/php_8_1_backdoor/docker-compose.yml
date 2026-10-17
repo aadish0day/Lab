@@ -1,6 +1,7 @@
 services:
   php:
     image: vulhub/php:8.1-backdoor
+    pull_policy: missing
     container_name: cyberlab_php_8_1_backdoor
     mem_limit: 1024m
     restart: unless-stopped

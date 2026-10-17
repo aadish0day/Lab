@@ -1,6 +1,7 @@
 services:
   vulhub_node_900:
     image: vulhub/node:9.0.0
+    pull_policy: missing
     container_name: cyberlab_vulhub_node_900
     ports:
       - "80:80"

@@ -3,6 +3,7 @@ version: "3.8"
 services:
   couchdb:
     image: vulhub/couchdb:3.2.1
+    pull_policy: missing
     container_name: cyberlab_couchdb_cookie
     restart: unless-stopped
     ports:
