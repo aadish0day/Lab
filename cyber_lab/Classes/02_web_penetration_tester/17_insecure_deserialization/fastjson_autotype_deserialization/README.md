@@ -16,6 +16,7 @@ In Fastjson versions prior to 1.2.25, the **AutoType** feature allowed JSON payl
 ## Exploitation Walkthrough
 
 ### 1. Verification of Vulnerability via POST Request
+
 Post a JSON payload targeting `JdbcRowSetImpl` pointing to an OOB callback server (or Interactsh from `tools/offensive/interactsh-oob`):
 
 ```bash

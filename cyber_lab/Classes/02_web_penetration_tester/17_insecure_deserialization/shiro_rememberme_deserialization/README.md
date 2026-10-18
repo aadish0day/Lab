@@ -43,6 +43,7 @@ When a user logs into an Apache Shiro application with "Remember Me" checked, Sh
 ## Exploitation Walkthrough
 
 ### 1. Verification of Shiro Exposure
+
 Send a request with an arbitrary `rememberMe=1` cookie. If Shiro is active, it responds with `Set-Cookie: rememberMe=deleteMe`:
 
 ```bash
@@ -50,6 +51,7 @@ curl -I -s 'http://localhost:8127/login.jsp' -H 'Cookie: rememberMe=1' | grep -i
 ```
 
 ### 2. Generating & Sending Malicious Payload
+
 Using Python and `ysoserial` (or Metasploit):
 
 ```bash

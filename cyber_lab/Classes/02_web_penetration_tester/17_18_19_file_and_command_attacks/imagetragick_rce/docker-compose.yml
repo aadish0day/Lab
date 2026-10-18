@@ -3,6 +3,9 @@ services:
     image: vulhub/imagemagick:6.9.2-10-php
     pull_policy: missing
     container_name: cyberlab_02_imagetragick_rce
+    command: php -t /var/www/html -S 0.0.0.0:80
+    volumes:
+      - ./index.php:/var/www/html/index.php
     ports:
       - "8133:80"
     restart: unless-stopped

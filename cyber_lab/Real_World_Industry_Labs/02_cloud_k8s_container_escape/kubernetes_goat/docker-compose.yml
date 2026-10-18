@@ -6,8 +6,8 @@ services:
     privileged: true
     restart: unless-stopped
     ports:
-      - "8105:80"        # Ingress HTTP / Scenario Web Access
-      - "6443:6443"      # Kubernetes API Server
+      - "8105:80" # Ingress HTTP / Scenario Web Access
+      - "6443:6443" # Kubernetes API Server
     environment:
       - K3S_KUBECONFIG_OUTPUT=/output/kubeconfig.yaml
       - K3S_KUBECONFIG_MODE=666

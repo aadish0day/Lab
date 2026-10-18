@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   web:
     image: medicean/vulapps:m_memcached_CVE-2016-8704

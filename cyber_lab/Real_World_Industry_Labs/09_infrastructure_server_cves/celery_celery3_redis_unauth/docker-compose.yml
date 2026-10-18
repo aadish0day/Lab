@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   redis:
     image: redis
@@ -11,7 +11,7 @@ services:
     volumes:
       - .:/home/user
     command: "celery -A tasks worker -l debug"
-    links: 
+    links:
       - redis
     environment:
       CELERY_BROKER_URL: redis://redis/0

@@ -8,8 +8,8 @@ set -e
 
 echo "[*] Waiting for K3s cluster inside cyberlab_k8s_goat to be ready..."
 until docker exec cyberlab_k8s_goat kubectl get nodes >/dev/null 2>&1; do
-  echo "    Waiting for cluster API server..."
-  sleep 3
+	echo "    Waiting for cluster API server..."
+	sleep 3
 done
 
 echo "[+] K3s cluster is online!"

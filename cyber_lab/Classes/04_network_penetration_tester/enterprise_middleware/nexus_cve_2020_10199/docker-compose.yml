@@ -1,11 +1,11 @@
-version: '3'
+version: "3"
 services:
- web:
-   image: vulhub/nexus:3.21.1
-   pull_policy: missing
-   mem_limit: 1024m
-   restart: unless-stopped
-   ports:
-    - "8485:8081"
-   volumes: 
-    - ./admin.password:/nexus-data/admin.password
+  web:
+    image: vulhub/nexus:3.21.1
+    pull_policy: missing
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8485:8081"
+    volumes:
+      - ./admin.password:/nexus-data/admin.password

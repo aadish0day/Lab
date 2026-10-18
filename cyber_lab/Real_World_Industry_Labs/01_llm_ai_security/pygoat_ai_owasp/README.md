@@ -1,6 +1,7 @@
 # OWASP Top 10 for LLMs & AI Application Security
 
 ## Overview
+
 Modern AI security challenges: Direct & Indirect Prompt Injection, Insecure Output Handling, AI Agent SSRF, and Pickle Insecure Deserialization.
 
 - **Default Port / Access**: `8091`
@@ -25,7 +26,9 @@ Modern AI security challenges: Direct & Indirect Prompt Injection, Insecure Outp
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

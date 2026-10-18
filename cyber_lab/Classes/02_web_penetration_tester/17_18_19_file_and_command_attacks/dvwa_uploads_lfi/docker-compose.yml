@@ -6,3 +6,8 @@ services:
     ports:
       - "8087:80"
     restart: unless-stopped
+    volumes:
+      - dvwa_uploads_db_data:/var/lib/mysql
+
+volumes:
+  dvwa_uploads_db_data:

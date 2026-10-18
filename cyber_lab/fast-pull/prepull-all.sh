@@ -24,18 +24,18 @@ JOBS="${JOBS:-4}"
 FILTER="${1:-}"
 
 if [[ -n "$FILTER" && "$FILTER" != *"*"* ]]; then
-  FILTER="$FILTER*"
+	FILTER="$FILTER*"
 fi
 
 list_labs() {
-  if [[ -n "$FILTER" ]]; then
-    # Let the shell expand globs in FILTER, then hand the paths to find.
-    # shellcheck disable=SC2086
-    set -- $ROOT/$FILTER
-    find "$@" -name 'docker-compose*.y*ml' -print0 2>/dev/null
-  else
-    find "$ROOT" -name 'docker-compose*.y*ml' -print0
-  fi
+	if [[ -n "$FILTER" ]]; then
+		# Let the shell expand globs in FILTER, then hand the paths to find.
+		# shellcheck disable=SC2086
+		set -- $ROOT/$FILTER
+		find "$@" -name 'docker-compose*.y*ml' -print0 2>/dev/null
+	else
+		find "$ROOT" -name 'docker-compose*.y*ml' -print0
+	fi
 }
 
 count="$(list_labs | tr -cd '\0' | wc -c)"

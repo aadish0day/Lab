@@ -1,10 +1,11 @@
 # MITRE Caldera: Cyber Adversary Emulation Platform
 
 ## Overview
+
 Automated adversary emulation platform built directly on the **MITRE ATT&CK® framework**. Caldera enables security teams, red teams, and purple teams to systematically test enterprise defenses, validate SIEM/EDR detection rules, and emulate realistic advanced persistent threat (APT) campaigns using intelligent software agents.
 
 - **Default Port / Access**: `http://localhost:8888`
-- **Default Credentials**: 
+- **Default Credentials**:
   - Red Operator: `red` / `admin`
   - Blue Defender: `blue` / `admin`
   - Administrator: `admin` / `admin`
@@ -45,13 +46,17 @@ Automated adversary emulation platform built directly on the **MITRE ATT&CK® fr
 ## How to Solve & Practice
 
 ### 1. Launch Caldera
+
 ```bash
 docker compose up -d
 ```
+
 Navigate to `http://localhost:8888` in your browser and log in with username `red` and password `admin`.
 
 ### 2. Deploy a Sandcat Agent (`54ndc47`)
+
 In the Caldera navigation bar:
+
 1. Navigate to **Agents** -> **Deploy an Agent**.
 2. Select `sandcat (54ndc47)`.
 3. Choose the target operating system (e.g., `Linux`).
@@ -66,6 +71,7 @@ In the Caldera navigation bar:
 6. Return to **Agents** in the web dashboard; you will see the active agent reporting its PID, hostname, privilege level, and heartbeat interval.
 
 ### 3. Explore Abilities & Adversary Profiles
+
 - Click on **Profiles** in the left sidebar.
 - Inspect the built-in **Discovery** profile: notice how techniques map directly to ATT&CK tactics (Reconnaissance, Discovery, Execution).
 - Clone or create a new profile called `Lab-Discovery-Test` and add:
@@ -74,6 +80,7 @@ In the Caldera navigation bar:
   - `System Information Discovery` (T1082)
 
 ### 4. Launch an Autonomous Operation
+
 1. Click on **Operations** -> **Create Operation**.
 2. Enter an operation name: `OP-EVAL-01`.
 3. Select the **Adversary**: `Lab-Discovery-Test` (or `Discovery`).
@@ -83,6 +90,7 @@ In the Caldera navigation bar:
 7. Click **Start**.
 
 ### 5. Monitor and Analyze Results
+
 - Watch the live operation graph execute abilities sequentially.
 - Click on completed steps (green nodes) to inspect:
   - Executed payload string.
@@ -101,7 +109,9 @@ In the Caldera navigation bar:
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

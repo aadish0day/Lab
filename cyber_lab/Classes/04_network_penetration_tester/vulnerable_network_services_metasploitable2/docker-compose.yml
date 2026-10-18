@@ -4,9 +4,10 @@ services:
     pull_policy: missing
     container_name: cyberlab_04_metasploitable2
     ports:
-      - "21:21"
-      - "22:22"
-      - "23:23"
-      - "80:80"
-      - "445:445"
+      - "2121:21"
+      - "2222:22"
+      - "2323:23"
+      - "8082:80"
+      - "4450:445"
+      - "6200:6200"
     restart: unless-stopped

@@ -1,6 +1,7 @@
 # Active Directory & LDAP Enumeration Lab
 
 ## Overview
+
 Lightweight containerized LDAP server (GLAuth) configured with domain accounts, groups, and service users for enumeration practice.
 
 - **Default Port / Access**: `3893`
@@ -27,7 +28,9 @@ Lightweight containerized LDAP server (GLAuth) configured with domain accounts, 
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

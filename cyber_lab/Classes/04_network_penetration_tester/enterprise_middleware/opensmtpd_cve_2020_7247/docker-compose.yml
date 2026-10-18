@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   smtpd:
     image: vulhub/opensmtpd:6.6.1p1

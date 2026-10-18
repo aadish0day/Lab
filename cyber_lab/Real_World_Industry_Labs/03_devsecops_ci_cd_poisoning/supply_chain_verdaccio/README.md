@@ -185,17 +185,22 @@ Simulate a continuous integration (CI/CD) pipeline running `npm install` for an 
 ## Defensive Engineering & Remediation
 
 ### 1. Mandatory Scoped Packages
+
 Never use unscoped global package names for private code. Prefix all internal packages with an organization scope owned by your company on public `npmjs.com`:
+
 ```json
 {
   "name": "@mycorp/auth-utils",
   "version": "1.0.0"
 }
 ```
+
 Public npm enforces that only authorized organization members can publish packages beginning with `@mycorp/`.
 
 ### 2. Explicit Registry Scoping in `.npmrc`
+
 Bind your internal scope exclusively to your internal Verdaccio registry:
+
 ```ini
 # .npmrc
 registry=https://registry.npmjs.org/
@@ -204,28 +209,33 @@ always-auth=true
 ```
 
 ### 3. Registry Uplink Isolation (Verdaccio Configuration)
+
 Configure Verdaccio to **never** query upstream public proxies for your internal scope:
+
 ```yaml
 # config.yaml
 packages:
-  '@mycorp/*':
+  "@mycorp/*":
     access: $authenticated
     publish: $authenticated
     # Crucial: omit 'proxy: npmjs' so Verdaccio never asks npmjs for @mycorp packages
-  '**':
+  "**":
     access: $all
     publish: $authenticated
     proxy: npmjs
 ```
 
 ### 4. Disabling Build Scripts in Production / CI
+
 Prevent unvetted code execution during build steps:
+
 ```bash
 npm install --ignore-scripts
 # Or using modern pnpm with strict script execution policies
 ```
 
 ### 5. Enforcing Lockfiles with Hash Verification
+
 Always use `npm ci` rather than `npm install` in CI/CD pipelines to ensure dependencies strictly match the pinned cryptographic integrity hashes (`sha512-...`) recorded in `package-lock.json`.
 
 ---
@@ -242,7 +252,9 @@ All video links have been verified active via YouTube oEmbed API (`HTTP 200 OK`)
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Start Verdaccio registry
 ./lab start verdaccio

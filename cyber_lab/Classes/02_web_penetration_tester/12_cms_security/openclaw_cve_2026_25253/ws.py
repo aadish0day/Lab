@@ -23,7 +23,9 @@ try:
     import websockets
     from websockets.exceptions import ConnectionClosedError
 except ImportError:
-    sys.stderr.write("[-] 'websockets' package not installed. Run: pip3 install websockets\n")
+    sys.stderr.write(
+        "[-] 'websockets' package not installed. Run: pip3 install websockets\n"
+    )
     sys.exit(1)
 
 
@@ -41,7 +43,9 @@ async def handler(ws):
                 device = params.get("device", {})
                 token = auth.get("token", "")
 
-                print("[+] Captured auth.token:", token[:16] + "..." if token else "N/A")
+                print(
+                    "[+] Captured auth.token:", token[:16] + "..." if token else "N/A"
+                )
                 print("    role:", params.get("role", ""))
                 print("    scopes:", params.get("scopes", []))
                 print("    device.id:", device.get("id", ""))
@@ -51,11 +55,15 @@ async def handler(ws):
                 # Ack to keep connection briefly alive
                 msg_id = obj.get("id")
                 if msg_id:
-                    await ws.send(json.dumps({
-                        "type": "res",
-                        "id": msg_id,
-                        "result": {"ok": True},
-                    }))
+                    await ws.send(
+                        json.dumps(
+                            {
+                                "type": "res",
+                                "id": msg_id,
+                                "result": {"ok": True},
+                            }
+                        )
+                    )
 
                 return
     except ConnectionClosedError:

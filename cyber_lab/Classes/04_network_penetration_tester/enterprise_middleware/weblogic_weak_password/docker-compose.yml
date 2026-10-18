@@ -1,9 +1,9 @@
 services:
- weblogic:
-   image: vulhub/weblogic:10.3.6.0-2017
-   pull_policy: missing
-   volumes:
-    - ./web:/root/Oracle/Middleware/user_projects/domains/base_domain/autodeploy
-   ports:
-    - "8335:7001"
-    - "5556:5556"
+  weblogic:
+    image: vulhub/weblogic:10.3.6.0-2017
+    pull_policy: missing
+    volumes:
+      - ./web:/root/Oracle/Middleware/user_projects/domains/base_domain/autodeploy
+    ports:
+      - "8335:7001"
+      - "5556:5556"

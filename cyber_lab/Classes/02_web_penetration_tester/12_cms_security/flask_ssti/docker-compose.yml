@@ -1,8 +1,8 @@
 services:
- web:
-   image: vulhub/flask:1.1.1
-   pull_policy: missing
-   volumes:
-    - ./src:/app
-   ports:
-    - "8283:8000"
+  web:
+    image: vulhub/flask:1.1.1
+    pull_policy: missing
+    volumes:
+      - ./src:/app
+    ports:
+      - "8283:8000"

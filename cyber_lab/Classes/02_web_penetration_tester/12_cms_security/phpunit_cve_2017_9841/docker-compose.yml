@@ -1,7 +1,7 @@
-version: '2'
+version: "2"
 services:
- web:
-   image: vulhub/phpunit:5.6.2
-   pull_policy: missing
-   ports:
-    - "8432:80"
+  web:
+    image: vulhub/phpunit:5.6.2
+    pull_policy: missing
+    ports:
+      - "8432:80"

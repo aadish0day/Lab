@@ -1,15 +1,18 @@
 # DSXS-XSS - Damn-Small-XSS-Scanner
 
 ## Overview
+
 - **Vulnerability ID**: DSXS-LAB
 - **Application**: DSXS-XSS
 - **Port Allocation**: Port 8522
 - **CLI Shortcut**: `./lab start dsxs-xss-damn-small-xss-scanner`
 
 ## Vulnerability Description
+
 Damn Small XSS Scanner target application providing varied XSS injection vectors and contexts.
 
 ## Quick Start
+
 ```bash
 # Start target environment
 ./lab start dsxs-xss-damn-small-xss-scanner
@@ -22,9 +25,11 @@ Damn Small XSS Scanner target application providing varied XSS injection vectors
 ```
 
 ## Verification & Exploitation
+
 ```bash
 curl http://localhost:8522/
 ```
 
 ## Video Walkthrough
+
 - Walkthrough: [DSXS-XSS Damn-Small-XSS-Scanner Security Assessment Walkthrough](https://www.youtube.com/watch?v=FUODIae2d98)

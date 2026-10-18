@@ -43,6 +43,7 @@ Unlike IT networks where authentication and encryption are standard, legacy **Op
 ## Key ICS / OT Attack Scenarios & Exercises
 
 ### 1. Modbus TCP Reconnaissance & Register Mapping
+
 The Modbus protocol communicates in plaintext over TCP port 502. Use Nmap scripts or Python `pymodbus` to enumerate the PLC:
 
 ```bash
@@ -61,6 +62,7 @@ client.close()
 ```
 
 ### 2. Forcing Actuator Coils & Register Tampering
+
 In industrial environments, modifying registers alters physical behavior (such as opening emergency pressure relief valves or altering chemical dosing ratios):
 
 ```bash
@@ -77,8 +79,9 @@ client.close()
 ```
 
 ### 3. OpenPLC Web HMI Code Injection RCE (CVE-2021-31630)
-* **Vulnerability Mechanism**: The OpenPLC web interface permits administrators to select hardware platforms (`/hardware`). OpenPLC generates a C file (`hardware_layer.cpp`) based on this form and compiles it using `g++` via `system()` without input sanitization.
-* **Metasploit Exploitation**:
+
+- **Vulnerability Mechanism**: The OpenPLC web interface permits administrators to select hardware platforms (`/hardware`). OpenPLC generates a C file (`hardware_layer.cpp`) based on this form and compiles it using `g++` via `system()` without input sanitization.
+- **Metasploit Exploitation**:
   ```bash
   msfconsole -q
   use exploit/linux/http/openplc_rce
@@ -91,6 +94,7 @@ client.close()
   The exploit uploads a reverse shell embedded directly inside the compiled C hardware driver, yielding an interactive root shell.
 
 ### 4. Stuxnet-Style Logic Injection
+
 Upload an IEC 61131-3 Structured Text (ST) program that manipulates internal holding registers while keeping HMI reporting registers fixed, blindfolding operators to physical equipment tampering.
 
 ---

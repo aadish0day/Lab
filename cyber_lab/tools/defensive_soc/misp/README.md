@@ -1,6 +1,7 @@
 # MISP Open Source Threat Intelligence & Sharing Platform
 
 ## Overview
+
 Deploy and operate **MISP (Malware Information Sharing Platform)**, the global standard for Cyber Threat Intelligence (CTI) sharing, indicator correlation, and automated defensive rule generation. Ingest, structure, normalize, and contextualize Indicators of Compromise (IoCs), map malicious campaigns to **MITRE ATT&CK** techniques and threat actor profiles using **MISP Galaxies & Taxonomies**, ingest/export intelligence using **STIX 2.1 / TAXII**, and automatically generate actionable detection rules for **Suricata**, **Snort**, and **YARA**.
 
 - **Default Port / Access**:
@@ -88,14 +89,17 @@ Deploy and operate **MISP (Malware Information Sharing Platform)**, the global s
 ## Core MISP Concepts
 
 ### 1. Events, Attributes, and Objects
+
 - **Event**: The top-level container describing an incident, campaign, or intelligence report. Contains metadata: date, threat level (High, Medium, Low), analysis status (Initial, Ongoing, Completed), and distribution rules (TLP:CLEAR, TLP:AMBER, TLP:RED).
 - **Attribute**: An individual technical indicator within an event (e.g. `ip-dst: 198.51.100.25`, `domain: malicious-c2.net`, `sha256: 275a021bbf...`). Each attribute has an **IDS flag** (whether to export into NIDS/EDR rules).
 - **Object**: A structured combination of related attributes following predefined schemas (e.g., `file` object with filename, md5, sha256, and size; `network-connection` object with src_ip, dst_ip, and dst_port).
 
 ### 2. Correlation Engine
+
 When an analyst enters an attribute (e.g. an MD5 hash), MISP's correlation engine automatically links it to all past events across organizations sharing the same attribute. This instantly reveals if a newly observed indicator is part of an ongoing multi-year campaign by a tracked Advanced Persistent Threat (APT).
 
 ### 3. MISP Taxonomies & Galaxies
+
 - **Taxonomies**: Classification libraries used to tag events systematically:
   - **TLP (Traffic Light Protocol)**: `tlp:white`, `tlp:green`, `tlp:amber`, `tlp:red`.
   - **Admiralty Scale (Information Reliability)**: Source reliability (`A` to `F`) and information credibility (`1` to `6`).
@@ -105,6 +109,7 @@ When an analyst enters an attribute (e.g. an MD5 hash), MISP's correlation engin
   - **MITRE ATT&CK**: Maps indicators to tactics (`Initial Access`, `Execution`, `Command and Control`) and specific techniques (`T1059.001 - PowerShell`).
 
 ### 4. STIX 2.1 and TAXII 2.1 Standard
+
 - **STIX (Structured Threat Information eXpression)**: An OASIS open-standard graph serialization format (`json`) defining Cyber Observables, Indicators, Attack Patterns, Malware, and Campaigns.
 - **TAXII (Trusted Automated eXchange of Intelligence Information)**: The application-layer transport protocol for routing cyber threat intelligence over HTTPS REST APIs.
 
@@ -113,15 +118,19 @@ When an analyst enters an attribute (e.g. an MD5 hash), MISP's correlation engin
 ## How to Solve & Practice
 
 ### 1. Launch the MISP Intelligence Stack
+
 ```bash
 docker compose up -d
 ```
+
 Verify all containers are up and healthy:
+
 ```bash
 docker ps --filter "name=cyberlab_misp_"
 ```
 
 ### 2. Log in to the MISP Web Console
+
 1. Navigate to:
    ```
    http://localhost:8115
@@ -132,6 +141,7 @@ docker ps --filter "name=cyberlab_misp_"
 3. When prompted, establish your new administrator password.
 
 ### 3. Create a Threat Intelligence Event
+
 1. Click **Events** -> **Add Event** in the top navigation bar.
 2. Fill in the event metadata:
    - **Distribution**: This Community Only (or Connected Communities)
@@ -141,6 +151,7 @@ docker ps --filter "name=cyberlab_misp_"
 3. Click **Submit**.
 
 ### 4. Add Indicators and Objects
+
 1. Inside the created event, click **Add Attribute**:
    - **Category**: Network activity
    - **Type**: domain
@@ -153,13 +164,16 @@ docker ps --filter "name=cyberlab_misp_"
    - **For Intrusion Detection System**: Checked (Yes)
 
 ### 5. Tag with Taxonomies & Attach Galaxies
+
 1. Click **Add Tag** on the event header:
    - Select `tlp:amber`
    - Select `misp-galaxy:mitre-attack-pattern="Command and Scripting Interpreter - T1059"`
 2. Notice the visual relationship graph that MISP renders automatically connecting the indicators to known threat clusters.
 
 ### 6. Export Actionable Detection Rules
+
 Export the curated indicators into live detection rules for your sensor grid:
+
 1. In the event view, click **Export**.
 2. Select your target detection format:
    - **Suricata Rules**: Generates ready-to-deploy Suricata alert signatures matching DNS queries and HTTP Host headers.
@@ -169,7 +183,9 @@ Export the curated indicators into live detection rules for your sensor grid:
 3. Compare the generated Suricata output with the custom rules authoring practiced in `Classes/03_network_security/suricata_evebox_soc`.
 
 ### 7. Import External STIX 2.1 Threat Feed
+
 Import the provided sample STIX 2.1 bundle:
+
 1. Navigate to **Events** -> **Import from**.
 2. Select **Upload STIX 2.0 / 2.1 File**.
 3. Select the file located at:
@@ -189,7 +205,9 @@ Import the provided sample STIX 2.1 bundle:
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

@@ -3,7 +3,7 @@ services:
     image: stirlingtools/stirling-pdf:latest-fat
     container_name: stirling-pdf
     ports:
-      - '9000:8080'
+      - "9000:8080"
     volumes:
       - ./stirling-data/tessdata:/usr/share/tessdata
       - ./stirling-data:/configs

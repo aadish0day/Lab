@@ -1,17 +1,15 @@
-version: "3.8"
-
 services:
   fastjson:
     image: vulhub/fastjson:1.2.45
     pull_policy: missing
-    container_name: cyberlab_fastjson_autotype
+    container_name: cyberlab_02_fastjson_12086
     restart: unless-stopped
     ports:
       - "8205:8090"
     deploy:
       resources:
         limits:
-          memory: 1024m
+          memory: 400M
     labels:
       - "cyberlab.managed=true"
       - "cyberlab.category=practice-target"

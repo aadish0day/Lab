@@ -1,8 +1,8 @@
 services:
- saltstack:
-   image: vulhub/saltstack:2019.2.3
-   pull_policy: missing
-   mem_limit: 1024m
-   restart: unless-stopped
-   ports:
-    - "8489:8000"
+  saltstack:
+    image: vulhub/saltstack:2019.2.3
+    pull_policy: missing
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8489:8000"

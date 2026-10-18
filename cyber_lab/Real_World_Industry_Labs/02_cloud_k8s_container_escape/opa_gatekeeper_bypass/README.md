@@ -68,6 +68,7 @@ docker compose exec -it opa opa eval \
 ```
 
 ### Policy-as-Code (PaC) Paradigm
+
 1. **ConstraintTemplates**: Define the abstract Rego validation logic and parameters.
 2. **Constraints**: Bind the template to specific Kubernetes resources, namespaces, and enforcement actions (`deny`, `dryrun`, or `warn`).
 3. **Data Ingestion**: Rego queries compare incoming request objects (`input.request.object`) against cluster state stored in OPA memory.
@@ -77,7 +78,9 @@ docker compose exec -it opa opa eval \
 ## Attack Vector 1: Rego Logic Flaws & Truthiness Traps
 
 ### Threat Model & Rego Mechanics
+
 Rego is not an imperative language; it is a declarative, set-based query language. Key properties that introduce vulnerabilities:
+
 - **Default Behavior**: In Rego, if no rule generates a contradiction or if a condition fails, undefined evaluation occurs.
 - **AND vs OR Semantics**:
   - Statements on separate lines inside a single rule block are evaluated as logical **AND**. If any statement is false or undefined, the entire rule fails.
@@ -95,6 +98,7 @@ Rego is not an imperative language; it is a declarative, set-based query languag
 ## Attack Vector 2: Undefined Variable Fall-Through (Privileged Root Bypass)
 
 ### The Vulnerability
+
 A common pattern in custom admission webhooks is writing a rule that detects explicit violations:
 
 ```rego
@@ -115,14 +119,17 @@ allow = false {
 ```
 
 ### The Flaw
+
 The policy author assumed that containers either have `runAsNonRoot: true` or `runAsNonRoot: false`.
 However, in Kubernetes, `securityContext` is entirely optional. When a developer omits `securityContext`:
+
 1. `container.securityContext.runAsNonRoot` evaluates to **undefined**.
 2. The `deny` block halts immediately without producing an error.
 3. The count of `deny` is 0, so `default allow = true` takes effect!
 4. Kubernetes spawns the container with standard default settings: **UID 0 (root)**!
 
 ### Hands-On Exploitation
+
 Send `bypass_undefined_root_pod.json` to the OPA server:
 
 ```bash
@@ -132,6 +139,7 @@ curl -s -X POST http://127.0.0.1:8111/v1/data/kubernetes/admission/security_cont
 ```
 
 **Result**:
+
 ```json
 {
   "result": {
@@ -139,6 +147,7 @@ curl -s -X POST http://127.0.0.1:8111/v1/data/kubernetes/admission/security_cont
   }
 }
 ```
+
 The admission controller allows the pod, and it executes as unconstrained root inside the cluster.
 
 ---
@@ -146,6 +155,7 @@ The admission controller allows the pod, and it executes as unconstrained root i
 ## Attack Vector 3: Regex Anchor Bypass in Admission Control
 
 ### The Vulnerability
+
 Organizations enforce trusted container registries by matching image strings against corporate prefixes. A common flaw is omitting regular expression anchors (`^` for beginning of string, `$` for end of string):
 
 ```rego
@@ -164,12 +174,15 @@ allow = false { count(deny) > 0 }
 ```
 
 ### The Flaw
+
 Because `re_match` searches for a substring anywhere within the image string without anchors:
+
 - `internal-registry.corp.com/approved-app:v1` -> **MATCHES** (Approved)
 - `docker.io/attacker/internal-registry.corp.com-backdoor:latest` -> **MATCHES** (Bypassed!)
 - `internal-registry.corp.com.attacker.com/pwned:latest` -> **MATCHES** (Bypassed!)
 
 ### Hands-On Exploitation
+
 Submit a pod referencing an external malicious registry disguised with the trusted domain as a path component:
 
 ```bash
@@ -179,6 +192,7 @@ curl -s -X POST http://127.0.0.1:8111/v1/data/kubernetes/admission/registry \
 ```
 
 **Result**:
+
 ```json
 {
   "result": {
@@ -186,6 +200,7 @@ curl -s -X POST http://127.0.0.1:8111/v1/data/kubernetes/admission/registry \
   }
 }
 ```
+
 The attacker pulls arbitrary malicious containers into the production cluster despite policy enforcement.
 
 ---
@@ -193,7 +208,9 @@ The attacker pulls arbitrary malicious containers into the production cluster de
 ## Attack Vector 4: Pod Security Standard (PSS) Bypasses
 
 ### 1. Ephemeral Containers Bypass (`kubectl debug`)
+
 Many Gatekeeper ConstraintTemplates and legacy Kyverno policies inspect only:
+
 - `spec.containers[_]`
 - `spec.initContainers[_]`
 
@@ -206,11 +223,14 @@ curl -s -X POST http://127.0.0.1:8111/v1/data/kubernetes/admission/pod_security 
 ```
 
 ### 2. HostPath Volume Obfuscation & SubPath Escapes
+
 Policies banning `hostPath` volumes can often be bypassed by:
+
 - Using symbolic links inside persistent volumes.
 - Path normalization bypasses (e.g. `/var/run/docker.sock` vs `/var/log/../../var/run/docker.sock` if path resolution is performed textually instead of canonicalized).
 
 ### 3. Namespace Selector & Label Tampering
+
 Gatekeeper uses `namespaceSelector` to exclude system namespaces (`kube-system`).
 If an attacker has permission to create pods in unmonitored namespaces or can apply labels like `admission.gatekeeper.sh/ignore=true` to an existing namespace, Gatekeeper ignores all objects within that namespace.
 
@@ -221,13 +241,17 @@ If an attacker has permission to create pods in unmonitored namespaces or can ap
 Review the included hardened policy at `policies/hardened_admission.rego`:
 
 ### 1. Enforce Default Deny
+
 Never rely on `default allow = true`. Explicitly deny by default and require all security assertions to pass:
+
 ```rego
 default allow = false
 ```
 
 ### 2. Safe Object Access with `object.get`
+
 Never traverse deeply nested optional objects directly. Use `object.get` with an explicit fallback value:
+
 ```rego
 # Safely handle undefined securityContext
 run_as_non_root := object.get(container, ["securityContext", "runAsNonRoot"], false)
@@ -235,7 +259,9 @@ run_as_non_root != true # Triggers denial if missing or false
 ```
 
 ### 3. Comprehensive Container Iteration
+
 Create a helper rule that unifies all container categories:
+
 ```rego
 all_containers[c] { c := input.request.object.spec.containers[_] }
 all_containers[c] { c := input.request.object.spec.initContainers[_] }
@@ -243,7 +269,9 @@ all_containers[c] { c := input.request.object.spec.ephemeralContainers[_] }
 ```
 
 ### 4. Anchored Regular Expressions
+
 Always anchor domain checks and escape dots:
+
 ```rego
 approved_registry_regex := "^internal-registry\\.corp\\.com/"
 regex.match(approved_registry_regex, container.image)
@@ -267,6 +295,7 @@ All video links have been verified active via the YouTube oEmbed API (`HTTP 200 
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
 
 ```bash

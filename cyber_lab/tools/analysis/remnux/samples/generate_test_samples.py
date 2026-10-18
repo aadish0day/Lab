@@ -6,7 +6,7 @@ These files simulate typical macro and binary structures without containing harm
 
 import os
 
-VBA_SAMPLE = '''
+VBA_SAMPLE = """
 Attribute VB_Name = "AutoExec"
 
 Sub AutoOpen()
@@ -32,13 +32,15 @@ Sub ExecutePayload()
     ' Suspicious API calls: URLDownloadToFile, Shell, Environ
     wsh.Run cmdStr, 0, False
 End Sub
-'''
+"""
+
 
 def main():
     os.makedirs("samples", exist_ok=True)
     with open("samples/sample_macro.vba", "w") as f:
         f.write(VBA_SAMPLE.strip())
     print("[+] Generated samples/sample_macro.vba for olevba static analysis testing.")
+
 
 if __name__ == "__main__":
     main()

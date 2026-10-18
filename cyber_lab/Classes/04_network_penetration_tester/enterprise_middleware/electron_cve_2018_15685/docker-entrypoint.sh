@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex 
+set -ex
 
 cd /project && npm install && npm run build-${PLATFORM:=win64}
 

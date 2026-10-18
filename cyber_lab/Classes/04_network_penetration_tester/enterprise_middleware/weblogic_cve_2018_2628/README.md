@@ -1,6 +1,7 @@
 # Lab Target: WEBLOGIC CVE-2018-2628
 
 ## Overview
+
 - **Vulnerability**: CVE-2018-2628
 - **Target Category**: Practice Environment
 - **Host Port**: http://localhost:8582
@@ -8,6 +9,7 @@
 - **Memory Ceiling**: 1024m
 
 ## Architecture & Data Flow
+
 ```
 [Attacker Console / CLI]
        |
@@ -16,15 +18,22 @@
 ```
 
 ## Quick Start
+
 ```bash
 cd Classes/04_network_penetration_tester/enterprise_middleware/weblogic_cve_2018_2628
 docker compose up -d
 ```
 
 ## Attack Verification
+
 ```bash
+# Verify WebLogic HTTP/Console service (internal port 7001 forwarded to 8582)
+curl -i http://localhost:8582/console/login/LoginForm.jsp
+
+# Test T3 protocol connectivity
 curl -i http://localhost:8582/
 ```
 
 ## Walkthrough & Video Reference
+
 - **YouTube Walkthrough**: ['Sj5-lFWqBu0', 'CRITICAL Django SQL Injection (CVE-2025-64459): Patch NOW or Get Hacked!']

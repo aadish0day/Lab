@@ -1,54 +1,14 @@
 services:
   race-condition-target:
-    image: python:3.11-alpine
-    pull_policy: missing
-    container_name: cyberlab_web_race_conditions
-    working_dir: /app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cyberlab_02_race_conditions:latest
+    container_name: cyberlab_02_web_race_conditions
     ports:
       - "8097:5000"
-    command: >
-      sh -c 'pip install flask &&
-             cat << "EOF" > app.py
-             import time
-             from flask import Flask, jsonify, request
-             app = Flask(__name__)
-
-             balance = 50
-             coupons_used = 0
-
-             @app.route("/")
-             def index():
-                 return f"""
-                 <h2>PortSwigger Race Condition Challenge (Limit Overrun)</h2>
-                 <p>Account Balance: <b>${balance}</b></p>
-                 <p>Coupons Redeemed: <b>{coupons_used}/1</b></p>
-                 <p>Discount Code: <code>DISCOUNT2026</code> ($100 reward, 1-use only!)</p>
-                 <hr>
-                 <button onclick="fetch('/redeem', {{method:'POST'}}).then(r=>r.json()).then(d=>alert(JSON.stringify(d)))">Redeem Coupon</button>
-                 <button onclick="fetch('/reset', {{method:'POST'}}).then(()=>location.reload())">Reset</button>
-                 """
-
-             @app.route("/redeem", methods=["POST"])
-             def redeem():
-                 global balance, coupons_used
-                 if coupons_used >= 1:
-                     return jsonify({"error": "Coupon already used"}), 400
-                 # Vulnerable race window (sleep simulates database / validation delay)
-                 time.sleep(0.3)
-                 coupons_used += 1
-                 balance += 100
-                 flag = "FLAG{TURBO_INTRUDER_RACE_PWNED}" if coupons_used > 1 else "Normal single redemption"
-                 return jsonify({"balance": balance, "redeemed": coupons_used, "message": flag})
-
-             @app.route("/reset", methods=["POST"])
-             def reset():
-                 global balance, coupons_used
-                 balance = 50
-                 coupons_used = 0
-                 return jsonify({"status": "reset"})
-
-             if __name__ == "__main__":
-                 app.run(host="0.0.0.0", port=5000, threaded=True)
-             EOF
-             python app.py'
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 128M

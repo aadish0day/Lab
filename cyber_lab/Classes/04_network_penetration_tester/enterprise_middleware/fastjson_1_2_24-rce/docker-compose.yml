@@ -1,6 +1,6 @@
 services:
- web:
-   image: vulhub/fastjson:1.2.24
-   pull_policy: missing
-   ports:
-    - "8307:8090"
+  web:
+    image: vulhub/fastjson:1.2.24
+    pull_policy: missing
+    ports:
+      - "8307:8090"

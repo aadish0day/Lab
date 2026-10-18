@@ -1,8 +1,8 @@
 services:
- web:
-   image: vulhub/supervisor:3.3.2
-   pull_policy: missing
-   mem_limit: 1024m
-   restart: unless-stopped
-   ports:
-    - "8506:9001"
+  web:
+    image: vulhub/supervisor:3.3.2
+    pull_policy: missing
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8506:9001"

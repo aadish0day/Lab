@@ -19,16 +19,16 @@ SRC="$HERE/daemon.json"
 DEST="/etc/docker/daemon.json"
 
 if [[ ! -f "$SRC" ]]; then
-  echo "daemon.json not found next to this script: $SRC" >&2
-  exit 1
+	echo "daemon.json not found next to this script: $SRC" >&2
+	exit 1
 fi
 
 sudo mkdir -p /etc/docker
 
 if [[ -f "$DEST" ]]; then
-  backup="${DEST}.bak.$(date +%Y%m%d%H%M%S)"
-  echo "Backing up existing config -> $backup"
-  sudo cp "$DEST" "$backup"
+	backup="${DEST}.bak.$(date +%Y%m%d%H%M%S)"
+	echo "Backing up existing config -> $backup"
+	sudo cp "$DEST" "$backup"
 fi
 
 sudo cp "$SRC" "$DEST"
@@ -38,9 +38,9 @@ sudo cat "$DEST"
 echo
 echo "Restarting Docker..."
 if command -v systemctl >/dev/null 2>&1; then
-  sudo systemctl restart docker
+	sudo systemctl restart docker
 else
-  sudo service docker restart
+	sudo service docker restart
 fi
 
 echo

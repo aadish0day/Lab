@@ -39,6 +39,7 @@ docker compose up -d
 # Check logs
 docker logs -f cyberlab_wrongsecrets
 ```
+
 Open [http://localhost:8100](http://localhost:8100) in your browser to begin the interactive exercises.
 
 ---
@@ -46,6 +47,7 @@ Open [http://localhost:8100](http://localhost:8100) in your browser to begin the
 ## Core Challenge Domains & Exploitation Guides
 
 ### 1. Secrets Hardcoded in Source Code (Challenges 1 & 2)
+
 - **Mechanism**: Developers embed raw API keys, passwords, or tokens directly in application logic or source repositories.
 - **Exploitation**:
   1. Inspect source code repositories using code search or automated SAST:
@@ -58,6 +60,7 @@ Open [http://localhost:8100](http://localhost:8100) in your browser to begin the
      ```
 
 ### 2. Secrets in Docker Container Layers (Challenges 3 & 4)
+
 - **Mechanism**: Adding files in one `RUN` step and deleting them in a later `RUN` step does NOT remove them from earlier image layers.
 - **Exploitation**:
   1. Inspect the image history without truncation:
@@ -73,6 +76,7 @@ Open [http://localhost:8100](http://localhost:8100) in your browser to begin the
      ```
 
 ### 3. Secrets Stored in Environment Variables (Challenge 5)
+
 - **Mechanism**: Passing credentials via `-e` or Docker Compose environment blocks. Environment variables are readable by any process inside the container, leaked in `/proc/*/environ`, and often logged by APM tools or crash handlers.
 - **Exploitation**:
   1. Inspect environment variables of PID 1:
@@ -85,6 +89,7 @@ Open [http://localhost:8100](http://localhost:8100) in your browser to begin the
      ```
 
 ### 4. Secrets in Kubernetes ConfigMaps & Secrets (Challenges 6 & 7)
+
 - **Mechanism**: Storing secrets in `ConfigMaps` (which are unencrypted plain text) or assuming `Kubernetes Secrets` are encrypted by default (they are merely Base64-encoded in `etcd` unless KMS envelope encryption is active).
 - **Exploitation**:
   1. Base64 is encoding, not encryption:
@@ -98,6 +103,7 @@ Open [http://localhost:8100](http://localhost:8100) in your browser to begin the
      ```
 
 ### 5. Secrets in HashiCorp Vault & Dynamic Engines
+
 - **Mechanism**: Storing static root tokens on disks, using long-lived AppRole SecretIDs without CIDR binding, or exposing unauthenticated Vault development servers (`vault server -dev`).
 - **Remediation**:
   - Leverage dynamic database credentials with short TTLs (15 minutes).
@@ -105,6 +111,7 @@ Open [http://localhost:8100](http://localhost:8100) in your browser to begin the
   - Authenticate Kubernetes workloads using Kubernetes ServiceAccount JWT verification (`vault auth enable kubernetes`).
 
 ### 6. Reverse Engineering Binaries & Obfuscated Secrets
+
 - **Mechanism**: Embedding secrets into compiled C/Go/Rust binaries assuming compilation hides the string.
 - **Exploitation**:
   ```bash
@@ -157,7 +164,9 @@ All video links have been verified active via YouTube oEmbed API:
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

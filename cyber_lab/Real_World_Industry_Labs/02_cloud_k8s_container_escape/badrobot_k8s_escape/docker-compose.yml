@@ -5,7 +5,7 @@ services:
     container_name: cyberlab_realworld_container_escape
     privileged: true
     volumes:
-      - /:/host:ro
+      - ./sandbox:/sandbox
     restart: unless-stopped
     stdin_open: true
     tty: true

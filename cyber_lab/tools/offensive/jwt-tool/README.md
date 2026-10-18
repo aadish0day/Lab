@@ -1,6 +1,7 @@
 # JWT Security & Token Exploitation Lab (jwt_tool)
 
 ## Overview
+
 Analyze, crack, and forge JSON Web Tokens: `none` algorithm bypass, HMAC key brute-forcing, and JWK/JKU header injection.
 
 - **Default Port / Access**: `Terminal / CLI`
@@ -27,7 +28,9 @@ Analyze, crack, and forge JSON Web Tokens: `none` algorithm bypass, HMAC key bru
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

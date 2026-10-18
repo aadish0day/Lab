@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   mongo:
     image: mongo:5.0.6
@@ -15,9 +15,9 @@ services:
     mem_limit: 1024m
     restart: unless-stopped
     ports:
-    - "8469:3000"
+      - "8469:3000"
     volumes:
-    - ./config.json:/usr/config.json
-    - ./initdb.js:/usr/src/initdb.js
+      - ./config.json:/usr/config.json
+      - ./initdb.js:/usr/src/initdb.js
     environment:
-    - MONGO_ADDR=mongo:27017
+      - MONGO_ADDR=mongo:27017

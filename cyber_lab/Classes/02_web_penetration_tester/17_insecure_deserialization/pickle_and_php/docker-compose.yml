@@ -1,8 +1,16 @@
 services:
   deserialization-target:
-    image: vulnerables/cve-2014-6271:latest
+    image: python:3.11-alpine
     pull_policy: missing
-    container_name: cyberlab_web_deserialization
+    container_name: cyberlab_02_web_deserialization
+    working_dir: /app
+    volumes:
+      - .:/app
     ports:
-      - "8095:80"
+      - "8095:8095"
+    command: >
+      sh -c 'echo "FLAG{DESERIALIZATION_PICKLE_AND_PHP_PWNED}" > /flag.txt &&
+             apk add --no-cache php php-cli &&
+             pip install --no-cache-dir flask &&
+             python app.py'
     restart: unless-stopped

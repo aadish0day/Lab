@@ -1,6 +1,7 @@
 # Web3 & EVM Smart Contract Security Auditing
 
 ## Overview
+
 Audit and exploit Ethereum smart contracts: Reentrancy bugs, flash loan price oracle manipulation, and arithmetic flaws using Ganache.
 
 - **Default Port / Access**: `8545 (EVM RPC)`
@@ -25,7 +26,9 @@ Audit and exploit Ethereum smart contracts: Reentrancy bugs, flash loan price or
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

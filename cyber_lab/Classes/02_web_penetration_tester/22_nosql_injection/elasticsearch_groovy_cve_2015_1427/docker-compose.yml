@@ -1,7 +1,12 @@
-version: '3'
 services:
   elasticsearch:
     image: vulhub/elasticsearch:1.4.2
     pull_policy: missing
+    container_name: cyberlab_02_elasticsearch_groovy
     ports:
       - "8253:9200"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 1024M

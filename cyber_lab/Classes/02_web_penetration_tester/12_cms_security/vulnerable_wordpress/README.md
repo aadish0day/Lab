@@ -149,6 +149,7 @@ wpscan --url http://localhost:8107 -U admin -P /usr/share/wordlists/rockyou.txt
 Once administrator credentials are recovered (via brute-forcing, leaked database passwords, or default setup):
 
 #### Method A: Theme Editor Code Injection
+
 1. Log in to `/wp-admin/` with administrator privileges.
 2. Navigate to **Appearance -> Theme Editor** (or **Editor**).
 3. Select an existing theme template that can be triggered directly, such as `404.php` or `header.php`.
@@ -168,6 +169,7 @@ Once administrator credentials are recovered (via brute-forcing, leaked database
    ```
 
 #### Method B: Malicious ZIP Plugin Upload
+
 1. Create a malicious plugin directory:
    ```bash
    mkdir -p /tmp/evil_plugin
@@ -230,7 +232,9 @@ All videos verified active via YouTube oEmbed API (`HTTP 200 OK`):
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Start WordPress lab
 ./lab start wordpress

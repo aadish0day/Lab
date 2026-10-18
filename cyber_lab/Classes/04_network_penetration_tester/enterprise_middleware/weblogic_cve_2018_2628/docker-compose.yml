@@ -6,4 +6,4 @@ services:
     mem_limit: 1024m
     restart: unless-stopped
     ports:
-      - "8582:8080"
+      - "8582:7001"

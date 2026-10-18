@@ -5,14 +5,14 @@ services:
     container_name: cyberlab_samba_ad_dc
     restart: unless-stopped
     ports:
-      - "88:88"           # Kerberos KDC (TCP)
-      - "88:88/udp"       # Kerberos KDC (UDP)
-      - "389:389"         # LDAP (TCP)
-      - "389:389/udp"     # LDAP (UDP)
-      - "445:445"         # SMB
-      - "464:464"         # Kerberos kpasswd (TCP)
-      - "464:464/udp"     # Kerberos kpasswd (UDP)
-      - "636:636"         # LDAPS
+      - "88:88" # Kerberos KDC (TCP)
+      - "88:88/udp" # Kerberos KDC (UDP)
+      - "389:389" # LDAP (TCP)
+      - "389:389/udp" # LDAP (UDP)
+      - "445:445" # SMB
+      - "464:464" # Kerberos kpasswd (TCP)
+      - "464:464/udp" # Kerberos kpasswd (UDP)
+      - "636:636" # LDAPS
     environment:
       - DOMAIN=LAB
       - REALM=LAB.LOCAL

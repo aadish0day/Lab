@@ -1,7 +1,8 @@
 import os
 import sqlite3
+
 import yaml
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -11,13 +12,17 @@ AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 STRIPE_API_KEY = "sk_live_51HzT92Lkjf92834jlsdfk90234jlks"
 DATABASE_URL = "postgres://admin:SuperSecretPass123!@db.internal:5432/prod"
 
+
 @app.route("/")
 def home():
-    return jsonify({
-        "status": "online",
-        "service": "cyberlab-vulnerable-microservice",
-        "description": "DevSecOps Scanner Pipeline Target"
-    })
+    return jsonify(
+        {
+            "status": "online",
+            "service": "cyberlab-vulnerable-microservice",
+            "description": "DevSecOps Scanner Pipeline Target",
+        }
+    )
+
 
 # SQL INJECTION (Target for Semgrep SAST)
 @app.route("/user")
@@ -34,6 +39,7 @@ def get_user():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 # COMMAND INJECTION (Target for Semgrep SAST)
 @app.route("/ping")
 def ping_host():
@@ -43,6 +49,7 @@ def ping_host():
     status = os.system(cmd)
     return jsonify({"command": cmd, "exit_status": status})
 
+
 # INSECURE DESERIALIZATION (Target for Semgrep & Trivy)
 @app.route("/load_config", methods=["POST"])
 def load_config():
@@ -50,6 +57,7 @@ def load_config():
     # INSECURE: yaml.load without SafeLoader allows arbitrary object instantiation
     data = yaml.load(payload, Loader=yaml.Loader)
     return jsonify({"parsed": str(data)})
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

@@ -64,8 +64,9 @@ gcloud auth list
 ## Key GCP Vulnerability Scenarios & Attack Exercises
 
 ### 1. Exploiting GCP Instance Metadata Service (IMDS) via SSRF
-* **Vulnerability Mechanism**: Unlike AWS IMDSv1 which required no custom headers, GCP IMDS requires the HTTP header `Metadata-Flavor: Google` to mitigate basic SSRF. However, when an application forwards user-supplied HTTP headers or uses open proxy libraries, attackers bypass this defense.
-* **Attack Walkthrough**:
+
+- **Vulnerability Mechanism**: Unlike AWS IMDSv1 which required no custom headers, GCP IMDS requires the HTTP header `Metadata-Flavor: Google` to mitigate basic SSRF. However, when an application forwards user-supplied HTTP headers or uses open proxy libraries, attackers bypass this defense.
+- **Attack Walkthrough**:
   Query the compute engine metadata service to steal the default service account's OAuth2 token:
   ```bash
   curl -s -H "Metadata-Flavor: Google" \
@@ -81,8 +82,9 @@ gcloud auth list
   ```
 
 ### 2. IAM Privilege Escalation: Service Account Token Creator
-* **Scenario**: The compromised service account possesses the `roles/iam.serviceAccountTokenCreator` permission on a high-privilege service account (such as `editor-sa@project.iam.gserviceaccount.com`).
-* **Exploitation**:
+
+- **Scenario**: The compromised service account possesses the `roles/iam.serviceAccountTokenCreator` permission on a high-privilege service account (such as `editor-sa@project.iam.gserviceaccount.com`).
+- **Exploitation**:
   Generate an administrative bearer token:
   ```bash
   gcloud iam service-accounts generate-access-token \
@@ -91,7 +93,8 @@ gcloud auth list
   ```
 
 ### 3. Google Cloud Storage (GCS) Bucket Auditing & Exfiltration
-* **Scenario**: Publicly readable buckets or misconfigured IAM ACLs:
+
+- **Scenario**: Publicly readable buckets or misconfigured IAM ACLs:
   ```bash
   # Check for open bucket permissions
   gsutil ls gs://<BUCKET_NAME>

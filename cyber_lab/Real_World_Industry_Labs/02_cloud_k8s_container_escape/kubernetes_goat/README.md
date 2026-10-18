@@ -65,36 +65,37 @@ kubectl get nodes
 
 ## 22 Scenario Map & Vulnerability Matrix
 
-| # | Scenario Name | Category | Primary Vulnerability & Attack Vector |
-|---|---------------|----------|---------------------------------------|
-| **01** | **Sensitive Keys in Codebases** | Information Disclosure | Git repo commit history contains leaked AWS keys and API tokens. |
-| **02** | **DIND (Docker-in-Docker) Exploitation** | Container Escape | Pod has host `/var/run/docker.sock` mounted; spawn privileged sibling container on host node. |
-| **03** | **SSRF in Kubernetes** | Server-Side Request Forgery | Web proxy service abused to query internal Kubelet API (`10255`/`10250`) and cloud metadata (`169.254.169.254`). |
-| **04** | **Container Escape to Host System** | Host Compromise | Pod runs with `privileged: true` or `CAP_SYS_ADMIN`; mount host `/dev/sda1` or abuse cgroups `release_agent`. |
-| **05** | **Docker CIS Benchmarks Analysis** | Compliance & Audit | Auditing container host configurations against CIS Docker benchmarks using `docker-bench-security`. |
-| **06** | **Kubernetes CIS Benchmarks** | Compliance & Audit | Running `kube-bench` against Master/Worker node components (apiserver, etcd, controller-manager). |
-| **07** | **Attacking Private Registry** | Supply Chain / Registry | Insecure, unauthenticated Docker Registry v2 API querying `_catalog` and pulling internal build layers. |
-| **08** | **NodePort Exposed Services** | Network Perimeter | Services exposed across high NodePort range (30000–32767) accessible to the public without auth. |
-| **09** | **Helm v2 Tiller to PwN the Cluster** | RBAC / Legacy Tech | Unauthenticated Tiller gRPC port `44134` exploited to deploy arbitrary pods with `cluster-admin`. |
-| **10** | **Analyzing Crypto Miner Container** | Incident Response / Forensics | Spotting anomalous CPU load, unauthorized background processes (`xmrig`), and hidden crontab jobs. |
-| **11** | **Kubernetes Namespaces Bypass** | Multi-Tenancy Boundary | Breaching network segmentation across namespaces lacking `NetworkPolicies`. |
-| **12** | **Gaining Environment Information** | Discovery | Harvesting `/proc/1/environ`, Kubernetes Service Account tokens, and secrets passed via `env`. |
-| **13** | **DoS the Memory/CPU Resources** | Availability / Resource Starvation | Pod without `resources.limits` consuming all node CPU/RAM, triggering OOMKilled on adjacent pods. |
-| **14** | **Hacker Container Preview** | Offensive Tooling | Exploring offensive toolkits: `amicontained`, `peirates`, `kube-hunter`, and `botb`. |
-| **15** | **Hidden in Layers** | Image Forensics | Extracting sensitive database credentials committed in intermediate Docker build layers using `dive`. |
-| **16** | **RBAC Least Privileges Misconfiguration** | Privilege Escalation | ServiceAccount with permission to `create pods/exec` or `impersonate` escalating to full cluster control. |
-| **17** | **KubeAudit Cluster Scanner** | Cluster Hardening | Automated scanning of PodSecurityContexts, read-only root filesystems, and runAsNonRoot. |
-| **18** | **Falco Runtime Security Monitoring** | Detection Engineering | Detecting unauthorized bash shells spawned in containers, sensitive file reads (`/etc/shadow`), and socket tampering. |
-| **19** | **Popeye Cluster Sanitizer** | Cluster Hygiene | Scanning Kubernetes manifests for misconfigurations, dead endpoints, and unused secrets. |
-| **20** | **Secure Network Boundaries (NSP)** | Zero Trust Networking | Implementing default-deny ingress and egress `NetworkPolicy` rules. |
-| **21** | **Cilium Tetragon eBPF Observability** | Kernel Runtime Security | Enforcing kernel-level syscall filtering (`sys_execve`, `sys_open`) with eBPF hooks. |
-| **22** | **Kyverno Policy Engine** | Admission Control | Validating, mutating, and generating Kubernetes resources using declarative policies. |
+| #      | Scenario Name                              | Category                           | Primary Vulnerability & Attack Vector                                                                                 |
+| ------ | ------------------------------------------ | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| **01** | **Sensitive Keys in Codebases**            | Information Disclosure             | Git repo commit history contains leaked AWS keys and API tokens.                                                      |
+| **02** | **DIND (Docker-in-Docker) Exploitation**   | Container Escape                   | Pod has host `/var/run/docker.sock` mounted; spawn privileged sibling container on host node.                         |
+| **03** | **SSRF in Kubernetes**                     | Server-Side Request Forgery        | Web proxy service abused to query internal Kubelet API (`10255`/`10250`) and cloud metadata (`169.254.169.254`).      |
+| **04** | **Container Escape to Host System**        | Host Compromise                    | Pod runs with `privileged: true` or `CAP_SYS_ADMIN`; mount host `/dev/sda1` or abuse cgroups `release_agent`.         |
+| **05** | **Docker CIS Benchmarks Analysis**         | Compliance & Audit                 | Auditing container host configurations against CIS Docker benchmarks using `docker-bench-security`.                   |
+| **06** | **Kubernetes CIS Benchmarks**              | Compliance & Audit                 | Running `kube-bench` against Master/Worker node components (apiserver, etcd, controller-manager).                     |
+| **07** | **Attacking Private Registry**             | Supply Chain / Registry            | Insecure, unauthenticated Docker Registry v2 API querying `_catalog` and pulling internal build layers.               |
+| **08** | **NodePort Exposed Services**              | Network Perimeter                  | Services exposed across high NodePort range (30000–32767) accessible to the public without auth.                      |
+| **09** | **Helm v2 Tiller to PwN the Cluster**      | RBAC / Legacy Tech                 | Unauthenticated Tiller gRPC port `44134` exploited to deploy arbitrary pods with `cluster-admin`.                     |
+| **10** | **Analyzing Crypto Miner Container**       | Incident Response / Forensics      | Spotting anomalous CPU load, unauthorized background processes (`xmrig`), and hidden crontab jobs.                    |
+| **11** | **Kubernetes Namespaces Bypass**           | Multi-Tenancy Boundary             | Breaching network segmentation across namespaces lacking `NetworkPolicies`.                                           |
+| **12** | **Gaining Environment Information**        | Discovery                          | Harvesting `/proc/1/environ`, Kubernetes Service Account tokens, and secrets passed via `env`.                        |
+| **13** | **DoS the Memory/CPU Resources**           | Availability / Resource Starvation | Pod without `resources.limits` consuming all node CPU/RAM, triggering OOMKilled on adjacent pods.                     |
+| **14** | **Hacker Container Preview**               | Offensive Tooling                  | Exploring offensive toolkits: `amicontained`, `peirates`, `kube-hunter`, and `botb`.                                  |
+| **15** | **Hidden in Layers**                       | Image Forensics                    | Extracting sensitive database credentials committed in intermediate Docker build layers using `dive`.                 |
+| **16** | **RBAC Least Privileges Misconfiguration** | Privilege Escalation               | ServiceAccount with permission to `create pods/exec` or `impersonate` escalating to full cluster control.             |
+| **17** | **KubeAudit Cluster Scanner**              | Cluster Hardening                  | Automated scanning of PodSecurityContexts, read-only root filesystems, and runAsNonRoot.                              |
+| **18** | **Falco Runtime Security Monitoring**      | Detection Engineering              | Detecting unauthorized bash shells spawned in containers, sensitive file reads (`/etc/shadow`), and socket tampering. |
+| **19** | **Popeye Cluster Sanitizer**               | Cluster Hygiene                    | Scanning Kubernetes manifests for misconfigurations, dead endpoints, and unused secrets.                              |
+| **20** | **Secure Network Boundaries (NSP)**        | Zero Trust Networking              | Implementing default-deny ingress and egress `NetworkPolicy` rules.                                                   |
+| **21** | **Cilium Tetragon eBPF Observability**     | Kernel Runtime Security            | Enforcing kernel-level syscall filtering (`sys_execve`, `sys_open`) with eBPF hooks.                                  |
+| **22** | **Kyverno Policy Engine**                  | Admission Control                  | Validating, mutating, and generating Kubernetes resources using declarative policies.                                 |
 
 ---
 
 ## Detailed Attack Walkthroughs
 
 ### 1. Scenario 02: DIND (Docker-in-Docker) Socket Breakout
+
 **Vulnerability**: A deployment mounts the node's Docker daemon socket (`/var/run/docker.sock`) into an unprivileged container.
 
 1. Check for socket availability inside the container:
@@ -114,6 +115,7 @@ kubectl get nodes
 ---
 
 ### 2. Scenario 16: RBAC Privilege Escalation
+
 **Vulnerability**: Overly permissive ServiceAccount bound via `RoleBinding` with `pods/exec` or `pods/create` permissions.
 
 1. Inspect the mounted ServiceAccount token inside the pod:
@@ -137,6 +139,7 @@ kubectl get nodes
 ---
 
 ### 3. Scenario 03: SSRF to Cloud Metadata & Kubelet
+
 **Vulnerability**: Web application internal proxy allows fetching arbitrary URLs.
 
 1. Point the proxy query parameter to the AWS/GCP instance metadata IP:
@@ -151,6 +154,7 @@ kubectl get nodes
 ---
 
 ### 4. Scenario 18: Falco Runtime Threat Detection
+
 **Detection**: Falco monitors Linux kernel syscalls via eBPF/kmod and flags unauthorized activity:
 
 1. Spawn an interactive shell inside a container:
@@ -200,7 +204,9 @@ All video links have been verified active via YouTube oEmbed API:
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

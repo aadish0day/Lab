@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   dubbo:
     image: vulhub/dubbo:2.7.3

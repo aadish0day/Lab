@@ -3,10 +3,13 @@ services:
     image: vulhub/ffmpeg:2.8.4-with-php
     pull_policy: missing
     container_name: cyberlab_02_ffmpeg_hls_ssrf
+    command: php -S 0.0.0.0:8080 -t /var/www/html
+    volumes:
+      - ./www/index.php:/var/www/html/index.php
     ports:
-      - "8165:80"
+      - "8165:8080"
     restart: unless-stopped
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 200M

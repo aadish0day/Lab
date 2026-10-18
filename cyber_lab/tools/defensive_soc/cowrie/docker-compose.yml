@@ -5,8 +5,8 @@ services:
     container_name: cyberlab_cowrie_honeypot
     restart: unless-stopped
     ports:
-      - "2223:2222"       # Cowrie SSH Honeypot
-      - "2324:2323"       # Cowrie Telnet Honeypot
+      - "2223:2222" # Cowrie SSH Honeypot
+      - "2324:2323" # Cowrie Telnet Honeypot
     environment:
       - COWRIE_TELNET_ENABLED=yes
     volumes:

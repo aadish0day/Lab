@@ -1,8 +1,11 @@
 services:
   ghostscript:
-    image: vulhub/ghostscript:9.23-with-flask
+    image: vulhub/imagemagick:7.0.8-10-php
+    command: php -t /var/www/html -S 0.0.0.0:8080
     pull_policy: missing
     container_name: cyberlab_02_ghostscript_rce
+    volumes:
+      - ./index.php:/var/www/html/index.php
     ports:
       - "8134:8080"
     restart: unless-stopped

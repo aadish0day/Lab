@@ -1,6 +1,7 @@
 # Sliver C2: Modern Adversary Emulation Framework
 
 ## Overview
+
 Professional Red Team Command & Control (C2) operations using BishopFox Sliver: Malleable HTTP beacons, process injection, and EDR evasion.
 
 - **Default Port / Access**: `8889, 31337`
@@ -26,7 +27,9 @@ Professional Red Team Command & Control (C2) operations using BishopFox Sliver: 
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

@@ -1,35 +1,14 @@
 services:
   prototype-pollution:
-    image: node:18-alpine
-    pull_policy: missing
-    container_name: cyberlab_web_prototype_pollution
-    working_dir: /app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cyberlab_02_web_prototype_pollution:latest
+    container_name: cyberlab_02_web_prototype_pollution
     ports:
       - "8096:3000"
-    command: >
-      sh -c 'npm init -y &&
-             npm install express lodash@4.17.4 &&
-             cat << "EOF" > server.js
-             const express = require("express");
-             const _ = require("lodash");
-             const app = express();
-             app.use(express.json());
-
-             let config = { admin: false, debug: false };
-
-             app.get("/", (req, res) => {
-               res.send(`<h1>Prototype Pollution Target</h1>
-                         <p>Status: Running</p>
-                         <p>Admin Flag: $${config.admin ? "FLAG{PROTO_POLLUTED_ROOT}" : "ACCESS_DENIED"}</p>`);
-             });
-
-             app.post("/api/update", (req, res) => {
-               let payload = req.body;
-               _.merge({}, payload);
-               res.json({ status: "processed", admin: Object.prototype.admin || false });
-             });
-
-             app.listen(3000, () => console.log("Proto-Pollution target listening on 3000"));
-             EOF
-             node server.js'
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 128M

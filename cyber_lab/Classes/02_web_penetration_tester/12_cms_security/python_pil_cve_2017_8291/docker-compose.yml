@@ -1,10 +1,10 @@
-version: '2'
+version: "2"
 services:
- web:
-   image: vulhub/ghostscript:9.21-with-flask
-   pull_policy: missing
-   command: python app.py
-   volumes: 
-    - ./app.py:/usr/src/app.py
-   ports:
-    - "8435:8000"
+  web:
+    image: vulhub/ghostscript:9.21-with-flask
+    pull_policy: missing
+    command: python app.py
+    volumes:
+      - ./app.py:/usr/src/app.py
+    ports:
+      - "8435:8000"

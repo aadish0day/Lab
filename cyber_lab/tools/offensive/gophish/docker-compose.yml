@@ -6,4 +6,8 @@ services:
     ports:
       - "3333:3333"
       - "8092:80"
+    environment:
+      - DB_FILE_PATH=data/gophish.db
+    volumes:
+      - ./data:/opt/gophish/data
     restart: unless-stopped

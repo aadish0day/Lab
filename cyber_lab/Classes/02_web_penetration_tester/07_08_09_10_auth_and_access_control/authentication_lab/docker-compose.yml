@@ -6,3 +6,8 @@ services:
     ports:
       - "8084:80"
     restart: unless-stopped
+    volumes:
+      - auth_lab_db_data:/var/lib/mysql
+
+volumes:
+  auth_lab_db_data:

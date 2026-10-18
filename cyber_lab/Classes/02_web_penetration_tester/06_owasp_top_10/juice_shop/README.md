@@ -1,6 +1,7 @@
 # OWASP Juice Shop (Modern Web Vulnerabilities)
 
 ## Overview
+
 The gold standard modern vulnerable web application (Angular, Express, Node.js, SQLite) with a built-in gamified Score Board.
 
 - **Default Port / Access**: `3000`
@@ -27,7 +28,9 @@ The gold standard modern vulnerable web application (Angular, Express, Node.js, 
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

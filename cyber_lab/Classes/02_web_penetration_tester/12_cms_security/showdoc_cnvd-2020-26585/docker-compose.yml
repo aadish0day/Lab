@@ -1,7 +1,7 @@
-version: '2'
+version: "2"
 services:
- web:
-   image: vulhub/showdoc:2.8.2
-   pull_policy: missing
-   ports:
-    - "8301:80"
+  web:
+    image: vulhub/showdoc:2.8.2
+    pull_policy: missing
+    ports:
+      - "8301:80"

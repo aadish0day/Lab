@@ -6,3 +6,53 @@ services:
     ports:
       - "8083:80"
     restart: unless-stopped
+    environment:
+      - DB_SERVER=db
+      - MYSQL_HOST=db
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=vulnerables
+      - MYSQL_DATABASE=dvwa
+    entrypoint: >
+      bash -c "sed -i \"s/'127.0.0.1'/'db'/g\" /var/www/html/config/config.inc.php && /main.sh"
+    depends_on:
+      db:
+        condition: service_started
+    networks:
+      - default
+      - internal
+
+  db:
+    image: mariadb:10.11
+    pull_policy: missing
+    container_name: cyberlab_01_dvwa_db
+    restart: unless-stopped
+    environment:
+      - MARIADB_ROOT_PASSWORD=vulnerables
+      - MARIADB_USER=app
+      - MARIADB_PASSWORD=vulnerables
+      - MARIADB_DATABASE=dvwa
+      - MARIADB_AUTO_UPGRADE=1
+      - MYSQL_ROOT_PASSWORD=vulnerables
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=vulnerables
+      - MYSQL_DATABASE=dvwa
+    volumes:
+      - dvwa_data:/var/lib/mysql
+    networks:
+      - internal
+    command:
+      [
+        mysqld,
+        --character-set-server=utf8mb4,
+        --collation-server=utf8mb4_unicode_ci,
+        --wait_timeout=28800,
+        --log-warnings=0,
+      ]
+
+networks:
+  default:
+  internal:
+    internal: true
+
+volumes:
+  dvwa_data:

@@ -6,13 +6,13 @@ A collection of self-hosted Docker Compose stacks for personal infrastructure, m
 
 ### homelab
 
-| Stack | Services | Count | Ports |
-|---|---|---|---|
-| **Immich** | immich-server, immich-machine-learning, valkey/redis, postgres | 4 | 2283 |
-| **Media Stack** | jellyfin, qbittorrent, prowlarr, sonarr, radarr | 5 | 8096, 8080, 9696, 8989, 7878 |
-| **Pi-hole** | pihole (DNS ad-blocker) | 1 | 53, 80, 443 |
-| **Stirling PDF** | stirling-pdf (PDF toolbox) | 1 | 9000 |
-| **Hadoop** | hadoop-namenode (HDFS, YARN) | 1 | 9870, 8088 |
+| Stack            | Services                                                       | Count | Ports                        |
+| ---------------- | -------------------------------------------------------------- | ----- | ---------------------------- |
+| **Immich**       | immich-server, immich-machine-learning, valkey/redis, postgres | 4     | 2283                         |
+| **Media Stack**  | jellyfin, qbittorrent, prowlarr, sonarr, radarr                | 5     | 8096, 8080, 9696, 8989, 7878 |
+| **Pi-hole**      | pihole (DNS ad-blocker)                                        | 1     | 53, 80, 443                  |
+| **Stirling PDF** | stirling-pdf (PDF toolbox)                                     | 1     | 9000                         |
+| **Hadoop**       | hadoop-namenode (HDFS, YARN)                                   | 1     | 9870, 8088                   |
 
 ### cyber_lab
 

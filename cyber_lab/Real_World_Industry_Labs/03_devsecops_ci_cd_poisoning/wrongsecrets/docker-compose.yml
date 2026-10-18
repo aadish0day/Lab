@@ -5,8 +5,8 @@ services:
     container_name: cyberlab_wrongsecrets
     restart: unless-stopped
     ports:
-      - "8100:8080"      # Main WrongSecrets Web Application
-      - "8101:8090"      # MCP Server (Model Context Protocol Challenge 60)
+      - "8100:8080" # Main WrongSecrets Web Application
+      - "8101:8090" # MCP Server (Model Context Protocol Challenge 60)
     environment:
       - HINTS_ENABLED=true
       - REASON_ENABLED=true

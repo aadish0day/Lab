@@ -1,6 +1,6 @@
 services:
- web:
-   image: vulhub/laravel:8.4.2
-   pull_policy: missing
-   ports:
-    - "8422:80"
+  web:
+    image: vulhub/laravel:8.4.2
+    pull_policy: missing
+    ports:
+      - "8422:80"

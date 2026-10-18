@@ -9,8 +9,8 @@ CONTAINER="cyberlab_samba_ad_dc"
 
 echo "[*] Waiting for Samba AD DC to become ready..."
 until docker exec "$CONTAINER" samba-tool domain info 127.0.0.1 >/dev/null 2>&1; do
-    echo "[-] AD DC initializing... retrying in 3 seconds."
-    sleep 3
+	echo "[-] AD DC initializing... retrying in 3 seconds."
+	sleep 3
 done
 
 echo "[+] Samba AD DC is ready!"
@@ -29,8 +29,8 @@ docker exec "$CONTAINER" samba-tool spn add "MSSQLSvc/db01.lab.local:1433" svc_m
 echo "[*] Creating AS-REP roastable user: svc_backup (Password: BackupSecret99!)"
 docker exec "$CONTAINER" samba-tool user create svc_backup BackupSecret99! 2>/dev/null || echo "User svc_backup exists"
 echo "[*] Disabling Kerberos Pre-Authentication for svc_backup (UF_DONT_REQUIRE_PREAUTH = 0x400000)..."
-docker exec "$CONTAINER" samba-tool user setaccount svc_backup --dont-req-preauth 2>/dev/null || \
-docker exec "$CONTAINER" ldbedit -H /var/lib/samba/private/sam.ldb "(sAMAccountName=svc_backup)" || true
+docker exec "$CONTAINER" samba-tool user setaccount svc_backup --dont-req-preauth 2>/dev/null ||
+	docker exec "$CONTAINER" ldbedit -H /var/lib/samba/private/sam.ldb "(sAMAccountName=svc_backup)" || true
 
 echo ""
 echo "================================================================="

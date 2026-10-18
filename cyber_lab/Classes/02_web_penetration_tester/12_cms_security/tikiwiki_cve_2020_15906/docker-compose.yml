@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   tikiwiki:
     image: vulhub/tikiwiki:21.1

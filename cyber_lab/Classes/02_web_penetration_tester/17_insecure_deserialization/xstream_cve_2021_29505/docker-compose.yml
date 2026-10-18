@@ -1,17 +1,15 @@
-version: "3.8"
-
 services:
   xstream:
     image: vulhub/xstream:1.4.16
     pull_policy: missing
-    container_name: cyberlab_xstream
+    container_name: cyberlab_02_xstream_29505
     restart: unless-stopped
     ports:
       - "8202:8080"
     deploy:
       resources:
         limits:
-          memory: 1024m
+          memory: 400M
     labels:
       - "cyberlab.managed=true"
       - "cyberlab.category=practice-target"

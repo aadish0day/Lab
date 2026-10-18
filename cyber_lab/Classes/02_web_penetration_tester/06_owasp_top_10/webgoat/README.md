@@ -1,7 +1,8 @@
 # OWASP WebGoat & WebWolf Lab
 
 ## Overview
-**OWASP WebGoat** is a deliberately insecure web application maintained by OWASP, designed to teach common web application vulnerabilities (OWASP Top 10) in Java-based enterprise architectures. 
+
+**OWASP WebGoat** is a deliberately insecure web application maintained by OWASP, designed to teach common web application vulnerabilities (OWASP Top 10) in Java-based enterprise architectures.
 
 It runs alongside **WebWolf**, a companion attack-simulation server designed to emulate external attacker infrastructure: receiving HTTP callbacks, catching password-reset emails, hosting malicious files/DTDs, and testing Out-of-Band (OOB) vulnerabilities such as blind SSRF and XXE.
 
@@ -26,6 +27,7 @@ It runs alongside **WebWolf**, a companion attack-simulation server designed to 
 ## Step-by-Step Exploit Exercises
 
 ### Exercise 1: Initial Setup & Account Registration
+
 1. Start the lab:
    ```bash
    ./lab start webgoat
@@ -37,6 +39,7 @@ It runs alongside **WebWolf**, a companion attack-simulation server designed to 
 ---
 
 ### Exercise 2: SQL Injection (Advanced Queries & Bypasses)
+
 1. In WebGoat, navigate to **Injection Flaws -> SQL Injection (advanced)**.
 2. Observe the search query input intended to search for user accounts by name.
 3. Test for SQL injection using a boolean condition:
@@ -52,6 +55,7 @@ It runs alongside **WebWolf**, a companion attack-simulation server designed to 
 ---
 
 ### Exercise 3: XML External Entity (XXE) Exfiltration with WebWolf
+
 1. Navigate to **XXE -> Exfiltrating data via XXE**.
 2. Intercept the comment submission request in Burp Suite. The endpoint accepts XML:
    ```xml
@@ -80,6 +84,7 @@ It runs alongside **WebWolf**, a companion attack-simulation server designed to 
 ---
 
 ### Exercise 4: Password Reset Flaw (Token Hijacking via WebWolf)
+
 1. Navigate to **Authentication Flaws -> Password Reset**.
 2. Notice the password reset mechanism asks for a username and sends a reset link to the user's registered email address.
 3. In WebWolf, click on **Incoming Emails**.
@@ -89,6 +94,7 @@ It runs alongside **WebWolf**, a companion attack-simulation server designed to 
 ---
 
 ### Exercise 5: Path Traversal (Arbitrary File Upload Bypass)
+
 1. Navigate to **Path Traversal -> Profile Upload**.
 2. Attempt to upload a profile picture. Intercept the multipart request in Burp Suite.
 3. Observe the `filename` parameter in the `Content-Disposition` header:
@@ -115,7 +121,9 @@ It runs alongside **WebWolf**, a companion attack-simulation server designed to 
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Start WebGoat & WebWolf
 ./lab start webgoat

@@ -73,6 +73,7 @@ docker compose exec -e VAULT_ADDR=http://127.0.0.1:8200 -it vault sh
 ```
 
 ### Key Architectural Concepts
+
 1. **Security Barrier**: All data passed between Vault core and the storage backend is cryptographically wrapped using AES-256-GCM. The storage backend never sees unencrypted keys or policies.
 2. **Mount Points**: Secrets engines and authentication methods are dynamically mounted at configurable URL paths (e.g., `secret/`, `transit/`, `auth/approle/`).
 3. **ACL Policies**: Written in HashiCorp Configuration Language (HCL). Capabilities include `create`, `read`, `update`, `delete`, `list`, `sudo`, and `deny`.
@@ -83,9 +84,11 @@ docker compose exec -e VAULT_ADDR=http://127.0.0.1:8200 -it vault sh
 ## Attack Vector 1: ACL Policy Privilege Escalation (`sys/policies/acl/*`)
 
 ### Threat Model
+
 Developers or CI/CD pipelines are frequently granted write access to manage application policies or scoped subpaths. If an administrator improperly grants `create` or `update` capabilities over `sys/policies/acl/*`, any low-privileged token possessing this permission can overwrite high-privilege policies (such as `default` or `admin`) or assign superuser capabilities to itself.
 
 ### Vulnerable Policy Configuration (`vulnerable-dev-policy.hcl`)
+
 ```hcl
 path "sys/policies/acl/*" {
   capabilities = ["create", "read", "update", "list"]
@@ -99,6 +102,7 @@ path "secret/data/dev/*" {
 ### Exploitation Walkthrough
 
 #### Step 1: Verify Current Low-Privilege Capabilities
+
 ```bash
 # Check current token identity and assigned policies
 curl -s -H "X-Vault-Token: cyberlab_dev_token_user01" \
@@ -110,6 +114,7 @@ curl -s -H "X-Vault-Token: cyberlab_dev_token_user01" \
 ```
 
 #### Step 2: Overwrite the Assigned Policy to Grant Full Capabilities
+
 Because the token has `update` on `sys/policies/acl/*`, rewrite `vulnerable-dev` to include root access across all paths:
 
 ```bash
@@ -128,6 +133,7 @@ curl -s -X PUT \
 ```
 
 #### Step 3: Access Target Secrets as Superuser
+
 The policy evaluation happens dynamically upon each request:
 
 ```bash
@@ -145,11 +151,14 @@ curl -s -H "X-Vault-Token: cyberlab_dev_token_user01" \
 ## Attack Vector 2: AppRole Token Abuse & Insecure Delivery
 
 ### Threat Model
+
 AppRole is designed for machine-to-machine authentication (microservices, scheduled tasks, CI/CD runners). It uses two pieces of information:
+
 - **Role ID**: A static identifier (similar to a username).
 - **Secret ID**: A secret token (similar to a password).
 
 Common vulnerabilities include:
+
 1. **Hardcoded Role ID & Secret ID**: Placed into GitHub/GitLab repositories, container environment variables, or configmaps.
 2. **Infinite Secret ID Use & Missing TTL**: Setting `secret_id_num_uses=0` allows permanent, indefinite reuse.
 3. **Missing Network CIDR Binding**: Failing to bind `secret_id_bound_cidrs` and `token_bound_cidrs` allows stolen credentials to be used from any external IP.
@@ -165,11 +174,14 @@ Common vulnerabilities include:
 ### Exploitation Walkthrough
 
 #### Step 1: Discover Leaked AppRole Identifiers
+
 An attacker auditing a repository or runner environment discovers:
+
 - Role ID: `ci-runner-service-account-role-id`
 - Secret ID: `ci-secret-token-vault-9921`
 
 #### Step 2: Authenticate and Generate an Access Token
+
 ```bash
 curl -s -X POST \
   -d '{
@@ -184,6 +196,7 @@ echo "[+] Compromised AppRole Token: $APPROLE_TOKEN"
 ```
 
 #### Step 3: Enumerate Assigned Capabilities & Read Secrets
+
 ```bash
 # Read production secrets allowed by approle-ci-policy
 curl -s -H "X-Vault-Token: $APPROLE_TOKEN" \
@@ -195,10 +208,12 @@ curl -s -H "X-Vault-Token: $APPROLE_TOKEN" \
 ## Attack Vector 3: Transit Engine Decryption Oracle & Key Abuse
 
 ### Threat Model
+
 The **Transit secrets engine** handles cryptographic functions (Encryption-as-a-Service) for data in transit. Applications send plaintext to Vault and receive ciphertext formatted as:
 `vault:v1:dHJhbnNpdF9kYXRh...`
 
 Security flaws arise when:
+
 1. **Missing Authentication Context (AEAD misuse)**: Applications use AES-GCM without supplying `context` (additional authenticated data), allowing ciphertext meant for one user or database row to be decrypted in another context.
 2. **Overprivileged Decrypt Endpoints**: Services that only need encryption (e.g., public sign-up form encrypting SSNs or credit card numbers) are granted `update` access to the `decrypt` endpoint.
 3. **Oracle Attacks**: An attacker feeds arbitrary encrypted blobs to `transit/decrypt/:key` and observes responses or error codes.
@@ -206,6 +221,7 @@ Security flaws arise when:
 ### Exploitation Walkthrough
 
 #### Step 1: Intercept or Harvest Stored Ciphertext
+
 ```bash
 # Read the sample ciphertext generated during lab initialization
 CIPHERTEXT=$(cat ./scripts/sample_ciphertext.txt 2>/dev/null || echo "vault:v1:sample")
@@ -213,6 +229,7 @@ echo "Captured Ciphertext: $CIPHERTEXT"
 ```
 
 #### Step 2: Abuse Overprivileged Decrypt API
+
 ```bash
 # Query the transit decryption endpoint
 curl -s -X POST \
@@ -231,12 +248,15 @@ echo ""
 ## Attack Vector 4: Dynamic Secrets & Lease Hijacking
 
 ### Architecture
+
 Unlike static secrets, **Dynamic Secrets** are generated on-demand and exist only for the lease duration. For example, when an app asks for database credentials:
+
 1. Vault connects to the database as admin.
 2. Executes: `CREATE USER 'v-token-xyz'@'%' IDENTIFIED BY 'random-pass'; GRANT SELECT ON app.* TO 'v-token-xyz';`
 3. Returns user/pass and a `lease_id` (e.g. `database/creds/readonly/h823...`).
 
 ### Privilege Escalation & Denial of Service Risks
+
 - **Lease Revocation DoS**: If a low-privilege policy has access to `sys/leases/revoke/*`, an attacker can revoke active credentials of production application servers.
 - **Unbounded TTL Renewal**: Users renewing leases indefinitely (`sys/leases/renew`) bypass regular access reviews.
 
@@ -252,7 +272,9 @@ curl -s -X PUT \
 ## Defensive Hardening & Policy Best Practices
 
 ### 1. Principle of Least Privilege in HCL
+
 Never grant wildcards on `sys/` or `auth/`. Explicitly block policy management:
+
 ```hcl
 # Block dangerous administrative paths
 path "sys/policies/*" {
@@ -267,6 +289,7 @@ path "auth/token/create-orphan" {
 ```
 
 ### 2. Hardening AppRole Configurations
+
 - **Enforce Single-Use Secret IDs**: `secret_id_num_uses = 1`
 - **Short TTLs**: `secret_id_ttl = "10m"`
 - **Strict CIDR Whitelisting**:
@@ -278,6 +301,7 @@ path "auth/token/create-orphan" {
 - **Use Trusted Orchestration**: Use Vault Agent with Auto-Auth or Kubernetes Service Account tokens (`auth/kubernetes`) instead of manual Secret IDs.
 
 ### 3. Transit Engine Hardening
+
 - Require `context` (AEAD Additional Authenticated Data) for sensitive records:
   ```bash
   vault write transit/keys/customer-data convergent_encryption=false derived=true
@@ -302,6 +326,7 @@ All video links have been verified active via the YouTube oEmbed API (`HTTP 200 
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
 
 ```bash

@@ -1,7 +1,7 @@
 services:
- web:
-   image: vulhub/gitea:1.4.0
-   pull_policy: missing
-   ports:
-    - "8359:3000"
-    - "20022:22"
+  web:
+    image: vulhub/gitea:1.4.0
+    pull_policy: missing
+    ports:
+      - "8359:3000"
+      - "20022:22"

@@ -6,7 +6,10 @@ services:
     ports:
       - "8155:5601"
     restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: 500M
+    depends_on:
+      - elasticsearch
+
+  elasticsearch:
+    image: vulhub/elasticsearch:6.8.6
+    pull_policy: missing
+    restart: unless-stopped

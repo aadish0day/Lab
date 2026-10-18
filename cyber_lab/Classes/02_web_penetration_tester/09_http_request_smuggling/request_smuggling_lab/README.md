@@ -2,14 +2,14 @@
 
 ## Overview
 
-**HTTP Request Smuggling** (also known as *HTTP Desync Attacks*) is an advanced server-side vulnerability that arises when a front-end reverse proxy (load balancer, CDN, or API gateway) and a back-end web server interpret the boundaries of HTTP requests differently.
+**HTTP Request Smuggling** (also known as _HTTP Desync Attacks_) is an advanced server-side vulnerability that arises when a front-end reverse proxy (load balancer, CDN, or API gateway) and a back-end web server interpret the boundaries of HTTP requests differently.
 
 When multiple HTTP requests are multiplexed or pipelined over a single persistent TCP connection (`Connection: keep-alive`), ambiguities between the `Content-Length` (CL) and `Transfer-Encoding` (TE) headers cause one server to determine the request length differently from the other. This desynchronization allows an attacker to "smuggle" an arbitrary HTTP prefix into the back-end connection pool, prepending malicious data to the subsequent request of an unsuspecting victim or bypassing front-end security controls.
 
 - **Lab Frontend URL**: [http://localhost:8108](http://localhost:8108)
 - **Frontend Proxy**: HAProxy (`haproxy:alpine`) on Port `8108`
 - **Backend Service**: Desync-Vulnerable HTTP Server (`cyberlab_smuggling_backend`) on Port `8000` (Internal)
-- **Container Names**: `cyberlab_smuggling_frontend`, `cyberlab_smuggling_backend`
+- **Container Names**: `cyberlab_02_smuggling_frontend`, `cyberlab_02_smuggling_backend`
 - **Directory**: `Classes/02_web_penetration_tester/09_http_request_smuggling/request_smuggling_lab`
 - **Lab Shortcut**: `./lab start smuggling`
 
@@ -44,9 +44,11 @@ When multiple HTTP requests are multiplexed or pipelined over a single persisten
 ```
 
 ### The RFC 7230 Conflict & Root Cause
+
 According to **RFC 7230 section 3.3.3**, if a request contains both `Transfer-Encoding: chunked` and a `Content-Length` header, `Transfer-Encoding` MUST take precedence, and `Content-Length` MUST be ignored.
 
 However, vulnerabilities arise when:
+
 1. One server supports `Transfer-Encoding: chunked`, but the other server does not or ignores it.
 2. The `Transfer-Encoding` header is subtly obfuscated so that one server parses it while the other fails to recognize it and falls back to `Content-Length`.
 3. The front-end forwards both headers unchanged over a shared keep-alive backend socket pool (`http-reuse always`).
@@ -68,6 +70,7 @@ curl -i http://localhost:8108/
 # Verify front-end ACL blocks direct access to /admin
 curl -i http://localhost:8108/admin
 ```
+
 Observe that direct requests to `/admin` return `403 Forbidden` from HAProxy!
 
 ---
@@ -77,10 +80,12 @@ Observe that direct requests to `/admin` return `403 Forbidden` from HAProxy!
 ### Exploit 1: CL.TE Desync (Bypassing Front-End ACL for /admin)
 
 In a **CL.TE** vulnerability:
+
 - The **Front-End** uses the `Content-Length` header.
 - The **Back-End** uses the `Transfer-Encoding` header.
 
 #### Exploitation Flow:
+
 1. Ensure the backend is in `CL.TE` mode (default, or visit `http://localhost:8108/mode/toggle`).
 2. Construct a request containing both `Content-Length` and `Transfer-Encoding: chunked`:
    - The `Content-Length` is calculated to cover the entire body, including the smuggled request.
@@ -102,6 +107,7 @@ Foo: x
 ```
 
 #### Executing via Raw TCP / Netcat:
+
 ```bash
 printf "POST / HTTP/1.1\r\n"\
 "Host: localhost:8108\r\n"\
@@ -117,6 +123,7 @@ printf "POST / HTTP/1.1\r\n"\
 ```
 
 #### What Happens on the Wire:
+
 1. HAProxy reads 46 bytes of body as indicated by `Content-Length`. It considers the entire block as one legitimate request to `/` (allowed by ACL).
 2. HAProxy forwards the entire payload to the backend over the reused keep-alive connection.
 3. The backend parses `Transfer-Encoding: chunked`. It reads `0\r\n\r\n`, terminating the first request, and responds to HAProxy.
@@ -140,10 +147,12 @@ printf "POST / HTTP/1.1\r\n"\
 ### Exploit 2: TE.CL Desync
 
 In a **TE.CL** vulnerability:
+
 - The **Front-End** uses the `Transfer-Encoding` header.
 - The **Back-End** uses the `Content-Length` header.
 
 #### Exploitation Flow:
+
 1. Toggle the backend mode to `TE.CL`:
    ```bash
    curl http://localhost:8108/mode/toggle
@@ -192,6 +201,7 @@ X: X[\n]Transfer-Encoding: chunked
 Transfer-encoding:
  chunked
 ```
+
 If the front-end normalizes or ignores the obfuscated header (falling back to `Content-Length`), while the back-end leniently parses it as chunked, the system degrades to a **CL.TE** vulnerability. If the reverse occurs, it degrades to **TE.CL**.
 
 ---
@@ -234,7 +244,7 @@ Request smuggling can be weaponized to steal session cookies, API tokens, and in
 
 1. **HTTP/2 End-to-End**:
    Migrate all communication between clients, CDNs, load balancers, and backends to HTTP/2. HTTP/2 uses binary framing with explicit length fields, eliminating text-based delimiter ambiguity.
-   *(Note: Avoid front-end HTTP/2 downgrading to backend HTTP/1.1 without strict header sanitization, as H2.CL / H2.TE desync can still occur).*
+   _(Note: Avoid front-end HTTP/2 downgrading to backend HTTP/1.1 without strict header sanitization, as H2.CL / H2.TE desync can still occur)._
 2. **Strict RFC 7230 Compliance**:
    Configure front-end proxies to normalize or reject any request containing both `Content-Length` and `Transfer-Encoding` with `400 Bad Request`.
 3. **Disable Connection Reuse (Connection Pooling)**:
@@ -257,7 +267,9 @@ All video links verified active via YouTube oEmbed API (`HTTP 200 OK`):
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Start HTTP Request Smuggling lab
 ./lab start smuggling

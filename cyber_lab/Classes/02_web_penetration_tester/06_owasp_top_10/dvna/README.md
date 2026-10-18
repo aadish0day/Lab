@@ -41,9 +41,10 @@ While traditional web application flaws like SQL injection behave differently ac
 ## Key Vulnerability Domains & Attack Exercises
 
 ### 1. JavaScript Prototype Pollution
-* **Mechanism**: Merging unvalidated user JSON properties directly into an object without filtering dangerous keys (`__proto__`, `constructor.prototype`).
-* **Exploitation Impact**: When an attacker injects a property into `Object.prototype`, every object created in the entire Node.js process inherits that property, leading to authentication bypass or logic hijacking.
-* **Attack Payload**:
+
+- **Mechanism**: Merging unvalidated user JSON properties directly into an object without filtering dangerous keys (`__proto__`, `constructor.prototype`).
+- **Exploitation Impact**: When an attacker injects a property into `Object.prototype`, every object created in the entire Node.js process inherits that property, leading to authentication bypass or logic hijacking.
+- **Attack Payload**:
   ```json
   {
     "__proto__": {
@@ -53,21 +54,23 @@ While traditional web application flaws like SQL injection behave differently ac
   ```
 
 ### 2. Regular Expression Denial of Service (ReDoS)
-* **Mechanism**: Exploiting catastrophic backtracking in unoptimized regular expressions used for user input validation (such as email validation or username formats).
-* **Exploitation Impact**: Because Node.js runs on a single thread, an input that triggers exponential backtracking causes 100% CPU utilization, freezing the event loop and blocking all concurrent users from receiving responses.
-* **Attack Payload**:
+
+- **Mechanism**: Exploiting catastrophic backtracking in unoptimized regular expressions used for user input validation (such as email validation or username formats).
+- **Exploitation Impact**: Because Node.js runs on a single thread, an input that triggers exponential backtracking causes 100% CPU utilization, freezing the event loop and blocking all concurrent users from receiving responses.
+- **Attack Payload**:
   ```text
   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!
   ```
   against vulnerable regexes of the form `^(a+)+$`.
 
 ### 3. Mass Assignment via Sequelize ORM
-* **Target Endpoint**: User profile update (`POST /app/profile`)
-* **Vulnerability Mechanism**: Directly passing `req.body` into `User.update()` without specifying an `attributes` or `fields` whitelist:
+
+- **Target Endpoint**: User profile update (`POST /app/profile`)
+- **Vulnerability Mechanism**: Directly passing `req.body` into `User.update()` without specifying an `attributes` or `fields` whitelist:
   ```javascript
   User.update(req.body, { where: { id: req.user.id } });
   ```
-* **Attack Walkthrough**:
+- **Attack Walkthrough**:
   Intercept the profile update request and inject the administrative privilege parameter:
   ```json
   {
@@ -80,9 +83,10 @@ While traditional web application flaws like SQL injection behave differently ac
   The ORM updates the user's role to administrator in the database.
 
 ### 4. Server-Side Template Injection (SSTI) in EJS
-* **Target Feature**: User profile display or customized greeting templates.
-* **Vulnerability Mechanism**: Concatenating unescaped user input into template strings before rendering.
-* **Attack Payload**:
+
+- **Target Feature**: User profile display or customized greeting templates.
+- **Vulnerability Mechanism**: Concatenating unescaped user input into template strings before rendering.
+- **Attack Payload**:
   ```text
   <%= global.process.mainModule.require('child_process').execSync('id').toString() %>
   ```
@@ -99,8 +103,8 @@ While traditional web application flaws like SQL injection behave differently ac
    - Explicitly define the allowable fields in Sequelize queries:
      ```javascript
      User.update(req.body, {
-       fields: ['name', 'bio'],
-       where: { id: req.user.id }
+       fields: ["name", "bio"],
+       where: { id: req.user.id },
      });
      ```
 3. **Mitigating ReDoS**:

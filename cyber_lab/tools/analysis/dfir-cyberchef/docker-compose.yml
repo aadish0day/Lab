@@ -5,7 +5,7 @@ services:
     container_name: cyberlab_dfir_cyberchef
     restart: unless-stopped
     ports:
-      - "8106:80"       # CyberChef Web Application
+      - "8106:80" # CyberChef Web Application
 
   volatility:
     image: cincan/volatility3:latest

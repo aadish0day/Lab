@@ -5,10 +5,10 @@ services:
     container_name: cyberlab_realworld_caldera
     restart: unless-stopped
     ports:
-      - "8888:8888"       # Caldera Web Interface & HTTP C2 Beacon Contact
-      - "7010:7010"       # TCP C2 Contact
-      - "7011:7011/udp"   # UDP C2 Contact
-      - "7012:7012"       # WebSocket C2 Contact
+      - "8888:8888" # Caldera Web Interface & HTTP C2 Beacon Contact
+      - "7010:7010" # TCP C2 Contact
+      - "7011:7011/udp" # UDP C2 Contact
+      - "7012:7012" # WebSocket C2 Contact
     environment:
       - CALDERA_PLUGINS=sandcat,stockpile,manx,atomic,response,access
     volumes:

@@ -1,10 +1,8 @@
-version: "3.8"
-
 services:
   shiro:
     image: vulhub/shiro:1.5.1
     pull_policy: missing
-    container_name: cyberlab_shiro_1957
+    container_name: cyberlab_02_shiro_1957
     restart: unless-stopped
     ports:
       - "8219:8080"

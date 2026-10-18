@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   craftcms:
     image: vulhub/craftcms:4.4.14

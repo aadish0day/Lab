@@ -6,6 +6,11 @@ services:
     ports:
       - "8889:8888"
       - "31337:31337"
+    volumes:
+      - sliver_data:/root/.sliver
     restart: unless-stopped
     stdin_open: true
     tty: true
+
+volumes:
+  sliver_data:

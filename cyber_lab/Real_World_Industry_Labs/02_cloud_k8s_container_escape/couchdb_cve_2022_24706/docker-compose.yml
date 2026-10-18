@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   couchdb:
     image: vulhub/couchdb:3.2.1

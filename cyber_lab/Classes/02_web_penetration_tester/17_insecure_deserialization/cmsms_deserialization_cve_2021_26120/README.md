@@ -1,34 +1,63 @@
-# CMS Made Simple PHP Object Injection & Deserialization RCE (CVE-2021-26120)
+# CMS Made Simple Authenticated Template Injection / RCE (CVE-2021-26120)
 
-## Laboratory Overview
-This laboratory provides an isolated, production-grade practice target for studying **CMS Made Simple PHP Object Injection & Deserialization RCE (CVE-2021-26120)** (CVE-2021-26120).
+## Overview
 
-* **Target Directory**: `Classes/02_web_penetration_tester/17_insecure_deserialization/cmsms_deserialization_cve_2021_26120`
-* **Default Port(s)**: `8260:80`
-* **CLI Shortcut**: `./lab start cmsms-object-rce`
+CMS Made Simple (CMSMS) is an open-source PHP content management system. In versions 2.2.15 and prior (including 2.2.9.1), the Smarty template engine (versions before 3.1.39) contained an arbitrary code execution vulnerability (CVE-2021-26120) where an attacker with template/designer permissions could inject executable PHP code via an unexpected function name after `{function name=...}`.
 
----
+In CMSMS versions prior to 2.2.9.1, unauthenticated attackers can chain CVE-2019-9053 (SQL injection) to extract administrator credentials/hashes or reset the password, and subsequently leverage CVE-2021-26120 to achieve remote code execution.
 
-## Architecture & Service Map
-* **Container Name**: `cyberlab_cmsms_obj`
-* **Network Mode**: Bridge (Isolated Docker network)
-* **Resource Ceiling**: 1024 MB RAM limit
-
----
-
-## Vulnerability Mechanics
-CMS Made Simple admin console PHP unserialize object injection RCE.
-
-### Technical Root Cause
-An authenticated administrator could trigger PHP object injection via untrusted serialized data processed in site preferences, achieving code execution via POP chains.
+- **Primary Interface**: `http://localhost:8260`
+- **Installation Wizard**: `http://localhost:8260/install.php`
+- **Docker Shortcut**: `./lab start cmsms-object-rce`
+- **Container Names**: `cyberlab_02_cmsms_deser_app` (App) and `cyberlab_02_cmsms_deser_db` (MySQL 5.7)
+- **Database Credentials**: Host `db`, Database `cmsms`, User `root`, Password `root`
+- **Source of Truth**: [Vulhub CVE-2021-26120](https://github.com/vulhub/vulhub/tree/master/cmsms/CVE-2021-26120)
 
 ---
 
-## Defensive Remediation & Hardening
-Upgrade CMS Made Simple to version 2.2.15 or later.
+## Service Architecture
+
+- **Web Service (`cmsms`)**: Serves CMSMS 2.2.9.1 on host port `8260` (container port `80`).
+- **Database (`db`)**: MySQL 5.7 database container with persistent volume `cmsms_deser_db_data:/var/lib/mysql`.
 
 ---
 
-## Verified Video Walkthrough
-* **Video Title**: [CMS Made Simple Tutorial 01- Installation](https://www.youtube.com/watch?v=uxnhNq8upD8)
-* **Direct URL**: https://www.youtube.com/watch?v=uxnhNq8upD8
+## Verification & Health Check
+
+### 1. Validate Configuration
+
+```bash
+docker compose config -q
+```
+
+### 2. Start Services
+
+```bash
+docker compose up -d
+```
+
+### 3. Check Web Endpoints
+
+```bash
+# Check root response (redirects to install or login)
+curl -i http://localhost:8260/
+
+# Verify installer endpoint
+curl -i http://localhost:8260/install.php
+```
+
+---
+
+## Defensive Remediation
+
+1. Upgrade CMS Made Simple to version 2.2.16 or newer.
+2. Upgrade the underlying Smarty library to version 3.1.39 or newer.
+3. Restrict admin console access using IP whitelisting and enforce strong administrator passwords.
+
+---
+
+## References
+
+- [Vulhub CMSMS CVE-2021-26120 Environment](https://github.com/vulhub/vulhub/tree/master/cmsms/CVE-2021-26120)
+- [NVD Advisory CVE-2021-26120](https://nvd.nist.gov/vuln/detail/CVE-2021-26120)
+- [Source Incite Advisory & PoC](https://srcincite.io/pocs/cve-2021-26120.py.txt)

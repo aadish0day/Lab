@@ -1,9 +1,9 @@
-version: '2'
+version: "2"
 services:
- struts2:
-   image: vulhub/struts2:2.3.30
-   pull_policy: missing
-   mem_limit: 1024m
-   restart: unless-stopped
-   ports:
-    - "8505:8080"
+  struts2:
+    image: vulhub/struts2:2.3.30
+    pull_policy: missing
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8505:8080"

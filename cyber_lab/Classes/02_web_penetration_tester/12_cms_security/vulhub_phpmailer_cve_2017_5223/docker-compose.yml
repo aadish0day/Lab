@@ -1,9 +1,0 @@
-services:
-  vulhub:
-    image: vulhub/phpmailer:5.2.21
-    pull_policy: missing
-    container_name: cyberlab_vulhub_phpmailer_cve_2017_5223
-    mem_limit: 1024m
-    restart: unless-stopped
-    ports:
-      - "8762:80"

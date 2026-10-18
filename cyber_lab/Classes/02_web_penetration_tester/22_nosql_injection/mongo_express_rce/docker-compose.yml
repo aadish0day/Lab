@@ -1,10 +1,22 @@
 services:
-  mongo_express_rce:
+  web:
     image: vulhub/mongo-express:0.53.0
+    container_name: cyberlab_02_mongo_express_web
     pull_policy: missing
-    container_name: cyberlab_02_mongo_express_rce
+    depends_on:
+      - mongo
     ports:
       - "8140:8081"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 350M
+
+  mongo:
+    image: mongo:3.4
+    container_name: cyberlab_02_mongo_express_db
+    pull_policy: missing
     restart: unless-stopped
     deploy:
       resources:

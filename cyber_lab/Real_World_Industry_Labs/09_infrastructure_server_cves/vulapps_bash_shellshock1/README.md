@@ -1,6 +1,7 @@
 # Lab Target: VULAPPS_BASH_SHELLSHOCK1
 
 ## Overview
+
 - **Vulnerability**: GNU Bash Shellshock Function Definition Environment RCE
 - **Target Category**: Practice Environment
 - **Host Port**: http://localhost:8730
@@ -8,6 +9,7 @@
 - **Memory Ceiling**: 1024m
 
 ## Architecture & Data Flow
+
 ```
 [Attacker Console / CLI]
        |
@@ -16,15 +18,18 @@
 ```
 
 ## Quick Start
+
 ```bash
 cd Real_World_Industry_Labs/09_infrastructure_server_cves/vulapps_bash_shellshock1
 docker compose up -d
 ```
 
 ## Attack Verification
+
 ```bash
 curl -i http://localhost:8730/
 ```
 
 ## Walkthrough & Video Reference
+
 - **YouTube Walkthrough**: https://www.youtube.com/watch?v=FvvdxA11-ZU

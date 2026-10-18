@@ -1,9 +1,9 @@
-version: '2'
+version: "2"
 services:
- spring:
-   image: vulhub/spring-security-oauth2:2.0.8
-   pull_policy: missing
-   mem_limit: 1024m
-   restart: unless-stopped
-   ports:
-    - "8495:8080"
+  spring:
+    image: vulhub/spring-security-oauth2:2.0.8
+    pull_policy: missing
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8495:8080"

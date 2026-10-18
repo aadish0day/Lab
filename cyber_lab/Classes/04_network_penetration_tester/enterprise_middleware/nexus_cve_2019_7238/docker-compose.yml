@@ -1,9 +1,9 @@
-version: '3'
+version: "3"
 services:
- web:
-   image: vulhub/nexus:3.14.0
-   pull_policy: missing
-   mem_limit: 1024m
-   restart: unless-stopped
-   ports:
-    - "8484:8081"
+  web:
+    image: vulhub/nexus:3.14.0
+    pull_policy: missing
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8484:8081"

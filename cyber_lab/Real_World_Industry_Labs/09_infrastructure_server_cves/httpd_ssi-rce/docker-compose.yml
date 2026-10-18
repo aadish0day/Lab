@@ -1,8 +1,8 @@
 services:
- apache:
-   image: vulhub/php:7.4.33-apache
-   pull_policy: missing
-   ports:
-    - "8369:80"
-   volumes:
-    - ./upload.php:/var/www/html/upload.php
+  apache:
+    image: vulhub/php:7.4.33-apache
+    pull_policy: missing
+    ports:
+      - "8369:80"
+    volumes:
+      - ./upload.php:/var/www/html/upload.php

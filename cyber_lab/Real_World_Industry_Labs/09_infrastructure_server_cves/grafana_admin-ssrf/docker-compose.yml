@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   web:
     image: vulhub/grafana:8.5.4

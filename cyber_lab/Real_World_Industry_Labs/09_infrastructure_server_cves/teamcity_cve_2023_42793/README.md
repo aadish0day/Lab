@@ -1,6 +1,7 @@
 # Lab Target: TEAMCITY CVE-2023-42793
 
 ## Overview
+
 - **Vulnerability**: CVE-2023-42793
 - **Target Category**: Practice Environment
 - **Host Port**: http://localhost:8605
@@ -8,6 +9,7 @@
 - **Memory Ceiling**: 1024m
 
 ## Architecture & Data Flow
+
 ```
 [Attacker Console / CLI]
        |
@@ -16,15 +18,18 @@
 ```
 
 ## Quick Start
+
 ```bash
 cd Real_World_Industry_Labs/09_infrastructure_server_cves/teamcity_cve_2023_42793
 docker compose up -d
 ```
 
 ## Attack Verification
+
 ```bash
 curl -i http://localhost:8605/
 ```
 
 ## Walkthrough & Video Reference
+
 - **YouTube Walkthrough**: ['YA-mL9Z8SNI', 'DVGA - Damn Vulnerable GraphQL Application | GraphQL Exploitation - Part - 2 | DVGA']

@@ -5,7 +5,7 @@ services:
     container_name: cyberlab_web_wireshark
     restart: unless-stopped
     ports:
-      - "3003:3000"       # Web-based Wireshark GUI (KasmVNC)
+      - "3003:3000" # Web-based Wireshark GUI (KasmVNC)
     environment:
       - PUID=1000
       - PGID=1000

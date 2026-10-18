@@ -5,6 +5,7 @@
 Apache CouchDB vulnerabilities CVE-2017-12635 and CVE-2017-12636 represent a critical chained attack against CouchDB NoSQL database clusters (versions prior to 1.7.0 and 2.1.1).
 
 The attack chain consists of two stages:
+
 1. **CVE-2017-12635 (JSON Parser Differential)**: CouchDB uses two different JSON parsers: an Erlang-based JSON parser (`jiffy`) and SpiderMonkey (JavaScript engine). In the user registration API (`/_users`), an attacker can submit duplicate keys in a single JSON document (e.g. two `roles` fields). One parser takes the first key while the other takes the last key, bypassing the non-admin role check and allowing anyone to grant themselves the `_admin` role.
 2. **CVE-2017-12636 (Erlang Query Server RCE)**: Once authenticated as an administrator, CouchDB permits configuring query servers via the HTTP API (`/_config/query_servers`). By defining an arbitrary system command as an Erlang query server, the attacker achieves instant Remote Code Execution.
 
@@ -18,6 +19,7 @@ The attack chain consists of two stages:
 ## Exploitation Walkthrough
 
 ### 1. Privilege Escalation: Creating an Unauthorized Admin (CVE-2017-12635)
+
 Submit a user registration request with duplicate `roles` fields:
 
 ```bash
@@ -35,6 +37,7 @@ curl -X PUT 'http://localhost:5984/_users/org.couchdb.user:attacker' \
 Response: `{"ok":true,"id":"org.couchdb.user:attacker", ...}`. The user `attacker` is now a cluster administrator.
 
 ### 2. Remote Code Execution via Query Server (CVE-2017-12636)
+
 Authenticate as `attacker:Password123!` and register an arbitrary shell command as a query server:
 
 ```bash
@@ -52,6 +55,7 @@ curl -X POST 'http://attacker:Password123!@localhost:5984/pwn_db/_temp_view' \
 ```
 
 Verify command execution inside the container:
+
 ```bash
 docker exec -it cyberlab_02_couchdb_erlang_rce cat /tmp/pwned
 ```

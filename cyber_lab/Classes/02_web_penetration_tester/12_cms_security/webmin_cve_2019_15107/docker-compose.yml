@@ -1,9 +1,9 @@
-version: '2'
+version: "2"
 services:
- web:
-   image: vulhub/webmin:1.910
-   pull_policy: missing
-   mem_limit: 1024m
-   restart: unless-stopped
-   ports:
-    - "8474:10000"
+  web:
+    image: vulhub/webmin:1.910
+    pull_policy: missing
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8474:10000"

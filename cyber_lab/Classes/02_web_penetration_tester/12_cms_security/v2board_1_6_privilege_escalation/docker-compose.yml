@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   web:
     image: vulhub/v2board:1.6.1
@@ -6,26 +6,26 @@ services:
     mem_limit: 1024m
     restart: unless-stopped
     ports:
-     - "8462:80"
+      - "8462:80"
     depends_on:
-     - db
-     - redis
+      - db
+      - redis
     entrypoint:
-     - bash
-     - /entrypoint.sh
+      - bash
+      - /entrypoint.sh
     volumes:
-     - ./entrypoint.sh:/entrypoint.sh
+      - ./entrypoint.sh:/entrypoint.sh
     command: apache2-foreground
   db:
-   image: mysql:5.7
-   pull_policy: missing
-   mem_limit: 1024m
-   restart: unless-stopped
-   environment:
-    - MYSQL_ROOT_PASSWORD=root
-    - MYSQL_DATABASE=v2board
+    image: mysql:5.7
+    pull_policy: missing
+    mem_limit: 1024m
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=v2board
   redis:
-   image: redis:7-alpine
-   pull_policy: missing
-   mem_limit: 1024m
-   restart: unless-stopped
+    image: redis:7-alpine
+    pull_policy: missing
+    mem_limit: 1024m
+    restart: unless-stopped

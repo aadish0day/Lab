@@ -1,17 +1,15 @@
-version: "3.8"
-
 services:
   solr:
     image: vulhub/solr:8.8.1
     pull_policy: missing
-    container_name: cyberlab_solr_streaming
+    container_name: cyberlab_02_solr_streaming
     restart: unless-stopped
     ports:
       - "8217:8983"
     deploy:
       resources:
         limits:
-          memory: 1024m
+          memory: 512M
     labels:
       - "cyberlab.managed=true"
       - "cyberlab.category=practice-target"

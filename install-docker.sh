@@ -10,37 +10,40 @@
 # ============================================================================
 set -euo pipefail
 
-WITH_LAZYDOCKER=1   # default: install lazydocker too
+WITH_LAZYDOCKER=1 # default: install lazydocker too
 for arg in "$@"; do
-    case "$arg" in
-        --docker-only) WITH_LAZYDOCKER=0 ;;
-        -h|--help)
-            echo "Usage: $0 [--docker-only]"
-            echo "  (default)          Install Docker + Lazydocker"
-            echo "  --docker-only      Install Docker only (skip Lazydocker)"
-            exit 0
-            ;;
-    esac
+	case "$arg" in
+	--docker-only) WITH_LAZYDOCKER=0 ;;
+	-h | --help)
+		echo "Usage: $0 [--docker-only]"
+		echo "  (default)          Install Docker + Lazydocker"
+		echo "  --docker-only      Install Docker only (skip Lazydocker)"
+		exit 0
+		;;
+	esac
 done
 
 if [ "$(id -u)" -eq 0 ]; then
-    SUDO=""
-    RUN_USER="${SUDO_USER:-$USER}"
+	SUDO=""
+	RUN_USER="${SUDO_USER:-$USER}"
 else
-    SUDO="sudo"
-    RUN_USER="$USER"
+	SUDO="sudo"
+	RUN_USER="$USER"
 fi
 
-log()   { printf '\e[1;34m[INFO]\e[0m %s\n' "$*"; }
-warn()  { printf '\e[1;33m[WARN]\e[0m %s\n' "$*" >&2; }
-err()   { printf '\e[1;31m[ERROR]\e[0m %s\n' "$*" >&2; }
-die()   { err "$*"; exit 1; }
+log() { printf '\e[1;34m[INFO]\e[0m %s\n' "$*"; }
+warn() { printf '\e[1;33m[WARN]\e[0m %s\n' "$*" >&2; }
+err() { printf '\e[1;31m[ERROR]\e[0m %s\n' "$*" >&2; }
+die() {
+	err "$*"
+	exit 1
+}
 
 # ----------------------------------------------------------------------------
 # Confirm Debian/Ubuntu family
 # ----------------------------------------------------------------------------
 if [ ! -f /etc/os-release ]; then
-    die "This script is for Debian/Ubuntu only."
+	die "This script is for Debian/Ubuntu only."
 fi
 
 . /etc/os-release
@@ -48,24 +51,24 @@ ID="${ID:-}"
 ID_LIKE="${ID_LIKE:-}"
 CODENAME="${UBUNTU_CODENAME:-${DEBIAN_CODENAME:-${VERSION_CODENAME:-}}}"
 
-if [ "$ID" != "ubuntu" ] && [ "$ID" != "debian" ] && \
-   [[ ! " $ID_LIKE " == *" ubuntu "* ]] && [[ ! " $ID_LIKE " == *" debian "* ]]; then
-    die "Unsupported distro: $ID ($ID_LIKE). This script is Debian/Ubuntu only."
+if [ "$ID" != "ubuntu" ] && [ "$ID" != "debian" ] &&
+	[[ ! " $ID_LIKE " == *" ubuntu "* ]] && [[ ! " $ID_LIKE " == *" debian "* ]]; then
+	die "Unsupported distro: $ID ($ID_LIKE). This script is Debian/Ubuntu only."
 fi
 
 log "Detected distro: $ID $VERSION_ID ($ID_LIKE) codename=$CODENAME"
 
 # Map to the Docker repo distro (ubuntu vs debian)
 if [ "$ID" = "ubuntu" ] || [[ " $ID_LIKE " == *" ubuntu "* ]]; then
-    REPO_DISTRO="ubuntu"
+	REPO_DISTRO="ubuntu"
 else
-    REPO_DISTRO="debian"
+	REPO_DISTRO="debian"
 fi
 
 # Kali uses the Debian "bookworm" Docker repo
 if [ "$ID" = "kali" ]; then
-    CODENAME="bookworm"
-    REPO_DISTRO="debian"
+	CODENAME="bookworm"
+	REPO_DISTRO="debian"
 fi
 
 ARCH="$(dpkg --print-architecture)"
@@ -79,11 +82,11 @@ log "Installing Docker CE on $ID ($CODENAME, $ARCH)..."
 conflicts=(docker.io docker-doc docker-compose podman-docker containerd runc)
 installed_conflicts=()
 for p in "${conflicts[@]}"; do
-    dpkg-query -W -f='${Status}' "$p" 2>/dev/null | grep -q "install ok installed" && installed_conflicts+=("$p")
+	dpkg-query -W -f='${Status}' "$p" 2>/dev/null | grep -q "install ok installed" && installed_conflicts+=("$p")
 done
 if [ "${#installed_conflicts[@]}" -gt 0 ]; then
-    log "Removing conflicting packages: ${installed_conflicts[*]}"
-    $SUDO apt-get remove -y "${installed_conflicts[@]}"
+	log "Removing conflicting packages: ${installed_conflicts[*]}"
+	$SUDO apt-get remove -y "${installed_conflicts[@]}"
 fi
 
 # Add Docker's official GPG key
@@ -95,20 +98,20 @@ $SUDO curl -fsSL https://download.docker.com/linux/$REPO_DISTRO/gpg | $SUDO gpg 
 $SUDO chmod a+r /etc/apt/keyrings/docker.gpg
 
 # Add the repository to Apt sources
-echo "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/$REPO_DISTRO $CODENAME stable" \
-    | $SUDO tee /etc/apt/sources.list.d/docker.list >/dev/null
+echo "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/$REPO_DISTRO $CODENAME stable" |
+	$SUDO tee /etc/apt/sources.list.d/docker.list >/dev/null
 
 $SUDO apt-get update -qq
 $SUDO apt-get install -y docker-ce docker-ce-cli containerd.io \
-    docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
+	docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
 
 # Enable service + docker group
 log "Enabling and starting Docker service..."
 if [ -d /run/systemd/system ]; then
-    $SUDO systemctl enable --now docker.service 2>/dev/null || \
-        warn "Could not enable docker.service via systemd."
+	$SUDO systemctl enable --now docker.service 2>/dev/null ||
+		warn "Could not enable docker.service via systemd."
 else
-    warn "systemd not detected; start Docker manually (e.g. 'sudo dockerd')."
+	warn "systemd not detected; start Docker manually (e.g. 'sudo dockerd')."
 fi
 
 # Ensure the docker group exists and add $RUN_USER to it.
@@ -116,36 +119,36 @@ fi
 # This avoids failing on minimal Debian installs where usermod (passwd pkg)
 # is not installed.
 add_user_to_docker_group() {
-    local user="$1"
+	local user="$1"
 
-    # Make sure the docker group exists.
-    if ! getent group docker >/dev/null 2>&1; then
-        if command -v groupadd >/dev/null 2>&1; then
-            $SUDO groupadd docker
-        else
-            local gid
-            gid="$(awk -F: '$3>0 && $3<60000{print $3}' /etc/group | sort -n | tail -n1)"
-            gid=$((gid + 1))
-            $SUDO sh -c "echo 'docker:x:${gid}:' >> /etc/group"
-        fi
-        log "Created docker group."
-    fi
+	# Make sure the docker group exists.
+	if ! getent group docker >/dev/null 2>&1; then
+		if command -v groupadd >/dev/null 2>&1; then
+			$SUDO groupadd docker
+		else
+			local gid
+			gid="$(awk -F: '$3>0 && $3<60000{print $3}' /etc/group | sort -n | tail -n1)"
+			gid=$((gid + 1))
+			$SUDO sh -c "echo 'docker:x:${gid}:' >> /etc/group"
+		fi
+		log "Created docker group."
+	fi
 
-    # Already a member?
-    if id "$user" >/dev/null 2>&1 && groups "$user" | grep -qw docker; then
-        log "User '$user' is already in the docker group."
-        return 0
-    fi
+	# Already a member?
+	if id "$user" >/dev/null 2>&1 && groups "$user" | grep -qw docker; then
+		log "User '$user' is already in the docker group."
+		return 0
+	fi
 
-    if command -v usermod >/dev/null 2>&1; then
-        $SUDO usermod -aG docker "$user"
-    elif command -v gpasswd >/dev/null 2>&1; then
-        $SUDO gpasswd -a "$user" docker
-    elif command -v adduser >/dev/null 2>&1; then
-        $SUDO adduser "$user" docker
-    else
-        # Last resort: append user to the docker group line in /etc/group.
-        $SUDO sh -c "
+	if command -v usermod >/dev/null 2>&1; then
+		$SUDO usermod -aG docker "$user"
+	elif command -v gpasswd >/dev/null 2>&1; then
+		$SUDO gpasswd -a "$user" docker
+	elif command -v adduser >/dev/null 2>&1; then
+		$SUDO adduser "$user" docker
+	else
+		# Last resort: append user to the docker group line in /etc/group.
+		$SUDO sh -c "
             if ! grep -q '^docker:[^:]*:[^:]*:.*\\b${user}\\b' /etc/group; then
                 if grep -q '^docker:[^:]*:[^:]*:$' /etc/group; then
                     sed -i 's/^docker:\\([^:]*:[^:]*:)\$/\1${user}/' /etc/group
@@ -154,8 +157,8 @@ add_user_to_docker_group() {
                 fi
             fi
         "
-    fi
-    log "Added user '$user' to the docker group."
+	fi
+	log "Added user '$user' to the docker group."
 }
 
 log "Adding user '$RUN_USER' to the docker group..."
@@ -171,46 +174,46 @@ log " 2. Test it: docker run hello-world"
 # Lazydocker (optional)
 # ----------------------------------------------------------------------------
 if [ "$WITH_LAZYDOCKER" -eq 1 ]; then
-    log "Installing Lazydocker..."
-    if command -v lazydocker &>/dev/null; then
-        log "lazydocker already installed."
-    else
-        RAW_ARCH="$(uname -m)"
-        case "$RAW_ARCH" in
-            x86_64|amd64) LAZY_ARCH="x86_64" ;;
-            aarch64|arm64) LAZY_ARCH="arm64" ;;
-            armv7*) LAZY_ARCH="armv7" ;;
-            *) die "Unsupported architecture for lazydocker: $RAW_ARCH" ;;
-        esac
+	log "Installing Lazydocker..."
+	if command -v lazydocker &>/dev/null; then
+		log "lazydocker already installed."
+	else
+		RAW_ARCH="$(uname -m)"
+		case "$RAW_ARCH" in
+		x86_64 | amd64) LAZY_ARCH="x86_64" ;;
+		aarch64 | arm64) LAZY_ARCH="arm64" ;;
+		armv7*) LAZY_ARCH="armv7" ;;
+		*) die "Unsupported architecture for lazydocker: $RAW_ARCH" ;;
+		esac
 
-        TAG="$(curl -fsSL -H 'Accept: application/vnd.github+json' \
-            "https://api.github.com/repos/jesseduffield/lazydocker/releases/latest" 2>/dev/null \
-            | grep -oP '"tag_name":\s*"\K[^"]+' || true)"
-        [ -z "$TAG" ] && TAG="v0.24.1"
-        VERSION="${TAG#v}"
+		TAG="$(curl -fsSL -H 'Accept: application/vnd.github+json' \
+			"https://api.github.com/repos/jesseduffield/lazydocker/releases/latest" 2>/dev/null |
+			grep -oP '"tag_name":\s*"\K[^"]+' || true)"
+		[ -z "$TAG" ] && TAG="v0.24.1"
+		VERSION="${TAG#v}"
 
-        TEMP_DIR="$(mktemp -d)"
-        trap 'rm -rf "$TEMP_DIR"' EXIT
+		TEMP_DIR="$(mktemp -d)"
+		trap 'rm -rf "$TEMP_DIR"' EXIT
 
-        ARCHIVE="lazydocker_${VERSION}_Linux_${LAZY_ARCH}.tar.gz"
-        URL="https://github.com/jesseduffield/lazydocker/releases/download/$TAG/$ARCHIVE"
+		ARCHIVE="lazydocker_${VERSION}_Linux_${LAZY_ARCH}.tar.gz"
+		URL="https://github.com/jesseduffield/lazydocker/releases/download/$TAG/$ARCHIVE"
 
-        log "Downloading $ARCHIVE..."
-        curl -fSL -o "$TEMP_DIR/$ARCHIVE" "$URL"
-        tar -xzf "$TEMP_DIR/$ARCHIVE" -C "$TEMP_DIR" lazydocker
-        $SUDO install -m 0755 "$TEMP_DIR/lazydocker" /usr/local/bin/lazydocker
-    fi
+		log "Downloading $ARCHIVE..."
+		curl -fSL -o "$TEMP_DIR/$ARCHIVE" "$URL"
+		tar -xzf "$TEMP_DIR/$ARCHIVE" -C "$TEMP_DIR" lazydocker
+		$SUDO install -m 0755 "$TEMP_DIR/lazydocker" /usr/local/bin/lazydocker
+	fi
 
-    for rc in "$HOME/.zshrc" "$HOME/.bashrc"; do
-        touch "$rc"
-        ALIAS_LINE="alias lzd='lazydocker'"
-        if ! grep -qxF -- "$ALIAS_LINE" "$rc"; then
-            printf '\n# Lazydocker\n%s\n' "$ALIAS_LINE" >> "$rc"
-        fi
-    done
+	for rc in "$HOME/.zshrc" "$HOME/.bashrc"; do
+		touch "$rc"
+		ALIAS_LINE="alias lzd='lazydocker'"
+		if ! grep -qxF -- "$ALIAS_LINE" "$rc"; then
+			printf '\n# Lazydocker\n%s\n' "$ALIAS_LINE" >>"$rc"
+		fi
+	done
 
-    log "Lazydocker installed. Run: lazydocker  (or alias: lzd)"
-    warn "You must be in the docker group (log out/in) to use lazydocker without sudo."
+	log "Lazydocker installed. Run: lazydocker  (or alias: lzd)"
+	warn "You must be in the docker group (log out/in) to use lazydocker without sudo."
 fi
 
 log "All done."

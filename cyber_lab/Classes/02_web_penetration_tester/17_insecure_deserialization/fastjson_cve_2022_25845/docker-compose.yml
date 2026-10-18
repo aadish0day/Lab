@@ -1,7 +1,12 @@
-version: '3'
 services:
   fastjson:
     image: vulhub/fastjson:1.2.83
     pull_policy: missing
+    container_name: cyberlab_02_fastjson_25845
+    restart: unless-stopped
     ports:
       - "8254:8090"
+    deploy:
+      resources:
+        limits:
+          memory: 400M

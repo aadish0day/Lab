@@ -1,6 +1,0 @@
-services:
- web:
-   image: vulhub/thinkphp:2.1
-   pull_policy: missing
-   ports:
-    - "8302:80"

@@ -17,6 +17,7 @@ A complete media automation stack using Docker Compose with Jellyfin, Sonarr, Ra
 ## Overview
 
 This setup provides a fully automated media server that can:
+
 - Download and organize TV shows and movies automatically
 - Stream content through Jellyfin with hardware transcoding
 - Manage torrent downloads securely
@@ -24,13 +25,13 @@ This setup provides a fully automated media server that can:
 
 ## Stack Components
 
-| Service | Purpose | Web UI Port |
-|---------|---------|-------------|
-| **Jellyfin** | Media server for streaming | `8096` |
-| **Sonarr** | TV show management & automation | `8989` |
-| **Radarr** | Movie management & automation | `7878` |
-| **qBittorrent** | Torrent download client | `8080` |
-| **Prowlarr** | Indexer manager for Sonarr/Radarr | `9696` |
+| Service         | Purpose                           | Web UI Port |
+| --------------- | --------------------------------- | ----------- |
+| **Jellyfin**    | Media server for streaming        | `8096`      |
+| **Sonarr**      | TV show management & automation   | `8989`      |
+| **Radarr**      | Movie management & automation     | `7878`      |
+| **qBittorrent** | Torrent download client           | `8080`      |
+| **Prowlarr**    | Indexer manager for Sonarr/Radarr | `9696`      |
 
 ## Directory Structure
 
@@ -139,9 +140,11 @@ After deployment, access each service's web interface:
 ### qBittorrent Setup
 
 1. **Get Initial Password**: The temporary password is in the container logs:
+
    ```bash
    docker logs qbittorrent
    ```
+
    Look for a line like: `The WebUI administrator password was not set. A temporary password is provided for this session: XXXXXXXX`
 
 2. **Configure Download Paths** (Settings → Downloads):
@@ -210,12 +213,14 @@ After deployment, access each service's web interface:
 ### Adding Content
 
 **TV Shows**:
+
 1. Go to Sonarr (http://your-server-ip:8989)
 2. Click "Add Series" and search for your show
 3. Select quality profile and monitor options
 4. Click "Add Series"
 
 **Movies**:
+
 1. Go to Radarr (http://your-server-ip:7878)
 2. Click "Add Movie" and search for your movie
 3. Select quality profile and monitor options
@@ -252,16 +257,19 @@ ls -la ~/home_lab/media-stack
 ### Hardware Transcoding Not Working
 
 1. **Verify device passthrough**:
+
    ```bash
    docker exec jellyfin ls -l /dev/dri
    ```
 
 2. **Check render group**:
+
    ```bash
    getent group render
    ```
 
 3. **Add your user to render group**:
+
    ```bash
    sudo usermod -aG render $USER
    ```
@@ -286,6 +294,7 @@ docker compose logs <service-name>
 ```
 
 Common fixes:
+
 ```bash
 # Restart the stack
 docker compose restart
@@ -311,6 +320,7 @@ Then follow installation steps again.
 ## Credits
 
 This setup is based on best practices from:
+
 - [TechHutTV Homelab](https://github.com/TechHutTV/homelab)
 - [Servarr Wiki](https://wiki.servarr.com/)
 - [Trash Guides](https://trash-guides.info/)
@@ -324,4 +334,3 @@ This setup is based on best practices from:
 - [qBittorrent Documentation](https://github.com/qbittorrent/qBittorrent/wiki)
 
 ---
-

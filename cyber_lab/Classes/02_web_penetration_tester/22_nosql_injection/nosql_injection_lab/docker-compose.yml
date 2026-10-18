@@ -3,6 +3,8 @@ services:
     image: blabla1337/owasp-skf-lab:sqli_node
     pull_policy: missing
     container_name: cyberlab_02_nosql_lab
+    environment:
+      - PORT=3000
     ports:
       - "3001:3000"
     restart: unless-stopped

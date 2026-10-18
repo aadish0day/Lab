@@ -1,9 +1,9 @@
-version: '2'
+version: "2"
 services:
- web:
-   image: vulhub/goahead:5.1.4
-   pull_policy: missing
-   ports:
-    - "8411:80"
-   volumes:
-    - ./index:/var/www/goahead/cgi-bin/index
+  web:
+    image: vulhub/goahead:5.1.4
+    pull_policy: missing
+    ports:
+      - "8411:80"
+    volumes:
+      - ./index:/var/www/goahead/cgi-bin/index

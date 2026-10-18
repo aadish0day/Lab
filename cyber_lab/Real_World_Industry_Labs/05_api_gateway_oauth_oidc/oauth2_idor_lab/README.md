@@ -1,6 +1,7 @@
 # Enterprise OAuth 2.0 & OIDC SSO Pentesting (Keycloak)
 
 ## Overview
+
 Test modern Single Sign-On (SSO) and Identity Provider flows: Redirect URI poisoning, scope escalation, CSRF in OAuth state, and token forgery.
 
 - **Default Port / Access**: `8093`
@@ -25,7 +26,9 @@ Test modern Single Sign-On (SSO) and Identity Provider flows: Redirect URI poiso
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

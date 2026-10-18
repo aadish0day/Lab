@@ -1,6 +1,7 @@
 # Red Team Phishing Infrastructure & Simulation (Gophish)
 
 ## Overview
+
 Deploy an enterprise phishing simulation platform: Clone corporate login portals (M365, Google), harvest credentials, and understand SPF/DKIM/DMARC.
 
 - **Default Port / Access**: `3333 (Admin HTTPS), 8092 (Phishing)`
@@ -26,7 +27,9 @@ Deploy an enterprise phishing simulation platform: Clone corporate login portals
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

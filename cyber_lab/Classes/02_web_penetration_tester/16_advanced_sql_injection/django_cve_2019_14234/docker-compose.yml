@@ -1,14 +1,19 @@
-version: '3'
 services:
   django:
+    container_name: cyberlab_02_django_14234_app
     image: vulhub/django:2.2.3
     pull_policy: missing
+    working_dir: /app
+    volumes:
+      - .:/app
     ports:
       - "8236:8000"
     depends_on:
       - db
+    command: bash /app/docker-entrypoint.sh
 
   db:
+    container_name: cyberlab_02_django_14234_db
     image: postgres:9.6-alpine
     pull_policy: missing
     environment:

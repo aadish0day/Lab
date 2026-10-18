@@ -1,6 +1,7 @@
 # DNS Tunneling & Data Exfiltration Lab (Iodine)
 
 ## Overview
+
 Establish covert TCP-over-DNS tunnels to bypass firewall restrictions and practice detecting DNS tunneling with Wireshark.
 
 - **Default Port / Access**: `5353/udp`
@@ -26,7 +27,9 @@ Establish covert TCP-over-DNS tunnels to bypass firewall restrictions and practi
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

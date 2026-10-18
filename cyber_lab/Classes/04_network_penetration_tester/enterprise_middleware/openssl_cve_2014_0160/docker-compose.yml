@@ -1,10 +1,10 @@
-version: '2'
+version: "2"
 services:
- nginx:
-   image: vulhub/openssl:1.0.1c-with-nginx
-   pull_policy: missing
-   volumes:
-    - ./www:/var/www/html
-   ports:
-    - "8454:80"
-    - "8443:443"
+  nginx:
+    image: vulhub/openssl:1.0.1c-with-nginx
+    pull_policy: missing
+    volumes:
+      - ./www:/var/www/html
+    ports:
+      - "8454:80"
+      - "8443:443"

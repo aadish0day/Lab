@@ -1,12 +1,12 @@
-version: '2'
+version: "2"
 services:
- samba:
-   image: vulhub/samba:4.6.3
-   pull_policy: missing
-   mem_limit: 1024m
-   restart: unless-stopped
-   tty: true
-   volumes:
-    - ./smb.conf:/usr/local/samba/etc/smb.conf
-   ports:
-    - "8491:445"
+  samba:
+    image: vulhub/samba:4.6.3
+    pull_policy: missing
+    mem_limit: 1024m
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./smb.conf:/usr/local/samba/etc/smb.conf
+    ports:
+      - "8491:445"

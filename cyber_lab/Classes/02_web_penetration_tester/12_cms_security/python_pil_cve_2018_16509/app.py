@@ -1,30 +1,31 @@
-from flask import Flask, flash, get_flashed_messages, make_response,  redirect, render_template_string, request
-from os import path, unlink
-from PIL import Image
-
 import tempfile
+from os import path, unlink
+
+from flask import Flask, flash, make_response, redirect, render_template_string, request
+from PIL import Image
 
 app = Flask(__name__)
 app.secret_key = "0123456789ABCDEF"
 
-@app.route('/', methods=['GET', 'POST'])
+
+@app.route("/", methods=["GET", "POST"])
 def upload_file():
-    if request.method == 'POST':
-        file = request.files.get('image', None)
+    if request.method == "POST":
+        file = request.files.get("image", None)
 
         if not file:
-            flash('No image found')
+            flash("No image found")
             return redirect(request.url)
 
         filename = file.filename
         ext = path.splitext(filename)[1]
 
-        if (ext not in ['.jpg', '.jpeg', '.png', '.gif', '.bmp']):
-            flash('Invalid extension')
+        if ext not in [".jpg", ".jpeg", ".png", ".gif", ".bmp"]:
+            flash("Invalid extension")
             return redirect(request.url)
 
         tmp = tempfile.mktemp("test")
-        img_path = "{}.{}".format(tmp, ext)
+        img_path = f"{tmp}.{ext}"
 
         file.save(img_path)
 
@@ -37,13 +38,13 @@ def upload_file():
 
         r = make_response()
         r.data = open(img_path, "rb").read()
-        r.headers['Content-Disposition'] = 'attachment; filename=resized_{}'.format(filename)
+        r.headers["Content-Disposition"] = f"attachment; filename=resized_{filename}"
 
         unlink(img_path)
 
         return r
 
-    return render_template_string('''
+    return render_template_string("""
     <!doctype html>
     <title>Image Resizer</title>
     <h1>Upload an Image to Resize</h1>
@@ -60,7 +61,8 @@ def upload_file():
       <p><input type=file name=image>
          <input type=submit value=Upload>
     </form>
-    ''')
+    """)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(threaded=True, port=8000, host="0.0.0.0")

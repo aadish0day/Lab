@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   web:
     image: medicean/vulapps:j_jboss_1

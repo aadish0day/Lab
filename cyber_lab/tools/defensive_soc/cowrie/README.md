@@ -1,6 +1,7 @@
 # Cowrie Honeypot: SSH & Telnet Deception & Threat Intelligence
 
 ## Overview
+
 Deploy and analyze a medium-to-high interaction **Cowrie honeypot** designed to emulate an authentic Unix system over SSH and Telnet. Cowrie captures brute-force attacks, logs entire interactive shell sessions, records raw terminal keystrokes for playback, and automatically quarantines files downloaded by adversaries via `curl`, `wget`, or SFTP.
 
 - **Default Port / Access**:
@@ -38,17 +39,22 @@ Deploy and analyze a medium-to-high interaction **Cowrie honeypot** designed to 
 ## How to Solve & Practice
 
 ### 1. Start the Honeypot
+
 ```bash
 docker compose up -d
 ```
 
 ### 2. Simulate an Attacker Attack
+
 From another terminal on your machine, connect to Cowrie over SSH:
+
 ```bash
 ssh root@127.0.0.1 -p 2223
 # When prompted for password, enter: root (or any password)
 ```
+
 Once inside Cowrie's simulated shell:
+
 ```bash
 # 1. Enumerate the system
 id
@@ -62,7 +68,9 @@ exit
 ```
 
 ### 3. Extract Credential and Command Logs
+
 Inspect the live JSON log inside the Cowrie container:
+
 ```bash
 # View login events (usernames and passwords attempted)
 docker exec cyberlab_cowrie_honeypot bash -c \
@@ -74,7 +82,9 @@ docker exec cyberlab_cowrie_honeypot bash -c \
 ```
 
 ### 4. Inspect Quarantined Malware
+
 Check the quarantined downloads folder inside the container:
+
 ```bash
 docker exec cyberlab_cowrie_honeypot ls -la /cowrie/cowrie-git/var/lib/cowrie/downloads/
 
@@ -84,7 +94,9 @@ docker exec cyberlab_cowrie_honeypot bash -c \
 ```
 
 ### 5. Replay the Attacker's Session (TTY Replay)
+
 Cowrie saves full terminal session files in `/cowrie/cowrie-git/var/lib/cowrie/tty/`:
+
 ```bash
 # Locate latest session file
 SESSION_FILE=$(docker exec cyberlab_cowrie_honeypot bash -c "ls -t /cowrie/cowrie-git/var/lib/cowrie/tty/ | head -n 1")
@@ -104,7 +116,9 @@ docker exec -it cyberlab_cowrie_honeypot /cowrie/cowrie-git/bin/playlog "/cowrie
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

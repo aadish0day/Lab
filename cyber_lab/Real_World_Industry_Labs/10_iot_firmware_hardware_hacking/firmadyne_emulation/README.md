@@ -1,6 +1,7 @@
 # IoT & Embedded Firmware Reverse Engineering Lab
 
 ## Overview
+
 Extract, unpack, and analyze embedded router/camera firmware images with `binwalk`, find backdoors, and emulate MIPS/ARM binaries.
 
 - **Default Port / Access**: `Terminal / CLI`
@@ -27,7 +28,9 @@ Extract, unpack, and analyze embedded router/camera firmware images with `binwal
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

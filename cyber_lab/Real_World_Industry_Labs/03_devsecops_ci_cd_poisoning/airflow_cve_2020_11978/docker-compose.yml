@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   airflow-web:
     image: vulhub/airflow:1.10.10

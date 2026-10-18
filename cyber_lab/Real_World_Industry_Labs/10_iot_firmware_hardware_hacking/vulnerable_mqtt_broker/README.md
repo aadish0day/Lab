@@ -45,6 +45,7 @@ In default or rushed deployments, MQTT brokers are frequently deployed without p
 ## Key IoT Attack Scenarios & Exercises
 
 ### 1. Global Wildcard Topic Sniffing (`#` and `$SYS/#`)
+
 MQTT topics use forward slashes as hierarchical topic delimiters (`home/livingroom/temperature`). The `#` character is a multi-level wildcard. Subscribing to `#` intercepts all messages published across the entire broker:
 
 ```bash
@@ -58,6 +59,7 @@ docker run --rm --network host eclipse-mosquitto:latest \
 ```
 
 ### 2. Injecting Spoofed Sensor Telemetry
+
 Attackers can publish fraudulent sensor measurements to trigger downstream alerting or skew data pipelines:
 
 ```bash
@@ -68,6 +70,7 @@ docker run --rm --network host eclipse-mosquitto:latest \
 ```
 
 ### 3. Unauthorized Actuator Control & Command Injection
+
 If smart devices or PLCs subscribe to command topics without message signing or authorization checks, an attacker can directly actuate physical hardware:
 
 ```bash
@@ -78,6 +81,7 @@ docker run --rm --network host eclipse-mosquitto:latest \
 ```
 
 ### 4. Interactive Python Hacking Script
+
 Using Python `paho-mqtt` to intercept and manipulate messages in real time:
 
 ```python

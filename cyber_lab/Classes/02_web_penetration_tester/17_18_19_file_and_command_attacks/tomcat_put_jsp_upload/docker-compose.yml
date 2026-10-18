@@ -3,6 +3,8 @@ services:
     image: vulhub/tomcat:8.5.19
     pull_policy: missing
     container_name: cyberlab_02_tomcat_put_rce
+    entrypoint: >
+      bash -c "sed -i '/<servlet-class>org.apache.catalina.servlets.DefaultServlet<\\/servlet-class>/a <init-param><param-name>readonly<\\/param-name><param-value>false<\\/param-value><\\/init-param>' /usr/local/tomcat/conf/web.xml && exec catalina.sh run"
     ports:
       - "8129:8080"
     restart: unless-stopped

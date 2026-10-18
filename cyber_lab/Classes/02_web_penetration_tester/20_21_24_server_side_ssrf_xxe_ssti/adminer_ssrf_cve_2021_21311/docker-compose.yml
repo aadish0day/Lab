@@ -1,7 +1,12 @@
-version: '3'
 services:
   adminer:
     image: vulhub/adminer:4.7.8
     pull_policy: missing
+    container_name: cyberlab_02_adminer_21311
+    restart: unless-stopped
     ports:
-      - "8258:8080"
+      - "8258:80"
+    deploy:
+      resources:
+        limits:
+          memory: 400M

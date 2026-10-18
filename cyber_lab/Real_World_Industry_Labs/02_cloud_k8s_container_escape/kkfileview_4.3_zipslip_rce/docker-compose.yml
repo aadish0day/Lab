@@ -1,8 +1,8 @@
-version: '2'
+version: "2"
 services:
- web:
-   image: vulhub/kkfileview:4.3.0
-   pull_policy: missing
-   ports:
-    - "8379:8012"
-    - "5005:5005"
+  web:
+    image: vulhub/kkfileview:4.3.0
+    pull_policy: missing
+    ports:
+      - "8379:8012"
+      - "5005:5005"

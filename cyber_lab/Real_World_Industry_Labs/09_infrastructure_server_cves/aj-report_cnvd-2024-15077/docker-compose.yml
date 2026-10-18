@@ -1,22 +1,22 @@
-version: '2'
+version: "2"
 services:
- web:
-   image: vulhub/aj-report:1.4.0
-   pull_policy: missing
-   depends_on:
-    - db
-   environment:
-    - MYSQL_HOST=db
-    - MYSQL_PORT=3306
-    - MYSQL_DB=aj_report
-    - MYSQL_USERNAME=root
-    - MYSQL_PASSWORD=root
-   ports:
-    - "8339:9095"
-    - "5005:5005"
- db:
-   image: mysql:5.7
-   pull_policy: missing
-   environment: 
-    - MYSQL_ROOT_PASSWORD=root
-    - MYSQL_DATABASE=aj_report
+  web:
+    image: vulhub/aj-report:1.4.0
+    pull_policy: missing
+    depends_on:
+      - db
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_DB=aj_report
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=root
+    ports:
+      - "8339:9095"
+      - "5005:5005"
+  db:
+    image: mysql:5.7
+    pull_policy: missing
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=aj_report

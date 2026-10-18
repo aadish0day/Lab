@@ -1,4 +1,4 @@
-version: '3.5'
+version: "3.5"
 services:
   oap:
     image: vulhub/skywalking:8.3.0

@@ -1,7 +1,6 @@
-version: '2'
 services:
- struts2:
-   image: vulhub/struts2:2.5.12-rest-showcase"8325:2".5.12-rest-showcase
-   pull_policy: missing
-   ports:
-    - "8080:8080"
+  struts2:
+    image: vulhub/struts2:2.5.12-rest-showcase
+    pull_policy: missing
+    ports:
+      - "8325:8080"

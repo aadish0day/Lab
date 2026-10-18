@@ -1,12 +1,12 @@
-version: '2'
+version: "2"
 services:
- kibana:
-   image: vulhub/kibana:6.5.4
-   pull_policy: missing
-   depends_on:
-    - elasticsearch
-   ports:
-    - "8377:5601"
- elasticsearch:
-   image: vulhub/elasticsearch:6.8.6
-   pull_policy: missing
+  kibana:
+    image: vulhub/kibana:6.5.4
+    pull_policy: missing
+    depends_on:
+      - elasticsearch
+    ports:
+      - "8377:5601"
+  elasticsearch:
+    image: vulhub/elasticsearch:6.8.6
+    pull_policy: missing

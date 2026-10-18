@@ -5,8 +5,8 @@ services:
     container_name: cyberlab_velociraptor
     restart: unless-stopped
     ports:
-      - "8114:8889"       # Velociraptor Web Management GUI (HTTPS)
-      - "8000:8000"       # Velociraptor Frontend Agent Communications
+      - "8114:8889" # Velociraptor Web Management GUI (HTTPS)
+      - "8000:8000" # Velociraptor Frontend Agent Communications
     environment:
       - VELOCIRAPTOR_HOSTNAME=localhost
       - VELOCIRAPTOR_GUI_PORT=8889

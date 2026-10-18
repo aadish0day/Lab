@@ -1,10 +1,10 @@
 services:
- glassfish:
-   image: vulhub/glassfish:4.1
-   pull_policy: missing
-   ports:
-    - "8410:4848"
-    - "5005:5005"
-   environment:
-    - ADMIN_PASSWORD=vulhub_default_password
-    - JAVA_DEBUGGER_PORT=5005
+  glassfish:
+    image: vulhub/glassfish:4.1
+    pull_policy: missing
+    ports:
+      - "8410:4848"
+      - "5005:5005"
+    environment:
+      - ADMIN_PASSWORD=vulhub_default_password
+      - JAVA_DEBUGGER_PORT=5005

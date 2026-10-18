@@ -1,6 +1,7 @@
 # Linux Privilege Escalation Challenge Lab
 
 ## Overview
+
 Gain root access on Linux through misconfigured SUID binaries, sudo privileges, cron jobs, and vulnerable kernel components.
 
 - **Default Port / Access**: `Terminal / CLI`
@@ -27,7 +28,9 @@ Gain root access on Linux through misconfigured SUID binaries, sudo privileges, 
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

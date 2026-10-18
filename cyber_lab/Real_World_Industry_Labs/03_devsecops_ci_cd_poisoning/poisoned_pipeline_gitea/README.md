@@ -1,6 +1,7 @@
 # CI/CD Pipeline Poisoning & Supply Chain Attacks (DevSecOps)
 
 ## Overview
+
 Simulate modern software supply chain compromises: Poisoned Pipeline Execution (PPE), stolen CI/CD runner secrets, and commit history leaks.
 
 - **Default Port / Access**: `3002 (Web), 2223 (SSH)`
@@ -25,7 +26,9 @@ Simulate modern software supply chain compromises: Poisoned Pipeline Execution (
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

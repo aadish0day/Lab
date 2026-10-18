@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   discuz:
     image: vulhub/discuz:x3.4

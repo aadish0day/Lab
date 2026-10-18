@@ -44,12 +44,13 @@ While generic web targets emphasize classic injection vectors, financial applica
 ## Key FinTech Vulnerability Domains & Attack Exercises
 
 ### 1. Negative Transfer / Inverted Arithmetic Exploit
-* **Target Endpoint**: `POST http://localhost:5001/api/transaction/transfer`
-* **Vulnerability Mechanism**: Lack of signed-integer validation allowing negative balance transfers. In double-entry bookkeeping:
+
+- **Target Endpoint**: `POST http://localhost:5001/api/transaction/transfer`
+- **Vulnerability Mechanism**: Lack of signed-integer validation allowing negative balance transfers. In double-entry bookkeeping:
   $$\text{Sender Balance} = \text{Sender Balance} - \text{Amount}$$
   $$\text{Recipient Balance} = \text{Recipient Balance} + \text{Amount}$$
   If $\text{Amount} < 0$, the sender balance increases while the recipient balance decreases.
-* **Attack Walkthrough**:
+- **Attack Walkthrough**:
   Send a transfer request with a negative value:
   ```bash
   curl -X POST http://localhost:5001/api/transaction/transfer \
@@ -65,17 +66,19 @@ While generic web targets emphasize classic injection vectors, financial applica
   Inspect your account balance; account 101 is credited with +$5000.
 
 ### 2. Double-Spending Race Condition
-* **Target Endpoint**: `POST http://localhost:5001/api/transaction/withdraw`
-* **Vulnerability Mechanism**: Time-of-Check to Time-of-Use (TOCTOU) concurrency gap. The application reads the balance, verifies sufficient funds, delays momentarily during ledger writes, and updates the balance without database row-level locking (`SELECT ... FOR UPDATE`).
-* **Attack Walkthrough**:
+
+- **Target Endpoint**: `POST http://localhost:5001/api/transaction/withdraw`
+- **Vulnerability Mechanism**: Time-of-Check to Time-of-Use (TOCTOU) concurrency gap. The application reads the balance, verifies sufficient funds, delays momentarily during ledger writes, and updates the balance without database row-level locking (`SELECT ... FOR UPDATE`).
+- **Attack Walkthrough**:
   1. Open Burp Suite Turbo Intruder.
   2. With an account balance of $100, dispatch 20 simultaneous withdrawal requests of $100 using parallel HTTP/2 single-packet synchronization.
   3. Verify that multiple withdrawal requests succeed before the account balance drops to zero, yielding thousands of dollars from a $100 deposit.
 
 ### 3. Broken Object Level Authorization (BOLA / IDOR) on Account Statements
-* **Target Endpoint**: `GET http://localhost:5001/api/statement/{accountId}`
-* **Vulnerability Mechanism**: Server retrieves account data based solely on the URL route parameter without verifying that the requesting user's JWT identity owns that specific `accountId`.
-* **Attack Walkthrough**:
+
+- **Target Endpoint**: `GET http://localhost:5001/api/statement/{accountId}`
+- **Vulnerability Mechanism**: Server retrieves account data based solely on the URL route parameter without verifying that the requesting user's JWT identity owns that specific `accountId`.
+- **Attack Walkthrough**:
   Iterate across account IDs:
   ```bash
   for id in $(seq 1 20); do
@@ -85,8 +88,9 @@ While generic web targets emphasize classic injection vectors, financial applica
   Full financial records, transaction histories, and customer balances are returned.
 
 ### 4. JWT Key Confusion & Algorithm Downgrade
-* **Target Endpoint**: `POST http://localhost:5001/api/auth/token`
-* **Vulnerability Mechanism**: Weak HMAC secret key verification or tolerance of `alg: "none"`, allowing attackers to forge arbitrary administrative claims (`"role": "BankAdmin"`).
+
+- **Target Endpoint**: `POST http://localhost:5001/api/auth/token`
+- **Vulnerability Mechanism**: Weak HMAC secret key verification or tolerance of `alg: "none"`, allowing attackers to forge arbitrary administrative claims (`"role": "BankAdmin"`).
 
 ---
 

@@ -3,8 +3,8 @@
 wait-for-it.sh db:1521 -t 0 -- echo "oracle is up"
 
 until python app.py migrate; do
-    echo "migrate failed, retrying in 5s..."
-    sleep 5
+	echo "migrate failed, retrying in 5s..."
+	sleep 5
 done
 
 python app.py makemigrations

@@ -10,7 +10,7 @@ Modern software engineering requires shifting security left by embedding automat
 4. **DefectDojo Ingestion**: Centralized vulnerability management, deduplication, and risk scoring dashboard.
 
 - **Vulnerable Target App Port**: [http://localhost:8102](http://localhost:8102)
-- **DefectDojo Dashboard Port**: `http://localhost:8098` (via `./lab start threat-intel`)
+- **DefectDojo Dashboard Port**: `http://localhost:8098` (via `./lab start scanner-pipeline`)
 - **Container Names**: `cyberlab_devsecops_pipeline`, `cyberlab_pipeline_target`
 - **Directory**: `Real_World_Industry_Labs/03_devsecops_ci_cd_poisoning/devsecops_scanner_pipeline`
 
@@ -77,6 +77,7 @@ jq '.Results[].Vulnerabilities[]? | {VulnerabilityID, PkgName, InstalledVersion,
 ## Pipeline Stages Breakdown
 
 ### Stage 1: Secret Scanning (Gitleaks)
+
 - **Target**: Prevents hardcoded credentials from entering git repositories or Docker builds.
 - **Rules Tested**:
   - AWS Access Key ID (`AKIA...`) and Secret Access Key
@@ -89,6 +90,7 @@ jq '.Results[].Vulnerabilities[]? | {VulnerabilityID, PkgName, InstalledVersion,
   ```
 
 ### Stage 2: Static Application Security Testing - SAST (Semgrep)
+
 - **Target**: AST pattern matching on application code without compiling or running the app.
 - **Flaws Detected in `./target/app.py`**:
   - `python.lang.security.audit.sqli.direct-quote-concat`: SQL string concatenation in `cursor.execute()`.
@@ -101,6 +103,7 @@ jq '.Results[].Vulnerabilities[]? | {VulnerabilityID, PkgName, InstalledVersion,
   ```
 
 ### Stage 3: Software Composition Analysis & Misconfiguration (Trivy)
+
 - **Target**: Scans package manifests (`requirements.txt`, `package.json`, `pom.xml`) against OSV/NVD databases and checks `Dockerfile` against CIS benchmarks.
 - **Flaws Detected**:
   - `CVE-2020-14343`: PyYAML 5.1 arbitrary code execution via FullLoader.
@@ -120,7 +123,7 @@ DefectDojo provides a unified pane of glass for consolidating findings from over
 
 1. Start DefectDojo from the root lab directory if not already running:
    ```bash
-   ./lab start threat-intel
+   ./lab start scanner-pipeline
    ```
 2. Navigate to [http://localhost:8098](http://localhost:8098) and log in (default credentials: `admin` / `admin`).
 3. Click your profile avatar in the upper right -> **API v2 Key** -> copy your token.
@@ -135,6 +138,7 @@ DefectDojo provides a unified pane of glass for consolidating findings from over
 ## Production CI/CD Integration Examples
 
 ### GitHub Actions Workflow (`.github/workflows/devsecops.yml`)
+
 ```yaml
 name: DevSecOps CI Pipeline
 on: [push, pull_request]
@@ -158,9 +162,9 @@ jobs:
       - name: Trivy Vulnerability Scanner
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'fs'
-          severity: 'HIGH,CRITICAL'
-          exit-code: '1'
+          scan-type: "fs"
+          severity: "HIGH,CRITICAL"
+          exit-code: "1"
 ```
 
 ---
@@ -180,7 +184,9 @@ All video links have been verified active via YouTube oEmbed API:
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

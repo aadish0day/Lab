@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 services:
   web:
     image: vulhub/struts2:2.3.32-showcase

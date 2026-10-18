@@ -1,18 +1,18 @@
-version: '2'
+version: "2"
 services:
   couchdb:
     image: vulhub/couchdb:2.1.0
     pull_policy: missing
     ports:
       - "8388:5984"
-    environment: 
+    environment:
       COUCHDB_USER: admin
       COUCHDB_PASSWORD: password
   initd:
     image: buildpack-deps:focal-curl
     pull_policy: missing
     command: "bash /init.sh"
-    environment: 
+    environment:
       COUCHDB_URL: couchdb:5984
       COUCHDB_AUTH: admin:password
     volumes:

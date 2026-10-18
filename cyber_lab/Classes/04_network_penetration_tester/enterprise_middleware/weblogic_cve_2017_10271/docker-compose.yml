@@ -1,8 +1,8 @@
 services:
- weblogic:
-   image: vulhub/weblogic:10.3.6.0-2017
-   pull_policy: missing
-   mem_limit: 1024m
-   restart: unless-stopped
-   ports:
-    - "8507:7001"
+  weblogic:
+    image: vulhub/weblogic:10.3.6.0-2017
+    pull_policy: missing
+    mem_limit: 1024m
+    restart: unless-stopped
+    ports:
+      - "8507:7001"

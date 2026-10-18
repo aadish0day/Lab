@@ -1,6 +1,7 @@
 # Snort: Intrusion Detection & Prevention (IDS/IPS) Lab
 
 ## Overview
+
 Write custom packet inspection rules, analyze PCAP traffic, and detect network attacks (port scans, Nmap, reverse shells).
 
 - **Default Port / Access**: `Host Network Mode`
@@ -27,7 +28,9 @@ Write custom packet inspection rules, analyze PCAP traffic, and detect network a
 ---
 
 ## Quick CLI Control
+
 From the `cyber_lab` root directory:
+
 ```bash
 # Check status
 ./lab status

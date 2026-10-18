@@ -1,6 +1,6 @@
-version: '3'
 services:
   cmsms:
+    container_name: cyberlab_02_cmsms_app
     image: vulhub/cmsms:2.2.9.1
     pull_policy: missing
     ports:
@@ -9,6 +9,7 @@ services:
       - db
 
   db:
+    container_name: cyberlab_02_cmsms_db
     image: mysql:5.7
     pull_policy: missing
     environment:
