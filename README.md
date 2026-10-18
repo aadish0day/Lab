@@ -65,7 +65,7 @@ cd cyber_lab
 The security ecosystem is structured into three clean functional divisions:
 
 ```mermaid
-graph TD
+graph LR
     CL["cyber_lab/"] --> C["Classes/ (Curriculum Tracks)"]
     CL --> R["Real_World_Industry_Labs/ (Modern Domains)"]
     CL --> T["tools/ (Security Tooling Suite)"]
@@ -90,129 +90,12 @@ graph TD
     T --> T4["Analysis & DFIR (REMnux, CyberChef, Scanners)"]
 ```
 
----
+1. **Academic & Certification Tracks ([`Classes/`](cyber_lab/Classes/))**: Course curricula covering ethical hacking fundamentals, advanced web pentesting mapped to the [PortSwigger Roadmap](cyber_lab/Classes/02_web_penetration_tester/PORTSWIGGER_ROADMAP.md), network security & DNS tunneling, enterprise middleware CVEs (WebLogic, Struts2, Tomcat, Spring4Shell, ActiveMQ), and binary exploitation (stack buffer overflows, custom shellcoding, DEP/ASLR bypass).
+2. **Real-World Industry Domains ([`Real_World_Industry_Labs/`](cyber_lab/Real_World_Industry_Labs/))**: Modern attack scenarios including AI/LLM prompt injection, Kubernetes Goat & container escapes, CI/CD pipeline poisoning (Gitea, WrongSecrets, Verdaccio), OAuth2/OIDC & HashiCorp Vault privilege escalation, multi-cloud security (AWS LocalStack, CloudGoat, AzureGoat, GCPGoat), Web3 EVM smart contracts, and OT/SCADA/IoT firmware emulation (OpenPLC Modbus TCP, MQTT, Firmadyne).
+3. **Dedicated Security Tooling Suite ([`tools/`](cyber_lab/tools/))**: Self-contained defensive, offensive, and forensic workstations including Zeek NSM + Web Wireshark, Suricata + EveBox, Snort, Sliver C2, MITRE Caldera, Gophish, Interactsh OOB, Cowrie Honeypot, Velociraptor, MISP Threat Intel, DefectDojo, REMnux, DFIR CyberChef + Volatility 3, and automated DevSecOps scanners.
 
-### Division 1: Academic & Certification Curriculum Tracks (`Classes/`)
-
-Comprehensive labs aligned with CREST, OSCP, OSWE, and eWPTX syllabi:
-
-#### 1. Ethical Hacking & System Fundamentals (`Classes/01_cyber_security_ethical_hacking/`)
-- **Network Recon & Scanning** ([`scanning_and_recon`](cyber_lab/Classes/01_cyber_security_ethical_hacking/scanning_and_recon)): Nmap timing templates, service fingerprinting, NSE scripting. Shortcut: `./lab start recon` (`:8081`).
-- **Metasploit Target System** ([`metasploit_and_system_hacking`](cyber_lab/Classes/01_cyber_security_ethical_hacking/metasploit_and_system_hacking)): Multi-service exploitation (`:2121`, `:2222`, `:2323`, `:8082`). Shortcut: `./lab start meta-target`.
-- **DVWA Fundamentals** ([`web_basics_dvwa`](cyber_lab/Classes/01_cyber_security_ethical_hacking/web_basics_dvwa)): Core web vulnerabilities across Low/Medium/High security modes. Shortcut: `./lab start dvwa-basic` (`:8083`).
-- **CTFd Challenge Platform** ([`ctf_intro_challenges`](cyber_lab/Classes/01_cyber_security_ethical_hacking/ctf_intro_challenges)): Self-hosted Jeopardy CTF engine. Shortcut: `./lab start ctfd` (`:8000`).
-
-#### 2. Advanced Web Penetration Testing (`Classes/02_web_penetration_tester/`)
-*Includes full PortSwigger Web Security Academy mapping: Apprentice $\to$ Practitioner $\to$ Expert ([Roadmap](cyber_lab/Classes/02_web_penetration_tester/PORTSWIGGER_ROADMAP.md)).*
-
-- **API Penetration Testing**:
-  - REST API security flaws & BOLA/IDOR: [`vampi`](cyber_lab/Classes/02_web_penetration_tester/03_api_penetration_testing/rest_vampi) (`:5000`).
-  - Damn Vulnerable GraphQL Application: [`dvga`](cyber_lab/Classes/02_web_penetration_tester/03_api_penetration_testing/graphql_dvga) (`:5013`).
-  - Microservices authentication & business logic: [`crapi`](cyber_lab/Classes/02_web_penetration_tester/03_api_penetration_testing/crapi_microservices) (`:8888`, `:8025`).
-- **Enterprise Web Frameworks & OWASP Top 10**:
-  - OWASP Juice Shop (`:3000`), OWASP WebGoat/WebWolf (`:8099`, `:9090`), RailsGoat (`:8109`), Mutillidae II (`:8116`), bWAPP (`:8085`).
-- **Modern Web Exploitation**:
-  - **HTTP Request Smuggling**: Front-end / back-end desynchronization (CL.TE, TE.CL, TE.TE) (`:8108`).
-  - **SSTI (Server-Side Template Injection)**: Jinja2, Twig, Velocity, and Spring SpEL sandbox escapes (`:8094`, `:8130`).
-  - **Prototype Pollution**: Client-side & server-side NodeJS prototype pollution to RCE (`:8096`, `:8155`).
-  - **Race Conditions**: Limit overrun, multi-threaded checkout race, and database concurrency flaws (`:8097`).
-  - **Insecure Deserialization**: Java (ysoserial, Shiro, Fastjson, XStream), Python pickle, and PHP object injection (`:8095`, `:8127`, `:8128`, `:8202`).
-  - **Server-Side Attacks**: Log4j JNDI injection (`:8104`), Blind XXE, SSRF to Cloud metadata.
-  - **CMS Security**: High-severity CVE labs for WordPress, Drupal (Drupalgeddon 1/2/3), Joomla, CraftCMS, ThinkPHP, and Discuz.
-
-#### 3. Network Security (`Classes/03_network_security/`)
-- **DNS Tunneling & Exfiltration** ([`dns_tunneling`](cyber_lab/Classes/03_network_security/dns_tunneling)): Covert data channel simulation and payload exfiltration detection over UDP `5353`. Shortcut: `./lab start dns-tunnel`.
-
-#### 4. Network Penetration Testing & Enterprise Middleware (`Classes/04_network_penetration_tester/`)
-- **Active Directory & Identity**:
-  - **GOAD LDAP Environment**: Multi-tier LDAP directory querying & Kerberoasting (`:3893`). Shortcut: `./lab start ad-ldap`.
-  - **Samba Active Directory & Kerberos**: Full Domain Controller emulation (Kerberos `88`, LDAP `389`, SMB `445`). Shortcut: `./lab start ad-kerberos`.
-- **Infrastructure Services**:
-  - Metasploitable2 legacy services, Linux Privilege Escalation lab (`privesc-linux`), SambaCry (`:4455`), Rsync unauthorized RCE (`:8154`), OpenSSH enumeration (`:8160`), OpenSMTPD RCE (`:8192`), MySQL Auth Bypass (`:8179`).
-- **Enterprise Middleware CVE Matrix (200+ dedicated labs)**:
-  - **Apache Struts2**: Complete S2-001 through S2-067 OGNL execution series (S2-016, S2-045, S2-048, S2-057, S2-061, S2-066).
-  - **Oracle WebLogic**: T3 protocol deserialization, XMLDecoder RCE, and WLS-WSAT flaws (CVE-2017-10271, CVE-2018-2628, CVE-2020-14882, CVE-2023-21839).
-  - **Apache Tomcat**: Ghostcat AJP traversal (CVE-2020-1938), PUT method arbitrary JSP upload (CVE-2017-12615).
-  - **Spring Framework**: Spring4Shell (CVE-2022-22965), Spring Cloud Gateway RCE (CVE-2022-22947), Spring Cloud Function (CVE-2022-22963).
-  - **Message Brokers & Queues**: Apache ActiveMQ (CVE-2015-5254, CVE-2016-3088, CVE-2023-46604 OpenWire RCE), Apache RocketMQ, Redis unauthenticated Lua sandbox escape.
-
-#### 5. Binary Exploitation & Exploit Writing (`Classes/05_exploit_writing/`)
-- **Stack Buffer Overflows** ([`05_stack_buffer_overflow_env`](cyber_lab/Classes/05_exploit_writing/05_stack_buffer_overflow_env)): Controlled EIP/RIP hijacking, offset determination, and stack alignment. Shortcut: `./lab start bof`.
-- **Shellcoding & Encoders** ([`06_13_14_shellcoding_and_encoders`](cyber_lab/Classes/05_exploit_writing/06_13_14_shellcoding_and_encoders)): Writing pure assembly shellcode, avoiding bad characters (`\x00`, `\x0a`), alphanumeric encoding. Shortcut: `./lab start shellcoder`.
-- **DEP & ASLR Bypass** ([`12_dep_aslr_bypass`](cyber_lab/Classes/05_exploit_writing/12_dep_aslr_bypass)): Modern mitigation evasion: Return-to-libc, ROP gadget chain building, and GOT overwrite.
-
----
-
-### Division 2: Real-World Industry Laboratories (`Real_World_Industry_Labs/`)
-
-Hardened, production-grade attack scenarios mirroring real adversary engagements:
-
-| Domain | Key Labs & Scenarios | CVEs / Standards | Shortcut | Exposed Ports |
-| :--- | :--- | :--- | :--- | :--- |
-| **AI & LLM Security** | OWASP PyGoat LLM (Prompt injection, indirect prompt injection, insecure output handling, model pickle deserialization) | OWASP Top 10 LLM | `ai-pygoat` | `8091` |
-| | Jupyter Notebook unauthenticated API token bypass to shell | CVE-2019-10255 | `jupyter-token-bypass` | `8148` |
-| **Cloud & K8s Escapes** | BadRobot container escape (`CAP_SYS_ADMIN`, cgroups, rootfs mount) | Linux Namespaces | `container-escape` | Host |
-| | Kubernetes Goat (22 real-world cluster scenarios: Helm, RBAC, Falco) | Cloud Native K8s | `k8s-goat` | `8105` |
-| | OPA Gatekeeper policy evasion and admission webhook bypass | Rego Logic Bypass | `opa-bypass` | `8111` |
-| | Docker daemon remote TCP API unauthenticated host filesystem escape | Misconfig | `docker-api` | `2375` |
-| | Apache Spark Standalone cluster manager REST RCE | CVE-2022-33891 | `spark-unauth-rce` | `8144`, `8145` |
-| | Apache Hadoop YARN ResourceManager REST API command execution | Unauth REST | `hadoop-yarn-rce` | `8162` |
-| | Apache Druid JavaScript ingestion expression evaluation RCE | CVE-2021-25646 | `druid-rce` | `8183` |
-| | GeoServer unauthenticated JXPath evaluation RCE | CVE-2024-36401 | `geoserver-rce` | `8193` |
-| **DevSecOps & Supply Chain** | Poisoned Pipeline Execution (PPE) in Gitea runners | Supply Chain CI/CD | `cicd-gitea` | `3002` |
-| | Cider Security CI/CD Goat (OWASP Top 10 CI/CD Security Risks) | OWASP CI/CD | `cicd-goat` | `8112` |
-| | OWASP WrongSecrets (Secrets in Docker layers, git, K8s, Vault) | Secret Sprawl | `wrongsecrets` | `8100` |
-| | Verdaccio NPM private registry poisoning & Dependency Confusion | Dependency Hijack | `verdaccio` | `8110` |
-| | Sonatype Nexus 3 Java Expression Language (JUEL) RCE | CVE-2020-10199 | `nexus-rce` | `8136` |
-| | SaltStack salt-api unauthenticated shell injection | CVE-2020-16846 | `saltstack-rce` | `8190` |
-| | Apache Airflow Celery task command injection & cookie forgery | CVE-2020-11978 | `airflow-dag-rce` | `8227`, `8228` |
-| **Identity & Secrets** | Keycloak OAuth2 / OIDC IDOR, token replay, redirect URI spoofing | RFC 6749 / OIDC | `oauth-keycloak` | `8093` |
-| | HashiCorp Vault security (ACL policy escalation, AppRole abuse) | Vault Architecture | `vault` | `8200` |
-| | OWASP SecureBank (FinTech race conditions, double-spending, BOLA) | Financial APIs | `securebank` | `8118`, `5001` |
-| | Spring Security OAuth2 whitelabel SpEL expression injection RCE | CVE-2016-4977 | `spring-oauth2-rce` | `8170` |
-| | Apache APISIX Dashboard unauthenticated dropper RCE | CVE-2021-45232 | `apisix-dashboard-rce`| `8225`, `8226` |
-| **Multi-Cloud Security** | AWS LocalStack (Offline S3, IAM escalation, Lambda exploitation) | AWS IAM | `aws-localstack` | `4566` |
-| | Rhino Security CloudGoat (21 vulnerable AWS paths, EC2 IMDS SSRF) | CloudGoat Suite | `cloudgoat` | CLI |
-| | INE AzureGoat (Entra ID RBAC escalation, Managed Identity theft) | Azure Cloud | `azuregoat` | CLI |
-| | INE GCPGoat (GCP IAM privilege escalation, bucket traversal, IMDS) | GCP Security | `gcpgoat` | CLI |
-| | MinIO S3 cluster verify environment information disclosure | CVE-2023-28432 | `minio-leak` | `9000`, `9002` |
-| **Web3 & Blockchain** | EVM Vulnerable Bank (Solidity reentrancy, oracle price manipulation) | Smart Contract Top 10 | `web3-evm` | `8545` |
-| **IoT, SCADA & OT** | Firmadyne Linux MIPS/ARM IoT firmware extraction and emulation | Firmware Hardware | `iot-firmware` | CLI |
-| | OpenPLC v3 SCADA & Modbus TCP (Holding register tampering, coil forcing) | Industrial Control | `openplc-modbus` | `502`, `8123` |
-| | Insecure anonymous MQTT broker & telemetry eavesdropping (`#` wildcard) | ICS / Smart Home | `iot-mqtt` | `1883`, `9001` |
-| | GoAhead embedded web server `LD_PRELOAD` dynamic linker hijacking | CVE-2017-17562 | `goahead-rce` | `8149` |
-
----
-
-### Division 3: Dedicated Defensive, Offensive & DFIR Tool Suite (`tools/`)
-
-The repository includes a complete production security operations center, adversary emulation platform, and forensic analysis workstation suite:
-
-```text
-tools/
-├── network/          # Zeek NSM, Suricata + EveBox, Snort IDS/IPS
-├── offensive/        # Sliver C2, MITRE Caldera, Gophish, Interactsh OOB, JWT-Tool
-├── defensive_soc/    # Cowrie Honeypot, Velociraptor, MISP Threat Intel, DefectDojo
-└── analysis/         # REMnux Malware Toolkit, DFIR CyberChef + Volatility 3, DevSecOps
-```
-
-| Domain | Tool & Platform | Description & Capabilities | Shortcut | Ports |
-| :--- | :--- | :--- | :--- | :--- |
-| **Network Monitoring** | **Zeek NSM + Web Wireshark** | Protocol analysis, connection logging (`conn.log`, `dns.log`, `ssl.log`), JA3/JA4 fingerprinting, in-browser packet analysis | `./lab start zeek` | `3003` |
-| | **Suricata + EveBox** | Multi-threaded NIDS/NIPS engine, signature matching, EVE JSON telemetry, and EveBox triage UI | `./lab start suricata` | `8113` |
-| | **Snort IDS/IPS** | Industry-standard rule-based network intrusion detection system | `./lab start snort` | Host Mode |
-| **Offensive & Red Team** | **Sliver C2** | BishopFox Go/C cross-platform Command & Control (mTLS, WireGuard, DNS beacons) | `./lab start c2-sliver` | `8889`, `31337` |
-| | **MITRE Caldera** | Automated adversary emulation platform mapped directly to MITRE ATT&CK techniques | `./lab start c2-caldera` | `8888` |
-| | **Gophish** | Open-source enterprise phishing campaign and awareness training simulator | `./lab start phish-gophish` | `3333` (Admin), `8092` |
-| | **Interactsh OOB** | Self-hosted Out-of-Band callback server for blind SSRF, XXE, and RCE verification | `./lab start oob` | `8090`, `5354` |
-| | **JWT Tool Workspace** | CLI utility for tampering, dictionary attacks, and key confusion testing on JWTs | `./lab start jwt` | Shell |
-| **Defensive SOC & CTI** | **Cowrie Honeypot** | Medium/high-interaction SSH and Telnet honeypot with keystroke replay logging | `./lab start cowrie` | `2223`, `2324` |
-| | **Velociraptor** | Live endpoint forensics, artifact collection, and VQL threat hunting console | `./lab start velociraptor` | `8114` |
-| | **MISP Threat Intel** | Cyber Threat Intelligence sharing platform for IoC correlation and STIX/TAXII feeds | `./lab start misp` | `8115` |
-| | **DefectDojo** | DevSecOps vulnerability management, deduplication, and CVSS triaging dashboard | `./lab start threat-intel` | `8098` |
-| **Forensics & Analysis** | **REMnux Workstation** | SANS FOR610 reverse engineering environment (Capa, FLOSS, PEfile, Olevba, Ghidra) | `./lab start remnux` | Shell |
-| | **DFIR Suite** | CyberChef deobfuscation platform + Volatility 3 memory analysis + YARA rules | `./lab start dfir` | `8106` |
-| | **DevSecOps Pipeline** | Automated SAST, SCA, and secret scanning pipeline (Semgrep + Trivy + Gitleaks) | `./lab start scanner-pipeline` | `8102` |
+> [!TIP]
+> For the complete, exhaustive index of all 800+ targets, port allocations, and CLI shortcuts, refer directly to [`cyber_lab/SESSION_QUICKSTART.md`](cyber_lab/SESSION_QUICKSTART.md) and [`cyber_lab/README.md`](cyber_lab/README.md).
 
 ---
 
