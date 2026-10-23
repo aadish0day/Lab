@@ -226,6 +226,35 @@ ui_cleanup() {
 # UI Primitives
 # ------------------------------------------------------------------------------
 
+# Helper to count rendered lines of text (including embedded newlines)
+_ui_text_lines() {
+    local text="$1"
+    if [[ -z "$text" ]]; then
+        echo 0
+        return
+    fi
+    local expanded lines
+    expanded=$(printf '%b' "$text")
+    lines=$(grep -c '^' <<<"$expanded")
+    [ "$lines" -lt 1 ] && lines=1
+    echo "$lines"
+}
+
+# Helper to find maximum line width of text
+_ui_text_max_width() {
+    local text="$1"
+    if [[ -z "$text" ]]; then
+        echo 0
+        return
+    fi
+    local expanded max_w=0 line
+    expanded=$(printf '%b' "$text")
+    while IFS= read -r line; do
+        ((${#line} > max_w)) && max_w=${#line}
+    done <<<"$expanded"
+    echo "$max_w"
+}
+
 # Responsive terminal dimensions calculator
 _ui_calc_dimensions() {
     local -n _lines=$1
@@ -234,6 +263,8 @@ _ui_calc_dimensions() {
     _cols=$(tput cols 2>/dev/null || echo 80)
     [[ "$_lines" =~ ^[0-9]+$ ]] || _lines=24
     [[ "$_cols" =~ ^[0-9]+$ ]] || _cols=80
+    [ "$_lines" -lt 14 ] && _lines=14
+    [ "$_cols" -lt 60 ] && _cols=60
 }
 
 ui_menu() {
@@ -246,24 +277,35 @@ ui_menu() {
     local term_lines term_cols
     _ui_calc_dimensions term_lines term_cols
 
-    local box_width=92
-    if [ "$term_cols" -lt 98 ]; then
-        box_width=$((term_cols - 6))
-    fi
-    [ "$box_width" -lt 70 ] && box_width=70
-    [ "$box_width" -gt "$term_cols" ] && box_width=$((term_cols - 2))
+    # Responsive width: allow wide displays room for 40-char tags + 70-char descriptions
+    local box_width=$((term_cols - 6))
+    [ "$box_width" -gt 120 ] && box_width=120
+    [ "$box_width" -lt 76 ] && box_width=76
+    [ "$box_width" -gt "$((term_cols - 2))" ] && box_width=$((term_cols - 2))
+
+    local prompt_lines
+    prompt_lines=$(_ui_text_lines "$prompt")
+    [ "$prompt_lines" -lt 1 ] && prompt_lines=1
 
     local count=$((${#items[@]} / 2))
-    local box_height=$((count + 8))
-    local max_box=$((term_lines - 4))
-    [ "$max_box" -lt 16 ] && max_box=16
+
+    # Chrome overhead: title + borders + prompt margins + menu box frame + buttons
+    local chrome=8
+    local max_box=$((term_lines - 2))
+    [ "$max_box" -lt 14 ] && max_box=14
+
+    local desired_height=$((prompt_lines + count + chrome))
+    local box_height="$desired_height"
     [ "$box_height" -gt "$max_box" ] && box_height="$max_box"
     [ "$box_height" -lt 14 ] && box_height=14
 
-    local menu_height=$count
-    local max_menu=$((box_height - 8))
+    # Visible menu height inside the dialog window
+    local max_menu=$((box_height - prompt_lines - chrome + 1))
+    [ "$max_menu" -lt 3 ] && max_menu=3
+
+    local menu_height="$count"
     [ "$menu_height" -gt "$max_menu" ] && menu_height="$max_menu"
-    [ "$menu_height" -lt 6 ] && menu_height=6
+    [ "$menu_height" -lt 3 ] && menu_height=3
 
     case "$UI_TOOL" in
     whiptail)
@@ -289,12 +331,14 @@ ui_checklist() {
     local term_lines term_cols
     _ui_calc_dimensions term_lines term_cols
 
-    local box_width=92
-    if [ "$term_cols" -lt 98 ]; then
-        box_width=$((term_cols - 6))
-    fi
-    [ "$box_width" -lt 70 ] && box_width=70
-    [ "$box_width" -gt "$term_cols" ] && box_width=$((term_cols - 2))
+    local box_width=$((term_cols - 6))
+    [ "$box_width" -gt 120 ] && box_width=120
+    [ "$box_width" -lt 76 ] && box_width=76
+    [ "$box_width" -gt "$((term_cols - 2))" ] && box_width=$((term_cols - 2))
+
+    local prompt_lines
+    prompt_lines=$(_ui_text_lines "$prompt")
+    [ "$prompt_lines" -lt 1 ] && prompt_lines=1
 
     while true; do
         local -a display_items=(
@@ -304,16 +348,21 @@ ui_checklist() {
         display_items+=("${items[@]}")
 
         local count=$((${#display_items[@]} / 3))
-        local box_height=$((count + 9))
-        local max_box=$((term_lines - 4))
-        [ "$max_box" -lt 16 ] && max_box=16
-        [ "$box_height" -gt "$max_box" ] && box_height="$max_box"
-        [ "$box_height" -lt 16 ] && box_height=16
+        local chrome=8
+        local max_box=$((term_lines - 2))
+        [ "$max_box" -lt 14 ] && max_box=14
 
-        local list_height=$count
-        local max_list=$((box_height - 7))
+        local desired_height=$((prompt_lines + count + chrome))
+        local box_height="$desired_height"
+        [ "$box_height" -gt "$max_box" ] && box_height="$max_box"
+        [ "$box_height" -lt 14 ] && box_height=14
+
+        local max_list=$((box_height - prompt_lines - chrome + 1))
+        [ "$max_list" -lt 3 ] && max_list=3
+
+        local list_height="$count"
         [ "$list_height" -gt "$max_list" ] && list_height="$max_list"
-        [ "$list_height" -lt 6 ] && list_height=6
+        [ "$list_height" -lt 3 ] && list_height=3
 
         local raw=""
         case "$UI_TOOL" in
@@ -377,12 +426,24 @@ ui_yesno() {
     local term_lines term_cols
     _ui_calc_dimensions term_lines term_cols
 
-    local box_width=72
-    [ "$term_cols" -lt 78 ] && box_width=$((term_cols - 6))
-    [ "$box_width" -lt 40 ] && box_width=40
+    local prompt_lines
+    prompt_lines=$(_ui_text_lines "$prompt")
+    [ "$prompt_lines" -lt 1 ] && prompt_lines=1
 
-    local box_height=12
-    [ "$term_lines" -lt 18 ] && box_height=$((term_lines - 4))
+    local max_w
+    max_w=$(_ui_text_max_width "$prompt")
+    [ "$max_w" -lt 50 ] && max_w=50
+
+    local box_width=$((max_w + 10))
+    [ "$box_width" -gt "$((term_cols - 6))" ] && box_width=$((term_cols - 6))
+    [ "$box_width" -gt 90 ] && box_width=90
+    [ "$box_width" -lt 55 ] && box_width=55
+    [ "$box_width" -gt "$((term_cols - 2))" ] && box_width=$((term_cols - 2))
+
+    local box_height=$((prompt_lines + 6))
+    local max_box=$((term_lines - 4))
+    [ "$max_box" -lt 8 ] && max_box=8
+    [ "$box_height" -gt "$max_box" ] && box_height="$max_box"
     [ "$box_height" -lt 8 ] && box_height=8
 
     case "$UI_TOOL" in
@@ -406,13 +467,25 @@ ui_input() {
     local term_lines term_cols
     _ui_calc_dimensions term_lines term_cols
 
-    local box_width=72
-    [ "$term_cols" -lt 78 ] && box_width=$((term_cols - 6))
-    [ "$box_width" -lt 40 ] && box_width=40
+    local prompt_lines
+    prompt_lines=$(_ui_text_lines "$prompt")
+    [ "$prompt_lines" -lt 1 ] && prompt_lines=1
 
-    local box_height=10
-    [ "$term_lines" -lt 16 ] && box_height=$((term_lines - 4))
-    [ "$box_height" -lt 8 ] && box_height=8
+    local max_w
+    max_w=$(_ui_text_max_width "$prompt")
+    [ "$max_w" -lt 50 ] && max_w=50
+
+    local box_width=$((max_w + 12))
+    [ "$box_width" -gt "$((term_cols - 6))" ] && box_width=$((term_cols - 6))
+    [ "$box_width" -gt 90 ] && box_width=90
+    [ "$box_width" -lt 55 ] && box_width=55
+    [ "$box_width" -gt "$((term_cols - 2))" ] && box_width=$((term_cols - 2))
+
+    local box_height=$((prompt_lines + 7))
+    local max_box=$((term_lines - 4))
+    [ "$max_box" -lt 9 ] && max_box=9
+    [ "$box_height" -gt "$max_box" ] && box_height="$max_box"
+    [ "$box_height" -lt 9 ] && box_height=9
 
     case "$UI_TOOL" in
     whiptail)
@@ -434,12 +507,25 @@ ui_msg() {
     local term_lines term_cols
     _ui_calc_dimensions term_lines term_cols
 
-    local box_width=72
-    [ "$term_cols" -lt 78 ] && box_width=$((term_cols - 6))
-    [ "$box_width" -lt 40 ] && box_width=40
+    local text_lines
+    text_lines=$(_ui_text_lines "$text")
+    [ "$text_lines" -lt 1 ] && text_lines=1
 
-    local box_height=14
-    [ "$term_lines" -lt 20 ] && box_height=$((term_lines - 4))
+    local max_w
+    max_w=$(_ui_text_max_width "$text")
+    [ "$max_w" -lt 50 ] && max_w=50
+
+    local box_width=$((max_w + 10))
+    [ "$box_width" -gt "$((term_cols - 6))" ] && box_width=$((term_cols - 6))
+    [ "$box_width" -gt 110 ] && box_width=110
+    [ "$box_width" -lt 60 ] && box_width=60
+    [ "$box_width" -gt "$((term_cols - 2))" ] && box_width=$((term_cols - 2))
+
+    local desired_height=$((text_lines + 6))
+    local max_box=$((term_lines - 4))
+    [ "$max_box" -lt 10 ] && max_box=10
+    local box_height="$desired_height"
+    [ "$box_height" -gt "$max_box" ] && box_height="$max_box"
     [ "$box_height" -lt 8 ] && box_height=8
 
     case "$UI_TOOL" in
@@ -479,11 +565,10 @@ ui_textbox() {
     _ui_calc_dimensions term_lines term_cols
 
     local box_width=$((term_cols - 6))
-    [ "$box_width" -gt 100 ] && box_width=100
+    [ "$box_width" -gt 130 ] && box_width=130
     [ "$box_width" -lt 60 ] && box_width=60
 
     local box_height=$((term_lines - 4))
-    [ "$box_height" -gt 35 ] && box_height=35
     [ "$box_height" -lt 14 ] && box_height=14
 
     local ret=0
@@ -520,11 +605,10 @@ ui_tailbox() {
     _ui_calc_dimensions term_lines term_cols
 
     local box_width=$((term_cols - 6))
-    [ "$box_width" -gt 100 ] && box_width=100
+    [ "$box_width" -gt 130 ] && box_width=130
     [ "$box_width" -lt 60 ] && box_width=60
 
     local box_height=$((term_lines - 4))
-    [ "$box_height" -gt 35 ] && box_height=35
     [ "$box_height" -lt 14 ] && box_height=14
 
     case "$UI_TOOL" in
