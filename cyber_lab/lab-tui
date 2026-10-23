@@ -1,0 +1,896 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# CyberLab v2.5 - Professional TUI Workflow & Lab Controller
+# Archinstall / Post-Install Style Management Interface
+# ==============================================================================
+
+set -o pipefail
+
+# Determine base paths with fallback
+CYBERLAB_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd || echo "")"
+if [[ -z "$CYBERLAB_ROOT" || ! -d "${CYBERLAB_ROOT}/lib_tui" ]]; then
+    CYBERLAB_ROOT="/home/aadish/Documents/Github/lab/cyber_lab"
+fi
+LIB_DIR="${CYBERLAB_ROOT}/lib_tui"
+
+# Source UI and Core modules
+if [[ ! -f "${LIB_DIR}/ui.sh" || ! -f "${LIB_DIR}/core.sh" ]]; then
+    echo "Error: CyberLab TUI libraries not found in ${LIB_DIR}" >&2
+    exit 1
+fi
+
+# shellcheck source=lib_tui/ui.sh
+source "${LIB_DIR}/ui.sh"
+# shellcheck source=lib_tui/core.sh
+source "${LIB_DIR}/core.sh"
+
+# Signal trap for graceful cleanup and terminal restoration
+trap 'ui_cleanup; exit 0' EXIT INT TERM
+
+# Global state
+declare -gA RUNNING_MAP=()
+
+# ------------------------------------------------------------------------------
+# Helpers
+# ------------------------------------------------------------------------------
+
+refresh_running_labs() {
+    RUNNING_MAP=()
+    local lab_key
+    while IFS= read -r lab_key; do
+        [[ -n "$lab_key" ]] && RUNNING_MAP["$lab_key"]=1
+    done < <(core_get_running_labs)
+}
+
+# ------------------------------------------------------------------------------
+# Lab Task Execution (Interactive Live Output)
+# ------------------------------------------------------------------------------
+
+run_lab_task() {
+    local key="$1"
+    local action="$2" # start, stop, restart, pull
+    local title="$3"
+    local path desc port cat cat_title rel_path
+    path=$(get_lab_path "$key")
+    desc=$(get_lab_desc "$key")
+    port=$(get_lab_port "$key")
+    cat=$(get_lab_category "$key")
+    cat_title=$(core_get_category_title "$cat")
+    rel_path="${path#"${CYBERLAB_ROOT}"/}"
+
+    # Clear terminal buffer and restore terminal mode
+    clear
+    ui_restore_cursor
+    if command -v stty >/dev/null 2>&1; then
+        stty sane 2>/dev/null || true
+        stty echo 2>/dev/null || true
+    fi
+
+    echo -e "\033[1;36m========================================================================\033[0m"
+    echo -e "\033[1;32m[*] CyberLab Action  :\033[0m \033[1m${title}\033[0m"
+    echo -e "\033[1;34m[*] Target Lab       :\033[0m ${key}"
+    echo -e "\033[1;34m[*] Category         :\033[0m ${cat_title}"
+    echo -e "\033[1;34m[*] Path             :\033[0m ${rel_path}"
+    echo -e "\033[1;34m[*] Access / Port    :\033[0m ${port:-None / Internal}"
+    echo -e "\033[1;36m========================================================================\033[0m"
+    echo ""
+
+    local start_time exit_code=0
+    start_time=$(date +%s)
+
+    case "$action" in
+    start)
+        echo -e "\033[0;33m==> Executing: docker compose up -d\033[0m\n"
+        (cd "$path" && docker compose up -d) || exit_code=$?
+        ;;
+    stop)
+        echo -e "\033[0;33m==> Executing: docker compose down\033[0m\n"
+        (cd "$path" && docker compose down) || exit_code=$?
+        ;;
+    restart)
+        echo -e "\033[0;33m==> Executing: docker compose restart\033[0m\n"
+        (cd "$path" && docker compose restart) || exit_code=$?
+        ;;
+    pull)
+        echo -e "\033[0;33m==> Executing: docker compose pull\033[0m\n"
+        (cd "$path" && docker compose pull) || exit_code=$?
+        ;;
+    esac
+
+    local duration=$(( $(date +%s) - start_time ))
+    echo ""
+    echo -e "\033[1;36m------------------------------------------------------------------------\033[0m"
+    if [[ "$exit_code" -eq 0 ]]; then
+        echo -e "\033[1;32m[✓] ${title} finished successfully in ${duration}s.\033[0m"
+    else
+        echo -e "\033[1;31m[✗] ${title} failed with exit code ${exit_code} (took ${duration}s).\033[0m"
+    fi
+    echo -e "\033[1;36m------------------------------------------------------------------------\033[0m"
+    echo ""
+    read -rp "Press [ENTER] to return to CyberLab TUI..." _ </dev/tty || true
+    clear
+    return "$exit_code"
+}
+
+# ------------------------------------------------------------------------------
+# Lab Detail / Action Menu
+# ------------------------------------------------------------------------------
+
+show_lab_action_menu() {
+    local key="$1"
+    local default_action="start"
+
+    while true; do
+        local path desc port cat cat_title status_badge status_text rel_path
+        path=$(get_lab_path "$key")
+        desc=$(get_lab_desc "$key")
+        port=$(get_lab_port "$key")
+        cat=$(get_lab_category "$key")
+        cat_title=$(core_get_category_title "$cat")
+        rel_path="${path#"${CYBERLAB_ROOT}"/}"
+
+        if core_is_running "$key"; then
+            status_badge="[RUNNING]"
+            status_text="RUNNING (Container active)"
+            [[ "$default_action" == "start" ]] && default_action="shell"
+        else
+            status_badge="[STOPPED]"
+            status_text="STOPPED (Containers offline)"
+            [[ "$default_action" == "shell" || "$default_action" == "stop" ]] && default_action="start"
+        fi
+
+        local prompt_info
+        prompt_info="Target   : ${key}\nStatus   : ${status_text}\nCategory : ${cat_title}\nAccess   : ${port:-None / Internal}\nPath     : ${rel_path}\nInfo     : ${desc}\n\nSelect an operation:"
+
+        local -a actions=(
+            "start"   "Start Lab (docker compose up -d)"
+            "stop"    "Stop Lab (docker compose down)"
+            "restart" "Restart Lab (docker compose restart)"
+            "shell"   "Interactive Shell (Connect to primary service)"
+            "logs"    "View Container Logs (Tail 150 lines)"
+            "compose" "View docker-compose.yml"
+            "readme"  "View Lab Documentation (README.md)"
+            "pull"    "Pull Container Images"
+            "back"    "<-- Return to Previous Menu"
+        )
+
+        local action
+        action=$(ui_menu "CyberLab // ${key} ${status_badge}" "$prompt_info" "$default_action" "${actions[@]}") || break
+        default_action="$action"
+
+        case "$action" in
+        start)
+            if run_lab_task "$key" "start" "Start Lab"; then
+                default_action="shell"
+            fi
+            ;;
+        stop)
+            if run_lab_task "$key" "stop" "Stop Lab"; then
+                default_action="start"
+            fi
+            ;;
+        restart)
+            run_lab_task "$key" "restart" "Restart Lab"
+            ;;
+        shell)
+            if ! core_is_running "$key"; then
+                if ui_yesno "Lab Offline" "Lab '${key}' is currently stopped.\n\nWould you like to start it now before opening a shell?"; then
+                    if ! run_lab_task "$key" "start" "Start Lab for Interactive Shell"; then
+                        continue
+                    fi
+                else
+                    continue
+                fi
+            fi
+            clear
+            ui_restore_cursor
+            core_shell_lab "$key"
+            clear
+            ;;
+        logs)
+            local tmp_log
+            tmp_log=$(mktemp "${TMPDIR:-/tmp}/cyberlab_logs_XXXXXX.log")
+            core_get_logs "$key" 150 >"$tmp_log" 2>&1 || true
+            if [[ ! -s "$tmp_log" ]]; then
+                echo "No log records found for ${key} (is the container running?)." >"$tmp_log"
+            fi
+            ui_textbox "Container Logs: ${key} (Last 150 Lines)" "$tmp_log"
+            rm -f "$tmp_log" 2>/dev/null || true
+            ;;
+        compose)
+            local tmp_file
+            tmp_file=$(mktemp "${TMPDIR:-/tmp}/cyberlab_compose_XXXXXX.yml")
+            if core_get_compose_content "$key" >"$tmp_file" && [[ -s "$tmp_file" ]]; then
+                ui_textbox "docker-compose.yml: ${key}" "$tmp_file"
+            else
+                ui_msg "Notice" "No docker-compose.yml file found for ${key}."
+            fi
+            rm -f "$tmp_file" 2>/dev/null || true
+            ;;
+        readme)
+            local tmp_file
+            tmp_file=$(mktemp "${TMPDIR:-/tmp}/cyberlab_readme_XXXXXX.md")
+            if core_get_readme_content "$key" >"$tmp_file" && [[ -s "$tmp_file" ]]; then
+                ui_textbox "Documentation: ${key}" "$tmp_file"
+            else
+                ui_msg "Notice" "No README.md documentation file found for ${key}."
+            fi
+            rm -f "$tmp_file" 2>/dev/null || true
+            ;;
+        pull)
+            run_lab_task "$key" "pull" "Pull Container Images"
+            ;;
+        back | "")
+            break
+            ;;
+        esac
+    done
+}
+
+# ------------------------------------------------------------------------------
+# 1. Browse Labs by Category
+# ------------------------------------------------------------------------------
+
+show_category_labs() {
+    local cat="$1"
+    local cat_title
+    cat_title=$(core_get_category_title "$cat")
+    local last_selected=""
+
+    while true; do
+        refresh_running_labs
+        local raw_labs
+        raw_labs=$(core_get_labs_by_category "$cat")
+        if [[ -z "$raw_labs" ]]; then
+            ui_msg "Empty Category" "No labs registered under '${cat_title}'."
+            return 0
+        fi
+
+        local -a menu_items=(
+            ".." "<-- Back to Categories"
+        )
+
+        local k desc port badge
+        while IFS= read -r k; do
+            [[ -z "$k" ]] && continue
+            desc=$(get_lab_desc "$k")
+            port=$(get_lab_port "$k")
+            if [[ -n "${RUNNING_MAP[$k]:-}" ]]; then
+                badge="[RUNNING]"
+            else
+                badge="[STOPPED]"
+            fi
+            if [[ -n "$port" ]]; then
+                menu_items+=("$k" "${badge} ${port} | ${desc}")
+            else
+                menu_items+=("$k" "${badge} ${desc}")
+            fi
+        done <<<"$raw_labs"
+
+        local choice
+        choice=$(ui_menu "Category: ${cat_title}" "Select a lab to view details and launch actions:" "$last_selected" "${menu_items[@]}") || break
+
+        if [[ "$choice" == ".." || -z "$choice" ]]; then
+            break
+        fi
+
+        last_selected="$choice"
+        show_lab_action_menu "$choice"
+    done
+}
+
+menu_browse_categories() {
+    local last_cat=""
+    while true; do
+        local -a cat_items=(
+            ".." "<-- Back to Main Menu"
+        )
+        for c in "${CATEGORIES[@]}"; do
+            local title
+            title=$(core_get_category_title "$c")
+            local raw_labs count=0
+            raw_labs=$(core_get_labs_by_category "$c")
+            if [[ -n "$raw_labs" ]]; then
+                count=$(grep -c . <<<"$raw_labs" || echo 0)
+            fi
+            cat_items+=("$c" "${title} (${count} labs)")
+        done
+
+        local sel_cat
+        sel_cat=$(ui_menu "Browse Labs by Category" "Select a category to inspect lab environments:" "$last_cat" "${cat_items[@]}") || break
+
+        if [[ "$sel_cat" == ".." || -z "$sel_cat" ]]; then
+            break
+        fi
+
+        last_cat="$sel_cat"
+        show_category_labs "$sel_cat"
+    done
+}
+
+# ------------------------------------------------------------------------------
+# 2. Active / Running Labs Dashboard
+# ------------------------------------------------------------------------------
+
+menu_dashboard() {
+    local last_selected=""
+    while true; do
+        refresh_running_labs
+        local running_keys=("${!RUNNING_MAP[@]}")
+
+        if [[ ${#running_keys[@]} -eq 0 ]]; then
+            ui_msg "Running Labs Dashboard" "No active CyberLab containers are currently running.\n\nYou can launch labs via 'Browse Labs by Category', 'Search & Filter', or 'Security & Tooling Suite'."
+            return 0
+        fi
+
+        local -a menu_items=(
+            ".." "<-- Back to Main Menu"
+        )
+
+        local sorted_keys=()
+        mapfile -t sorted_keys < <(printf "%s\n" "${running_keys[@]}" | sort)
+
+        for k in "${sorted_keys[@]}"; do
+            local desc port
+            desc=$(get_lab_desc "$k")
+            port=$(get_lab_port "$k")
+            if [[ -n "$port" ]]; then
+                menu_items+=("$k" "[RUNNING] ${port} | ${desc}")
+            else
+                menu_items+=("$k" "[RUNNING] ${desc}")
+            fi
+        done
+
+        local choice
+        choice=$(ui_menu "Active / Running Labs Dashboard" "Currently running CyberLab containers (${#sorted_keys[@]} active):" "$last_selected" "${menu_items[@]}") || break
+
+        if [[ "$choice" == ".." || -z "$choice" ]]; then
+            break
+        fi
+
+        last_selected="$choice"
+        show_lab_action_menu "$choice"
+    done
+}
+
+# ------------------------------------------------------------------------------
+# 3. Search & Filter Labs
+# ------------------------------------------------------------------------------
+
+menu_search() {
+    local last_query=""
+    while true; do
+        local query
+        query=$(ui_input "Search & Filter Labs" "Search by shortcut key, CVE, port, or keyword:" "$last_query") || break
+
+        # Strip leading/trailing whitespace
+        query="${query#"${query%%[![:space:]]*}"}"
+        query="${query%"${query##*[![:space:]]}"}"
+
+        if [[ -z "$query" ]]; then
+            break
+        fi
+        last_query="$query"
+
+        # Find matching labs
+        local -a matches=()
+        shopt -s nocasematch
+        for k in "${ALL_LAB_KEYS[@]}"; do
+            local val="${LABS[$k]}"
+            if [[ "$k" =~ $query || "$val" =~ $query ]]; then
+                matches+=("$k")
+            fi
+        done
+        shopt -u nocasematch
+
+        if [[ ${#matches[@]} -eq 0 ]]; then
+            ui_msg "Search Results" "No labs found matching query: '${query}'\n\nTry searching for CVE (e.g. 'cve-2024'), tool ('sliver', 'suricata'), or port ('8080')."
+            continue
+        fi
+
+        local last_sel=""
+        while true; do
+            refresh_running_labs
+            local -a menu_items=(
+                ".." "<-- New Search / Back"
+            )
+            for k in "${matches[@]}"; do
+                local desc port badge
+                desc=$(get_lab_desc "$k")
+                port=$(get_lab_port "$k")
+                if [[ -n "${RUNNING_MAP[$k]:-}" ]]; then
+                    badge="[RUNNING]"
+                else
+                    badge="[STOPPED]"
+                fi
+                if [[ -n "$port" ]]; then
+                    menu_items+=("$k" "${badge} ${port} | ${desc}")
+                else
+                    menu_items+=("$k" "${badge} ${desc}")
+                fi
+            done
+
+            local choice
+            choice=$(ui_menu "Search Results (${#matches[@]} matches for '${query}')" "Select a matching lab to view details and launch actions:" "$last_sel" "${menu_items[@]}") || break
+
+            if [[ "$choice" == ".." || -z "$choice" ]]; then
+                break
+            fi
+
+            last_sel="$choice"
+            show_lab_action_menu "$choice"
+        done
+    done
+}
+
+# ------------------------------------------------------------------------------
+# 4. Security & Tooling Suite
+# ------------------------------------------------------------------------------
+
+menu_tools() {
+    local last_selected=""
+    while true; do
+        refresh_running_labs
+        local raw_labs
+        raw_labs=$(core_get_labs_by_category "09_tools")
+        if [[ -z "$raw_labs" ]]; then
+            ui_msg "Security Tools" "No dedicated tools found in category '09_tools'."
+            return 0
+        fi
+
+        local -a menu_items=(
+            ".." "<-- Back to Main Menu"
+        )
+
+        local k desc port badge
+        while IFS= read -r k; do
+            [[ -z "$k" ]] && continue
+            desc=$(get_lab_desc "$k")
+            port=$(get_lab_port "$k")
+            if [[ -n "${RUNNING_MAP[$k]:-}" ]]; then
+                badge="[RUNNING]"
+            else
+                badge="[STOPPED]"
+            fi
+            if [[ -n "$port" ]]; then
+                menu_items+=("$k" "${badge} ${port} | ${desc}")
+            else
+                menu_items+=("$k" "${badge} ${desc}")
+            fi
+        done <<<"$raw_labs"
+
+        local choice
+        choice=$(ui_menu "Security & Tooling Suite" "Enterprise C2 frameworks, SIEM/SOC platforms, and DFIR workspaces:" "$last_selected" "${menu_items[@]}") || break
+
+        if [[ "$choice" == ".." || -z "$choice" ]]; then
+            break
+        fi
+
+        last_selected="$choice"
+        show_lab_action_menu "$choice"
+    done
+}
+
+# ------------------------------------------------------------------------------
+# 5. Bulk Operations (Multi-select Checklist)
+# ------------------------------------------------------------------------------
+
+menu_bulk() {
+    # 1. Choose Scope Category
+    local -a cat_choices=(
+        "all" "All Categories (800+ Labs)"
+    )
+    for c in "${CATEGORIES[@]}"; do
+        local title count
+        title=$(core_get_category_title "$c")
+        local raw_labs
+        raw_labs=$(core_get_labs_by_category "$c")
+        count=$(grep -c . <<<"$raw_labs" || echo 0)
+        cat_choices+=("$c" "${title} (${count} labs)")
+    done
+    cat_choices+=("back" "<-- Back to Main Menu")
+
+    local sel_cat
+    sel_cat=$(ui_menu "Bulk Operations // Select Scope" "Choose category of labs to operate on:" "all" "${cat_choices[@]}") || return 0
+    [[ "$sel_cat" == "back" || -z "$sel_cat" ]] && return 0
+
+    # 2. Choose Operation
+    local -a op_choices=(
+        "start" "Bulk Start (docker compose up -d)"
+        "stop"  "Bulk Stop (docker compose down)"
+        "pull"  "Bulk Pull Images (docker compose pull)"
+        "back"  "<-- Back"
+    )
+    local sel_op
+    sel_op=$(ui_menu "Bulk Operations // Select Action" "Select the bulk action to perform:" "start" "${op_choices[@]}") || return 0
+    [[ "$sel_op" == "back" || -z "$sel_op" ]] && return 0
+
+    # 3. Collect target labs
+    local -a target_keys=()
+    if [[ "$sel_cat" == "all" ]]; then
+        target_keys=("${ALL_LAB_KEYS[@]}")
+    else
+        mapfile -t target_keys < <(core_get_labs_by_category "$sel_cat" | grep -v '^[[:space:]]*$')
+    fi
+
+    if [[ ${#target_keys[@]} -eq 0 ]]; then
+        ui_msg "Bulk Operations" "No labs available in the selected scope."
+        return 0
+    fi
+
+    # 4. Build checklist items
+    local -a checklist_items=()
+    for k in "${target_keys[@]}"; do
+        local desc port
+        desc=$(get_lab_desc "$k")
+        port=$(get_lab_port "$k")
+        checklist_items+=("$k" "${port:+$port | }${desc}" "OFF")
+    done
+
+    local cat_label
+    if [[ "$sel_cat" == "all" ]]; then
+        cat_label="All Categories"
+    else
+        cat_label=$(core_get_category_title "$sel_cat")
+    fi
+
+    local selected_raw
+    selected_raw=$(ui_checklist "Bulk ${sel_op^^} // ${cat_label}" "Select targets (Space to toggle, 'ALL' / 'NONE' at top):" "${checklist_items[@]}") || return 0
+
+    local -a selected_labs=()
+    while IFS= read -r line; do
+        [[ -n "$line" ]] && selected_labs+=("$line")
+    done <<<"$selected_raw"
+
+    local total=${#selected_labs[@]}
+    if [[ "$total" -eq 0 ]]; then
+        ui_msg "Bulk Operations" "No labs were selected. Operation cancelled."
+        return 0
+    fi
+
+    # 5. Confirm
+    if ! ui_yesno "Confirm Bulk Operation" "Are you sure you want to perform '${sel_op^^}' on ${total} lab(s)?"; then
+        return 0
+    fi
+
+    # 6. Execute with gauge progress and summary
+    local tmp_summary
+    tmp_summary=$(mktemp "${TMPDIR:-/tmp}/cyberlab_bulk_summary_XXXXXX.txt")
+    {
+        echo "=================================================================="
+        echo "CyberLab Bulk ${sel_op^^} Summary Report"
+        echo "Timestamp: $(date '+%Y-%m-%d %H:%M:%S')"
+        echo "Total Selected: ${total}"
+        echo "Scope: ${cat_label}"
+        echo "=================================================================="
+        echo ""
+    } >"$tmp_summary"
+
+    (
+        for ((idx = 0; idx < total; idx++)); do
+            local lab_k="${selected_labs[idx]}"
+            local pct=$(((idx * 100) / total))
+            echo "$pct"
+            echo "XXX"
+            echo "[$((idx + 1))/$total] Performing ${sel_op} on: ${lab_k}..."
+            echo "XXX"
+
+            local tmp_op_log
+            tmp_op_log=$(mktemp "${TMPDIR:-/tmp}/cyberlab_bulk_op_XXXXXX.log")
+            local ret=0
+            case "$sel_op" in
+            start) core_start_lab "$lab_k" "$tmp_op_log" || ret=$? ;;
+            stop) core_stop_lab "$lab_k" "$tmp_op_log" || ret=$? ;;
+            pull) core_pull_lab "$lab_k" "$tmp_op_log" || ret=$? ;;
+            esac
+
+            if [[ "$ret" -eq 0 ]]; then
+                echo "[SUCCESS] ${lab_k}" >>"$tmp_summary"
+            else
+                {
+                    echo "[FAILED ] ${lab_k} (Exit code ${ret})"
+                    cat "$tmp_op_log"
+                    echo "--------------------------------------------------"
+                } >>"$tmp_summary"
+            fi
+            rm -f "$tmp_op_log" 2>/dev/null || true
+        done
+        echo "100"
+        echo "XXX"
+        echo "Bulk ${sel_op} completed successfully!"
+        echo "XXX"
+    ) | ui_gauge "Bulk ${sel_op^^} in Progress" "Executing bulk operation on ${total} labs..." 0
+
+    ui_textbox "Bulk ${sel_op^^} Report" "$tmp_summary"
+    rm -f "$tmp_summary" 2>/dev/null || true
+}
+
+# ------------------------------------------------------------------------------
+# 6. Global Management
+# ------------------------------------------------------------------------------
+
+menu_global() {
+    local default_choice="running"
+    while true; do
+        local -a global_items=(
+            "running" "View Running Docker Containers (docker ps)"
+            "stop_all" "Stop All CyberLab Containers Across Project"
+            "disk_usage" "Docker Disk Usage (docker system df)"
+            "stats" "Live Container Resource Usage (docker stats)"
+            "prune_networks" "Clean Unused Networks & Build Cache"
+            "back" "<-- Back to Main Menu"
+        )
+
+        local choice
+        choice=$(ui_menu "Global CyberLab Management" "Perform global Docker infrastructure and lifecycle tasks:" "$default_choice" "${global_items[@]}") || break
+        default_choice="$choice"
+
+        case "$choice" in
+        running)
+            local tmp_log
+            tmp_log=$(mktemp "${TMPDIR:-/tmp}/cyberlab_running_XXXXXX.log")
+            {
+                echo "================================================================================"
+                echo "                     CURRENT RUNNING DOCKER CONTAINERS                          "
+                echo "================================================================================"
+                echo "Generated at: $(date '+%Y-%m-%d %H:%M:%S')"
+                echo ""
+                echo "--- [1. Active CyberLab Containers] ---"
+                local cl_out
+                cl_out=$(docker ps --filter "name=cyberlab_" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}\t{{.Image}}" 2>&1 || true)
+                local cl_lines
+                cl_lines=$(grep -c . <<<"$cl_out" 2>/dev/null || echo 0)
+                if [[ "$cl_lines" -le 1 ]]; then
+                    echo "No CyberLab containers currently running."
+                else
+                    echo "$cl_out"
+                fi
+                echo ""
+                echo "--- [2. All Active Host Containers] ---"
+                local sys_out
+                sys_out=$(docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}\t{{.Image}}" 2>&1 || true)
+                local sys_lines
+                sys_lines=$(grep -c . <<<"$sys_out" 2>/dev/null || echo 0)
+                if [[ "$sys_lines" -le 1 ]]; then
+                    echo "No running Docker containers detected on system."
+                else
+                    echo "$sys_out"
+                fi
+                echo ""
+                echo "================================================================================"
+            } >"$tmp_log"
+            ui_textbox "Running Containers (docker ps)" "$tmp_log"
+            rm -f "$tmp_log" 2>/dev/null || true
+            ;;
+        stop_all)
+            if ui_yesno "Confirm Stop All" "Are you sure you want to shut down ALL running CyberLab containers across the entire repository?"; then
+                clear
+                ui_restore_cursor
+                if command -v stty >/dev/null 2>&1; then
+                    stty sane 2>/dev/null || true
+                    stty echo 2>/dev/null || true
+                fi
+                echo -e "\033[1;36m========================================================================\033[0m"
+                echo -e "\033[1;33m[*] Stopping ALL CyberLab containers...\033[0m"
+                echo -e "\033[1;36m========================================================================\033[0m\n"
+                core_stop_all
+                echo ""
+                read -rp "Press [ENTER] to return to CyberLab TUI..." _ </dev/tty || true
+                clear
+            fi
+            ;;
+        disk_usage)
+            local tmp_log
+            tmp_log=$(mktemp "${TMPDIR:-/tmp}/cyberlab_df_XXXXXX.log")
+            docker system df >"$tmp_log" 2>&1 || echo "Error querying docker system df" >"$tmp_log"
+            ui_textbox "Docker System Disk Usage" "$tmp_log"
+            rm -f "$tmp_log" 2>/dev/null || true
+            ;;
+        stats)
+            local tmp_log
+            tmp_log=$(mktemp "${TMPDIR:-/tmp}/cyberlab_stats_XXXXXX.log")
+            docker stats --no-stream --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}" >"$tmp_log" 2>&1 || echo "Error querying docker stats" >"$tmp_log"
+            ui_textbox "Container Resource Stats (Snapshot)" "$tmp_log"
+            rm -f "$tmp_log" 2>/dev/null || true
+            ;;
+        prune_networks)
+            if ui_yesno "Confirm Network & Cache Cleanup" "Prune unused docker networks and builder cache?\n(Active containers and images are not deleted)."; then
+                clear
+                ui_restore_cursor
+                if command -v stty >/dev/null 2>&1; then
+                    stty sane 2>/dev/null || true
+                    stty echo 2>/dev/null || true
+                fi
+                echo -e "\033[1;36m========================================================================\033[0m"
+                echo -e "\033[1;33m[*] Pruning unused docker networks and builder cache...\033[0m"
+                echo -e "\033[1;36m========================================================================\033[0m\n"
+                echo "==> Pruning unused docker networks..."
+                docker network prune -f
+                echo ""
+                echo "==> Pruning docker builder cache..."
+                docker builder prune -f
+                echo ""
+                read -rp "Press [ENTER] to return to CyberLab TUI..." _ </dev/tty || true
+                clear
+            fi
+            ;;
+        back | "")
+            break
+            ;;
+        esac
+    done
+}
+
+# ------------------------------------------------------------------------------
+# 7. Help & Shortcuts Guide
+# ------------------------------------------------------------------------------
+
+menu_help() {
+    local tmp_help
+    tmp_help=$(mktemp "${TMPDIR:-/tmp}/cyberlab_help_XXXXXX.txt")
+    cat <<'EOF' >"$tmp_help"
+================================================================================
+                    CYBERLAB TUI // USER GUIDE & KEYBINDINGS
+================================================================================
+
+1. VIM & ARROW KEYBOARD NAVIGATION
+--------------------------------------------------------------------------------
+   Key               Action
+   ---               ------
+   j / Down Arrow    Move selection down one line
+   k / Up Arrow      Move selection up one line
+   g / Home          Jump to first item in menu/checklist
+   G / End           Jump to last item in menu/checklist
+   h / Left Arrow    Navigate to previous button/field
+   l / Right Arrow   Navigate to next button/field
+   Tab               Cycle through active buttons / fields
+   Space             Toggle item state in checklists (Multi-select)
+   Enter             Activate button or select menu item
+   Esc / Cancel      Return to previous screen or exit dialog
+
+2. MENU MODULE OVERVIEW
+--------------------------------------------------------------------------------
+   * Browse Labs by Category:
+     Drill down into 10 structured domains covering 800+ offensive, defensive,
+     cloud, Kubernetes, DevSecOps, and exploit writing labs.
+
+   * Active / Running Labs Dashboard:
+     Instant list of all active CyberLab compose projects and containers.
+     Jump straight into shell, view logs, or stop containers.
+
+   * Search & Filter Labs:
+     Real-time case-insensitive keyword search across shortcut keys, CVEs,
+     ports, and descriptions.
+
+   * Security & Tooling Suite:
+     Quick access to dedicated red team and blue team platforms:
+     Sliver C2, Caldera, Suricata NIDS, Zeek NSM, Snort IDS, DefectDojo,
+     MISP, Cowrie Honeypot, REMnux Malware Analysis, and DFIR Volatility.
+
+   * Bulk Operations:
+     Select multiple targets using interactive checkboxes (with ALL / NONE)
+     and perform batch Start, Stop, or Image Pulls with live progress gauge.
+
+   * Global Management:
+     Global lifecycle actions including real-time inspection of running Docker
+     containers (`docker ps`), one-click shutdown of all CyberLab containers,
+     disk usage analysis, network pruning, and stats snapshots.
+
+3. INTERACTIVE SHELL SESSIONS
+--------------------------------------------------------------------------------
+   Selecting 'Connect to Shell' on any running lab will pause the TUI and attach
+   an interactive pseudo-terminal (/bin/bash or /bin/sh) directly to the container.
+   To return to CyberLab TUI, simply type:
+       exit
+   or press:
+       Ctrl + D
+
+4. PORTS & NETWORKING
+--------------------------------------------------------------------------------
+   Each lab binds its published ports to the host interface according to its
+   docker-compose configuration. The port details are displayed on the lab detail
+   screen and list items (e.g. Port 8080, Port 3000, Host Mode).
+
+================================================================================
+EOF
+    ui_textbox "CyberLab TUI // Shortcuts & Guide" "$tmp_help"
+    rm -f "$tmp_help" 2>/dev/null || true
+}
+
+# ------------------------------------------------------------------------------
+# Main Application Loop
+# ------------------------------------------------------------------------------
+
+main_menu() {
+    local default_choice="browse"
+    while true; do
+        refresh_running_labs
+        local running_keys=("${!RUNNING_MAP[@]}")
+        local running_count=${#running_keys[@]}
+        local total_count=${#ALL_LAB_KEYS[@]}
+
+        local status_str="[SYSTEM IDLE]"
+        if [[ "$running_count" -gt 0 ]]; then
+            status_str="[ACTIVE: ${running_count} LABS RUNNING]"
+        fi
+
+        local prompt_str="CyberLab Orchestrator | Total Catalog: ${total_count} Labs | ${status_str}\nNavigate: [j/k or ↑/↓] | Select: [Enter] | Switch: [Tab]"
+
+        local -a main_items=(
+            "browse"    "Browse Labs by Category (10 Domains, 800+ Labs)"
+            "dashboard" "Active / Running Labs Dashboard (${running_count} Active)"
+            "search"    "Search & Filter Labs (CVE, Port, Keyword)"
+            "tools"     "Security & Tooling Suite (C2, SIEM, SOC, IDS)"
+            "bulk"      "Bulk Operations (Multi-select Checklist)"
+            "global"    "Global Management (Stop All, Disk Usage, Cleanup)"
+            "help"      "Keyboard Shortcuts & Architecture Guide"
+            "exit"      "Exit CyberLab TUI"
+        )
+
+        local choice
+        choice=$(ui_menu "CyberLab v2.5 // TUI Control Center" "$prompt_str" "$default_choice" "${main_items[@]}") || break
+        default_choice="$choice"
+
+        case "$choice" in
+        browse)    menu_browse_categories ;;
+        dashboard) menu_dashboard ;;
+        search)    menu_search ;;
+        tools)     menu_tools ;;
+        bulk)      menu_bulk ;;
+        global)    menu_global ;;
+        help)      menu_help ;;
+        exit | "") break ;;
+        esac
+    done
+}
+
+# ------------------------------------------------------------------------------
+# Entrypoint
+# ------------------------------------------------------------------------------
+
+main() {
+    case "${1:-}" in
+    -h | --help)
+        echo "CyberLab TUI - Terminal User Interface for CyberLab"
+        echo "Usage: ./lab-tui [options]"
+        echo ""
+        echo "Options:"
+        echo "  -r, --reload     Force rebuild of the lab catalog cache"
+        echo "  -h, --help       Show this help message"
+        echo "  -v, --version    Show version information"
+        exit 0
+        ;;
+    -r | --reload | --rebuild-cache)
+        echo "Rebuilding CyberLab catalog cache from lab script..."
+        core_load_labs "" 1
+        echo "Cache rebuilt successfully (${#ALL_LAB_KEYS[@]} labs indexed)."
+        exit 0
+        ;;
+    -v | --version)
+        echo "CyberLab TUI v2.5 (Pure Bash / dialog engine)"
+        exit 0
+        ;;
+    esac
+
+    # Check and auto-install required dependencies (dialog, tput, etc.)
+    ui_ensure_dependencies
+
+    ui_init
+    if [[ "$UI_TOOL" == "none" ]]; then
+        echo "Error: Neither 'dialog' nor 'whiptail' is installed or could be auto-installed on your system." >&2
+        echo "Please install dialog manually: sudo apt-get update && sudo apt-get install -y dialog" >&2
+        exit 1
+    fi
+
+    # Initialize catalog
+    core_load_labs ""
+
+    # Run main TUI
+    main_menu
+
+    ui_cleanup
+    clear
+    echo "CyberLab TUI session closed. Goodbye!"
+}
+
+main "$@"
