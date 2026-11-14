@@ -1,0 +1,41 @@
+# ProtonVPN gateway via Gluetun.
+# Exposes a stealth HTTP proxy on localhost:8888 that host apps (yt-dlp, curl,
+# browsers...) can route through. No VPN is ever configured on the host itself.
+#
+# Quick start:
+#   1. Generate a WireGuard config at https://account.proton.me/u/0/vpn/WireGuard
+#      (free tier is fine; enable "NAT-PMP / Port forwarding" only if needed)
+#   2. cp .env.example .env   then paste the PrivateKey value
+#   3. docker compose up -d
+#   4. Verify: curl -s -x http://127.0.0.1:8888 https://ipinfo.io/json
+name: vpn-gateway
+
+services:
+  gluetun:
+    image: qmcgaw/gluetun:v3
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - ./gluetun-data:/gluetun
+    environment:
+      # ---- ProtonVPN ----
+      - VPN_SERVICE_PROVIDER=protonvpn
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY:?Set WIREGUARD_PRIVATE_KEY in .env}
+      # Free plan only. On a paid plan remove this (or set FREE_ONLY=off)
+      # and tune country with SERVER_COUNTRIES.
+      - FREE_ONLY=on
+      # Exit country for the free pool. NL is the most reliable exit node.
+      - SERVER_COUNTRIES=Netherlands
+      # ---- Stealth HTTP proxy (used by vpn-download.sh automatically) ----
+      - HTTPPROXY=on
+      - HTTPPROXY_STEALTH=on
+      - HTTPPROXY_LOG=off
+      - HTTPPROXY_LISTENING_ADDRESS=:8888
+    ports:
+      # Bind to loopback only; the proxy is not meant to be reachable from LAN.
+      - 127.0.0.1:8888:8888
+    restart: unless-stopped

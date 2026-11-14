@@ -1,6 +1,6 @@
 # Media Stack - Self-Hosted Automation
 
-A complete media automation stack using Docker Compose with Jellyfin, Sonarr, Radarr, qBittorrent, and Prowlarr.
+A complete media automation stack using Docker Compose with Jellyfin, Sonarr, Radarr, qBittorrent, Prowlarr, and Gluetun VPN.
 
 ## Table of Contents
 
@@ -20,18 +20,19 @@ This setup provides a fully automated media server that can:
 
 - Download and organize TV shows and movies automatically
 - Stream content through Jellyfin with hardware transcoding
-- Manage torrent downloads securely
+- Manage torrent downloads securely behind a VPN with a built-in killswitch (Gluetun)
 - Search and index content across multiple sources
 
 ## Stack Components
 
-| Service         | Purpose                           | Web UI Port |
-| --------------- | --------------------------------- | ----------- |
-| **Jellyfin**    | Media server for streaming        | `8096`      |
-| **Sonarr**      | TV show management & automation   | `8989`      |
-| **Radarr**      | Movie management & automation     | `7878`      |
-| **qBittorrent** | Torrent download client           | `8080`      |
-| **Prowlarr**    | Indexer manager for Sonarr/Radarr | `9696`      |
+| Service         | Purpose                                              | Web UI Port                       |
+| --------------- | ---------------------------------------------------- | --------------------------------- |
+| **Gluetun**     | VPN client with killswitch protecting torrent & indexer traffic | `8080` (qBit), `9696` (Prowlarr) |
+| **qBittorrent** | Torrent download client (routed via Gluetun)        | Routed via Gluetun (`8080`)       |
+| **Prowlarr**    | Indexer manager (routed via Gluetun to bypass ISP blocks) | Routed via Gluetun (`9696`)  |
+| **Jellyfin**    | Media server for streaming                           | `8096`                            |
+| **Sonarr**      | TV show management & automation                      | `8989`                            |
+| **Radarr**      | Movie management & automation                        | `7878`                            |
 
 ## Directory Structure
 
@@ -48,7 +49,10 @@ This setup uses the recommended unified `/data` directory structure for optimal 
         └── torrents/                     # .torrent files
 
 ~/home_lab/media-stack/                   # Docker compose directory
+├── .env.example                          # Example VPN configuration
+├── .env                                  # Your local VPN credentials
 ├── docker-compose.yml
+├── gluetun/                              # Gluetun configuration / data
 ├── jellyfin/
 │   ├── config/                           # Jellyfin configuration
 │   └── cache/                            # Jellyfin cache
@@ -71,6 +75,7 @@ This setup uses the recommended unified `/data` directory structure for optimal 
 - Intel CPU with QuickSync or dedicated GPU for hardware transcoding (optional but recommended)
 - At least 20GB free disk space for configs and metadata
 - Separate storage for media files
+- VPN provider subscription or free tier credentials supporting WireGuard or OpenVPN (e.g. ProtonVPN, Mullvad, etc.)
 
 ### Check Your User ID
 
@@ -104,18 +109,51 @@ cd ~/home_lab/media-stack
 Create config directories (Docker will populate these):
 
 ```bash
-mkdir -p jellyfin/{config,cache} qbittorrent/config prowlarr/config sonarr/config radarr/config
+mkdir -p gluetun jellyfin/{config,cache} qbittorrent/config prowlarr/config sonarr/config radarr/config
 ```
 
-### 2. Deploy the Stack
+### 2. Configure VPN Credentials (`.env`)
 
-Place your `docker-compose.yml` in the `~/home_lab/media-stack` directory, then start the services:
+Copy the example environment file to `.env`:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with your VPN settings:
+
+```bash
+nano .env
+```
+
+Key environment settings:
+- **`VPN_SERVICE_PROVIDER`**: Provider name (e.g., `protonvpn`, `mullvad`, `nordvpn`, `custom`). Default is `protonvpn`.
+- **`VPN_TYPE`**: Protocol type, typically `wireguard` (recommended for speed and efficiency) or `openvpn`.
+- **`WIREGUARD_PRIVATE_KEY`**: Your WireGuard private key obtained from your VPN provider dashboard.
+- **`VPN_FREE_ONLY`**: Set to `on` if using ProtonVPN free tier servers, or `off` for paid tiers.
+- **`VPN_SERVER_COUNTRIES`**: Preferred exit country (e.g., `Netherlands`, `United States`).
+
+#### How qBittorrent and Prowlarr Route Through Gluetun
+
+- **Network Routing (`network_mode: "service:gluetun"`)**: Both `qbittorrent` and `prowlarr` share Gluetun's network stack.
+  - **qBittorrent**: All torrent download and upload traffic is encrypted and forced through the VPN tunnel.
+  - **Prowlarr**: All indexer queries (e.g. YTS, 1337x, TorrentGalaxy) route through the VPN. This bypasses ISP-level DNS/IP blocks (such as those enforced in India by Jio, Airtel, ACT, etc.).
+- **Killswitch Protection**: If the VPN tunnel disconnects, Gluetun's built-in firewall automatically prevents any unencrypted traffic from leaking.
+- **Port Exposure**: Because services sharing Gluetun's network namespace cannot expose their own ports, their ports are published directly on the `gluetun` service container:
+  - `8080:8080`: qBittorrent Web UI
+  - `6881:6881` & `6881:6881/udp`: qBittorrent torrent transfers
+  - `9696:9696`: Prowlarr Web UI
+- **Local Network Access (`FIREWALL_OUTBOUND_SUBNETS`)**: Gluetun is configured with `FIREWALL_OUTBOUND_SUBNETS=192.168.0.0/16,172.16.0.0/12,10.0.0.0/8`. This allows Sonarr and Radarr to reach Prowlarr (`http://gluetun:9696` or `http://172.17.0.1:9696`) and qBittorrent (`http://gluetun:8080`), and lets Prowlarr sync directly with Sonarr and Radarr without hitting the VPN killswitch.
+
+### 3. Deploy the Stack
+
+Place your `docker-compose.yml` and `.env` in the `~/home_lab/media-stack` directory, then start the services:
 
 ```bash
 docker compose up -d
 ```
 
-### 3. Verify Services
+### 4. Verify Services
 
 Check that all containers are running:
 
@@ -123,7 +161,15 @@ Check that all containers are running:
 docker compose ps
 ```
 
-All services should show as "running" or "healthy".
+`qbittorrent` waits for `gluetun` to reach a healthy status before starting.
+
+Verify Gluetun VPN connection and status:
+
+```bash
+docker logs gluetun
+```
+
+You should see logs indicating a successful connection, assigned VPN IP address, and healthy status.
 
 ## Configuration
 
@@ -131,11 +177,11 @@ All services should show as "running" or "healthy".
 
 After deployment, access each service's web interface:
 
-- **Jellyfin**: http://your-server-ip:8096
-- **Sonarr**: http://your-server-ip:8989
-- **Radarr**: http://your-server-ip:7878
-- **qBittorrent**: http://your-server-ip:8080
-- **Prowlarr**: http://your-server-ip:9696
+- **Jellyfin**: <http://your-server-ip:8096>
+- **Sonarr**: <http://your-server-ip:8989>
+- **Radarr**: <http://your-server-ip:7878>
+- **qBittorrent**: <http://your-server-ip:8080> (routed via Gluetun)
+- **Prowlarr**: <http://your-server-ip:9696>
 
 ### qBittorrent Setup
 
@@ -158,11 +204,16 @@ After deployment, access each service's web interface:
 ### Prowlarr Setup
 
 1. Complete the initial setup wizard
-2. Add indexers (Settings → Indexers → Add Indexer)
+2. Add indexers (Settings → Indexers → Add Indexer). Indexers like **YTS**, **1337x**, etc. will now resolve properly via Gluetun's VPN, bypassing Indian ISP blocks.
 3. Connect to Sonarr and Radarr (Settings → Apps → Add Application):
-   - **Sonarr**: http://172.17.0.1:8989 (use Docker host IP)
-   - **Radarr**: http://172.17.0.1:7878
+   - **Sonarr**: <http://sonarr:8989> or <http://172.17.0.1:8989> (Docker host IP)
+   - **Radarr**: <http://radarr:7878> or <http://172.17.0.1:7878>
+   - **Prowlarr Server URL**: <http://gluetun:9696> (or <http://172.17.0.1:9696>) so Sonarr/Radarr can reach Prowlarr through Gluetun
    - Get API keys from Sonarr/Radarr (Settings → General)
+4. (Optional) Connect Download Client (Settings → Download Clients → Add → qBittorrent):
+   - **Host**: `127.0.0.1` or `gluetun` (since both qBittorrent and Prowlarr share Gluetun's network)
+   - **Port**: `8080`
+   - **Username/Password**: Your qBittorrent credentials
 
 ### Sonarr Setup
 
@@ -170,10 +221,11 @@ After deployment, access each service's web interface:
    - Add `/data/shows`
 
 2. **Add Download Client** (Settings → Download Clients → Add → qBittorrent):
-   - **Host**: Use Docker host IP (usually `172.17.0.1`)
+   - **Host**: `gluetun` (or use Docker host IP `172.17.0.1`)
    - **Port**: `8080`
    - **Username/Password**: Your qBittorrent credentials
    - **Category**: `sonarr`
+   > **Connecting behind Gluetun**: Because qBittorrent uses `network_mode: "service:gluetun"`, it shares the network stack with Gluetun. Sonarr should connect to `gluetun` on port `8080` (or the Docker host gateway IP `172.17.0.1:8080`).
 
 3. Indexers will be automatically added from Prowlarr
 
@@ -183,10 +235,11 @@ After deployment, access each service's web interface:
    - Add `/data/movies`
 
 2. **Add Download Client** (Settings → Download Clients → Add → qBittorrent):
-   - **Host**: Use Docker host IP (usually `172.17.0.1`)
+   - **Host**: `gluetun` (or use Docker host IP `172.17.0.1`)
    - **Port**: `8080`
    - **Username/Password**: Your qBittorrent credentials
    - **Category**: `radarr`
+   > **Connecting behind Gluetun**: Because qBittorrent shares Gluetun's network stack, set the host to `gluetun` (port `8080`) or the Docker host gateway IP (`172.17.0.1:8080`).
 
 3. Indexers will be automatically added from Prowlarr
 
@@ -203,9 +256,11 @@ After deployment, access each service's web interface:
    - Enable hardware encoding for relevant codecs
 
 5. **Verify Hardware Access**:
+
    ```bash
    docker exec jellyfin ls -l /dev/dri
    ```
+
    You should see `renderD128` listed.
 
 ## Usage
@@ -214,30 +269,54 @@ After deployment, access each service's web interface:
 
 **TV Shows**:
 
-1. Go to Sonarr (http://your-server-ip:8989)
+1. Go to Sonarr (<http://your-server-ip:8989>)
 2. Click "Add Series" and search for your show
 3. Select quality profile and monitor options
 4. Click "Add Series"
 
 **Movies**:
 
-1. Go to Radarr (http://your-server-ip:7878)
+1. Go to Radarr (<http://your-server-ip:7878>)
 2. Click "Add Movie" and search for your movie
 3. Select quality profile and monitor options
 4. Click "Add Movie"
 
 ### Monitoring Downloads
 
-- View active downloads in qBittorrent (http://your-server-ip:8080)
+- View active downloads in qBittorrent (<http://your-server-ip:8080>)
 - Track import progress in Sonarr/Radarr → Activity → Queue
 
 ### Watching Content
 
-1. Open Jellyfin (http://your-server-ip:8096)
+1. Open Jellyfin (<http://your-server-ip:8096>)
 2. Browse your organized libraries
 3. Content appears automatically after Sonarr/Radarr imports it
 
 ## Troubleshooting
+
+### VPN / Gluetun Issues
+
+1. **Check VPN Connection Status**:
+
+   ```bash
+   docker logs gluetun
+   ```
+
+   Look for `VPN agent status: HEALTHY` and IP allocation.
+
+2. **Verify Public IP is Masked**:
+   Check the external IP reported through the VPN container:
+
+   ```bash
+   docker exec gluetun wget -qO- https://ipinfo.io
+   ```
+
+   Verify that the returned IP and country match your VPN server and not your home ISP.
+
+3. **Sonarr/Radarr Cannot Connect to qBittorrent**:
+   - Confirm that `FIREWALL_OUTBOUND_SUBNETS=192.168.0.0/16,172.16.0.0/12,10.0.0.0/8` is present in Gluetun's environment so that traffic from Docker bridges is allowed.
+   - Set the download client host in Sonarr/Radarr to `gluetun` (port `8080`) or `172.17.0.1` (port `8080`).
+   - Check that qBittorrent is running (`docker compose ps`). Remember that qBittorrent will wait for Gluetun to become healthy before starting.
 
 ### Permission Issues
 
@@ -275,6 +354,7 @@ ls -la ~/home_lab/media-stack
    ```
 
 4. **Restart the container**:
+
    ```bash
    docker compose restart jellyfin
    ```
@@ -312,7 +392,7 @@ To start fresh (⚠️ **WARNING**: This deletes all configurations):
 
 ```bash
 docker compose down -v
-rm -rf jellyfin/ qbittorrent/ prowlarr/ sonarr/ radarr/
+rm -rf gluetun/ jellyfin/ qbittorrent/ prowlarr/ sonarr/ radarr/
 ```
 
 Then follow installation steps again.
@@ -322,11 +402,13 @@ Then follow installation steps again.
 This setup is based on best practices from:
 
 - [TechHutTV Homelab](https://github.com/TechHutTV/homelab)
+- [Gluetun Wiki](https://github.com/qdm12/gluetun-wiki)
 - [Servarr Wiki](https://wiki.servarr.com/)
 - [Trash Guides](https://trash-guides.info/)
 
 ## Additional Resources
 
+- [Gluetun Documentation](https://github.com/qdm12/gluetun)
 - [Jellyfin Documentation](https://jellyfin.org/docs/)
 - [Sonarr Wiki](https://wiki.servarr.com/sonarr)
 - [Radarr Wiki](https://wiki.servarr.com/radarr)

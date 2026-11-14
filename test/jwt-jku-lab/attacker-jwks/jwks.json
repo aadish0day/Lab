@@ -1,0 +1,10 @@
+{
+  "keys": [
+    {
+      "n": "9GGrDuitfKLOhcbbLE7K2l2RU3hu6DdE2YpljFtOoZB7cEzdzGYHQtAU5nmTha23nhZMah4S-at1yqptjjoahaq8XyqKuko0VV0jC4PfcdSv6OtjpPil-MghmEqQA6aFZ9mkpoqjF0YpS_-OQ3Mx5Wxfbt6rDZBv-8frMRbJXpMRIEprXWhMbVqib8mX9xy7fL9-fG2H6yneOc_VQgyP_GsEQeKt3Y3UNsnsbVYNQa64ems32dSM0PA6QBw3P5fCkaxXHBiZm7mgQyHyMF_SGedMZ9uEEZ38o46q27-XPLf5x0MiWYYctHUb4gGfm9zPKfwAnt3DqJoLbiDGwGqmpw",
+      "e": "AQAB",
+      "kty": "RSA",
+      "kid": "attacker-key-1794581223"
+    }
+  ]
+}

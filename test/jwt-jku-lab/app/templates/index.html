@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Lab: JWT authentication bypass via jku header injection{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block content %}
+<!-- Lab Briefing Box -->
+<section class="briefing-box">
+  <div class="briefing-header">
+    <div class="briefing-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+      Lab Briefing &amp; Objective
+    </div>
+    <span style="font-size: 0.8rem; background: #e0f2fe; color: #0369a1; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600;">
+      Vulnerability: JWT 'jku' Header Injection
+    </span>
+  </div>
+
+  <div class="briefing-body">
+    <p>
+      This lab uses a JWT-based authentication mechanism where the server blindly trusts the <code>jku</code> (JWK Set URL) header parameter specified inside incoming client tokens.
+    </p>
+
+    <div class="briefing-target">
+      🎯 <strong>Target Objective:</strong> To solve the lab, modify your session token with a <code>jku</code> header that points to your exploit server, access the admin panel, and delete the user <code>carlos</code>.
+    </div>
+
+    <div class="briefing-tips">
+      <strong>Attack Workflow:</strong>
+      <ol style="margin-left: 1.25rem; margin-top: 0.35rem; line-height: 1.6;">
+        <li>Log in to your account using the credentials <code>wiener:peter</code> and inspect your session token on the <a href="/my-account">My account</a> page.</li>
+        <li>Notice that the token's header contains a <code>jku</code> parameter pointing to <code>http://victim-app:5000/.well-known/jwks.json</code>.</li>
+        <li>Navigate to the <a href="{{ exploit_server_url or 'http://localhost:6000' }}" target="_blank">Exploit Server</a> (port 6000) to generate an attacker RSA keypair and host your public JWKS at <code>/evil-jwks.json</code>.</li>
+        <li>Forge a token with payload <code>sub: administrator</code> (or <code>role: admin</code>) and header <code>jku: http://attacker-jwks:6000/evil-jwks.json</code>, signed with your attacker private key.</li>
+        <li>Access <a href="/admin">/admin</a> with your forged token and click <strong>Delete user carlos</strong> to solve the lab!</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- Security Articles / Academy Lab Feed -->
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+  <h2 style="font-size: 1.4rem; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+    </svg>
+    Latest Security Articles &amp; Research
+  </h2>
+  <span style="font-size: 0.85rem; color: #64748b;">Showing 6 articles</span>
+</div>
+
+<div class="posts-grid">
+  <!-- Post 1 -->
+  <article class="post-card">
+    <div class="post-card-img" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);">
+      <span class="post-category-tag">JWT Security</span>
+      <span style="font-size: 3rem;">🔑</span>
+    </div>
+    <div class="post-card-body">
+      <h3 class="post-card-title">JWT jku Header Injection: Trust Anchor Architecture</h3>
+      <p class="post-card-excerpt">
+        When relying on asymmetric algorithms like RS256, applications frequently reference remote JWKS URLs. Without an explicit domain allow-list, attackers can supply their own trust anchors.
+      </p>
+      <div class="post-card-meta">
+        <span>By Carlos M. &bull; 5 min read</span>
+        <a href="#read-more" onclick="alert('Lab scenario article: Read the briefing box above to exploit the jku vulnerability!'); return false;">Read article &rarr;</a>
+      </div>
+    </div>
+  </article>
+
+  <!-- Post 2 -->
+  <article class="post-card">
+    <div class="post-card-img" style="background: linear-gradient(135deg, #831843 0%, #db2777 100%);">
+      <span class="post-category-tag">Vulnerability</span>
+      <span style="font-size: 3rem;">🛡️</span>
+    </div>
+    <div class="post-card-body">
+      <h3 class="post-card-title">Pitfalls of RFC 7515 Header Parameters</h3>
+      <p class="post-card-excerpt">
+        An in-depth review of header parameters such as 'jku', 'jwk', 'x5u', and 'kid'. Why trusting unverified headers before signature validation is fundamentally flawed.
+      </p>
+      <div class="post-card-meta">
+        <span>By Wiener &bull; 8 min read</span>
+        <a href="#read-more" onclick="alert('Lab scenario article: Read the briefing box above to exploit the jku vulnerability!'); return false;">Read article &rarr;</a>
+      </div>
+    </div>
+  </article>
+
+  <!-- Post 3 -->
+  <article class="post-card">
+    <div class="post-card-img" style="background: linear-gradient(135deg, #065f46 0%, #10b981 100%);">
+      <span class="post-category-tag">Defense</span>
+      <span style="font-size: 3rem;">🔒</span>
+    </div>
+    <div class="post-card-body">
+      <h3 class="post-card-title">Hardening Token Verification in Python &amp; Node.js</h3>
+      <p class="post-card-excerpt">
+        Best practices for configuring PyJWT, Authlib, and Jose libraries. Learn how strict issuer checks and static key registries eliminate header-injection attacks.
+      </p>
+      <div class="post-card-meta">
+        <span>By Security Team &bull; 4 min read</span>
+        <a href="#read-more" onclick="alert('Lab scenario article: Read the briefing box above to exploit the jku vulnerability!'); return false;">Read article &rarr;</a>
+      </div>
+    </div>
+  </article>
+
+  <!-- Post 4 -->
+  <article class="post-card">
+    <div class="post-card-img" style="background: linear-gradient(135deg, #4c1d95 0%, #8b5cf6 100%);">
+      <span class="post-category-tag">Cryptography</span>
+      <span style="font-size: 3rem;">📜</span>
+    </div>
+    <div class="post-card-body">
+      <h3 class="post-card-title">Understanding JWKS and Key ID (kid) Matching</h3>
+      <p class="post-card-excerpt">
+        How JSON Web Key Sets work in modern identity providers like Okta, Auth0, and Keycloak, and what happens when key lookups fall back to default keys.
+      </p>
+      <div class="post-card-meta">
+        <span>By Alice &bull; 6 min read</span>
+        <a href="#read-more" onclick="alert('Lab scenario article: Read the briefing box above to exploit the jku vulnerability!'); return false;">Read article &rarr;</a>
+      </div>
+    </div>
+  </article>
+
+  <!-- Post 5 -->
+  <article class="post-card">
+    <div class="post-card-img" style="background: linear-gradient(135deg, #7c2d12 0%, #ea580c 100%);">
+      <span class="post-category-tag">Architecture</span>
+      <span style="font-size: 3rem;">⚡</span>
+    </div>
+    <div class="post-card-body">
+      <h3 class="post-card-title">Server-Side Request Forgery via JWT Headers</h3>
+      <p class="post-card-excerpt">
+        When verifiers fetch arbitrary URLs specified in 'jku' or 'x5u', internal network probing and cloud metadata exposure become critical attack vectors.
+      </p>
+      <div class="post-card-meta">
+        <span>By Carlos M. &bull; 7 min read</span>
+        <a href="#read-more" onclick="alert('Lab scenario article: Read the briefing box above to exploit the jku vulnerability!'); return false;">Read article &rarr;</a>
+      </div>
+    </div>
+  </article>
+
+  <!-- Post 6 -->
+  <article class="post-card">
+    <div class="post-card-img" style="background: linear-gradient(135deg, #111827 0%, #374151 100%);">
+      <span class="post-category-tag">Tools</span>
+      <span style="font-size: 3rem;">🛠️</span>
+    </div>
+    <div class="post-card-body">
+      <h3 class="post-card-title">Burp Suite JWT Editor Extension Walkthrough</h3>
+      <p class="post-card-excerpt">
+        Step-by-step tutorial on generating RSA keys in Burp Suite, embedding public JWKs, and automating token forgery for authorized penetration testing.
+      </p>
+      <div class="post-card-meta">
+        <span>By PortSwigger &bull; 10 min read</span>
+        <a href="#read-more" onclick="alert('Lab scenario article: Read the briefing box above to exploit the jku vulnerability!'); return false;">Read article &rarr;</a>
+      </div>
+    </div>
+  </article>
+</div>
+{% endblock %}

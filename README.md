@@ -13,6 +13,8 @@ lab/
 │   ├── media-stack/        # Automated media management (Jellyfin, *arr suite, qBittorrent)
 │   ├── Stirling-PDF/       # Self-hosted web-based PDF Swiss-army knife
 │   └── vpn-proxy/          # Network privacy and outbound routing stacks
+│       ├── gluetun/        # ProtonVPN (WireGuard) gateway + stealth HTTP proxy
+│       └── vpn-download.sh # VPN-wrapped video downloader via the Gluetun proxy
 ├── cyber_lab/              # 800+ target enterprise cybersecurity training platform
 │   ├── Classes/            # Syllabus tracks (Ethical Hacking, Web, Network, Exploitation)
 │   ├── Real_World_Industry_Labs/ # Industry domains (Cloud/K8s, DevSecOps, OAuth2, Web3, IoT)
@@ -36,6 +38,7 @@ Self-hosted microservices for local storage, media automation, network security,
 | **Pi-hole** | `pihole` | 1 | `53/udp`, `53/tcp`, `80`, `443` | Network-wide DNS ad-blocking and local domain resolution |
 | **Stirling PDF** | `stirling-pdf` | 1 | `9000` | Full-featured OCR, redaction, splitting, and PDF conversion |
 | **Hadoop** | `hadoop-namenode` | 1 | `9870`, `8088` | Distributed HDFS storage & YARN cluster management |
+| **Gluetun** | `gluetun` | 1 | `8888` (loopback only) | ProtonVPN WireGuard exit node + stealth HTTP proxy for host tools (`vpn-download.sh`) |
 
 ---
 

@@ -19,10 +19,39 @@ services:
       - 7359:7359/udp
       - 1900:1900/udp
 
+  # VPN Client
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - ./gluetun:/gluetun
+    ports:
+      - 8080:8080 # qBittorrent WebUI
+      - 6881:6881 # qBittorrent Torrenting TCP
+      - 6881:6881/udp # qBittorrent Torrenting UDP
+      - 9696:9696 # Prowlarr WebUI
+    environment:
+      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER:-protonvpn}
+      - VPN_TYPE=${VPN_TYPE:-wireguard}
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - FREE_ONLY=${VPN_FREE_ONLY:-on}
+      - SERVER_COUNTRIES=${VPN_SERVER_COUNTRIES:-Netherlands}
+      - TZ=Asia/Kolkata
+      - FIREWALL_OUTBOUND_SUBNETS=192.168.0.0/16,172.16.0.0/12,10.0.0.0/8
+    restart: unless-stopped
+
   # Download Client
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
     environment:
       - PUID=1000
       - PGID=1000
@@ -32,24 +61,22 @@ services:
     volumes:
       - ./qbittorrent/config:/config
       - ~/data:/data
-    ports:
-      - 8080:8080
-      - 6881:6881
-      - 6881:6881/udp
     restart: unless-stopped
 
   # Indexer Manager
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Asia/Kolkata
     volumes:
       - ./prowlarr/config:/config
-    ports:
-      - 9696:9696
     restart: unless-stopped
 
   # TV Show Automation

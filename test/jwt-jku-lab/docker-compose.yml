@@ -1,0 +1,31 @@
+services:
+  victim-app:
+    build: ./app
+    container_name: victim-app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - labnet
+    depends_on:
+      - attacker-jwks
+
+  attacker-jwks:
+    build: ./attacker-jwks
+    container_name: attacker-jwks
+    ports:
+      - "6000:6000"
+    volumes:
+      # forge.py writes jwks.json here from the host; the server reads it live
+      - ./attacker-jwks:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - labnet
+
+networks:
+  labnet:
+    driver: bridge

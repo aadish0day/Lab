@@ -1,4 +1,6 @@
 home_lab/Stirling-PDF/stirling-data/
+home_lab/vpn-proxy/gluetun/gluetun-data/
+**/.env
 **/__pycache__/
 *.py[cod]
 

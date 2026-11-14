@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title or 'Error' }} - Web Security Academy{% endblock %}
+
+{% block content %}
+<div class="error-page-container">
+  <div class="error-code">{{ status_code or '403' }}</div>
+  <h1 class="error-title">{{ title or 'Forbidden' }}</h1>
+  
+  <div class="error-message">
+    {{ message or 'Admin interface only available if logged in as an administrator' }}
+  </div>
+
+  <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+    <a href="/login" class="btn btn-primary">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+        <polyline points="10 17 15 12 10 7"></polyline>
+        <line x1="15" y1="12" x2="3" y2="12"></line>
+      </svg>
+      Log in with another user
+    </a>
+    <a href="/my-account" class="btn btn-secondary">
+      View My Account &amp; JWT
+    </a>
+    <a href="/" class="btn btn-secondary">
+      Back to Home
+    </a>
+  </div>
+
+  <div class="hint-card" style="margin-top: 2.5rem; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto;">
+    <div class="hint-card-title">
+      💡 PortSwigger Academy Hint
+    </div>
+    <p style="font-size: 0.85rem; color: #475569; line-height: 1.5;">
+      You received a <strong>{{ status_code or '403' }} Forbidden</strong> because your current session does not have administrative privileges.
+      To access <code>/admin</code>, forge a JWT with <code>"sub": "administrator"</code> or <code>"role": "admin"</code>, and point the <code>jku</code> header to your exploit server key.
+    </p>
+  </div>
+</div>
+{% endblock %}

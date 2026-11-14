@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}My Account - Lab: JWT authentication bypass via jku header injection{% endblock %}
+{% block nav_account %}active{% endblock %}
+
+{% block content %}
+{% set uname = user.username if user is mapping else (user or username or 'wiener') %}
+{% set urole = user.role if user is mapping else (role or 'user') %}
+{% set uemail = user.email if (user is mapping and user.email) else (email or uname ~ '@normal-user.net') %}
+{% set uapikey = user.api_key if (user is mapping and user.api_key) else (api_key or 'a1b2c3d4e5f67890abcdef1234567890') %}
+{% set raw_token = token or jwt_token or '' %}
+
+<div class="profile-grid">
+  <!-- Sidebar Profile Card -->
+  <aside class="profile-sidebar">
+    <div class="avatar-large">
+      {{ uname[:1]|upper }}
+    </div>
+    <h2 class="profile-username">{{ uname }}</h2>
+    <div class="profile-badge-row">
+      {% if urole == 'admin' %}
+        <span class="admin-role-pill">Administrator</span>
+      {% else %}
+        <span class="user-status-pill active" style="background:#dbeafe; color:#1e40af;">Standard User</span>
+      {% endif %}
+    </div>
+
+    <div class="profile-details-list">
+      <div class="profile-detail-row">
+        <div class="profile-detail-label">Email Address</div>
+        <div class="profile-detail-val">{{ uemail }}</div>
+      </div>
+      <div class="profile-detail-row">
+        <div class="profile-detail-label">Your API Key</div>
+        <div class="profile-detail-val" style="font-family: var(--font-mono); font-size: 0.78rem;">
+          {{ uapikey }}
+        </div>
+      </div>
+      <div class="profile-detail-row">
+        <div class="profile-detail-label">Role Privilege</div>
+        <div class="profile-detail-val"><code>{{ urole }}</code></div>
+      </div>
+    </div>
+
+    <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+      {% if urole == 'admin' %}
+        <a href="/admin" class="btn btn-primary" style="width: 100%;">
+          Go to Admin Panel &rarr;
+        </a>
+      {% else %}
+        <a href="/admin" class="btn btn-secondary" style="width: 100%; font-size: 0.85rem;" title="Access will be denied until you escalate privileges">
+          Attempt Admin Panel
+        </a>
+      {% endif %}
+      <a href="/logout" class="btn btn-secondary" style="width: 100%;">
+        Log out
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Section: Built-in JWT Token Inspector -->
+  <section>
+    <div class="jwt-inspector-card">
+      <div class="jwt-inspector-header">
+        <div class="jwt-inspector-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Active Session JWT Inspector
+        </div>
+        <div class="jwt-legend">
+          <span class="jwt-legend-item"><span class="jwt-legend-dot header"></span> Header</span>
+          <span class="jwt-legend-item"><span class="jwt-legend-dot payload"></span> Payload</span>
+          <span class="jwt-legend-item"><span class="jwt-legend-dot signature"></span> Signature</span>
+        </div>
+      </div>
+
+      <!-- Raw Token Bar with Copy Button -->
+      <div class="jwt-token-raw-container">
+        <div id="jwt-raw-display" data-token="{{ raw_token }}" style="padding-right: 5rem;">
+          {{ raw_token or 'No active JWT token found in session. Please log in.' }}
+        </div>
+        {% if raw_token %}
+          <button type="button" class="jwt-copy-raw-btn" onclick="copyToClipboard('{{ raw_token }}', 'JWT copied to clipboard!')">
+            Copy Token
+          </button>
+        {% endif %}
+      </div>
+
+      <!-- Decoded Token Details Grid -->
+      <div class="jwt-decoded-grid">
+        <!-- Decoded Header -->
+        <div class="jwt-decoded-card header-card">
+          <div class="jwt-decoded-card-title">
+            <span>Decoded Header (JOSE)</span>
+            <span style="font-size: 0.72rem; color: #ea580c; font-weight: bold;">ALGORITHM &amp; KEY ID</span>
+          </div>
+          <pre class="jwt-code-block"><code id="jwt-decoded-header">/* Loading header... */</code></pre>
+        </div>
+
+        <!-- Decoded Payload -->
+        <div class="jwt-decoded-card payload-card">
+          <div class="jwt-decoded-card-title">
+            <span>Decoded Payload (Claims)</span>
+            <span style="font-size: 0.72rem; color: #9333ea; font-weight: bold;">DATA &amp; ROLES</span>
+          </div>
+          <pre class="jwt-code-block"><code id="jwt-decoded-payload">/* Loading payload... */</code></pre>
+        </div>
+      </div>
+
+      <!-- JKU Highlight Callout -->
+      <div id="jwt-jku-callout" class="jku-highlight-callout" style="display: none;">
+        <strong>⚠️ Security Inspection Note:</strong> Notice the <code>jku</code> header parameter is set to:
+        <code id="jku-value-span" style="background: rgba(0,0,0,0.06); padding: 0.15rem 0.35rem; border-radius: 3px;"></code>.
+        <br>
+        The victim server's signature verifier reads this URL and fetches the public key from it without validating the hostname.
+        You can exploit this by replacing the <code>jku</code> with your exploit server URL: <code>http://attacker-jwks:6000/evil-jwks.json</code>!
+      </div>
+    </div>
+
+    <!-- Exploit Walkthrough Box -->
+    <div class="card" style="margin-top: 1.5rem;">
+      <div class="card-header">
+        <h3 class="card-title" style="font-size: 1rem;">Next Step: Privilege Escalation</h3>
+      </div>
+      <div class="card-body" style="font-size: 0.9rem; color: #475569;">
+        <p>To access the admin panel and complete the lab:</p>
+        <ol style="margin-left: 1.25rem; margin-top: 0.5rem; line-height: 1.6;">
+          <li>Visit the <a href="{{ exploit_server_url or 'http://localhost:6000' }}" target="_blank">Exploit Server</a> on port 6000.</li>
+          <li>Generate an attacker RSA keypair and store the JWKS at <code>/evil-jwks.json</code>.</li>
+          <li>Craft a token with <code>"role": "admin"</code> (or <code>"sub": "administrator"</code>) and <code>"jku": "http://attacker-jwks:6000/evil-jwks.json"</code>.</li>
+          <li>Set the forged token in your request headers or cookies and visit <a href="/admin">/admin</a>.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const rawContainer = document.getElementById('jwt-raw-display');
+    let token = rawContainer ? (rawContainer.dataset.token || '') : '';
+    if (!token) {
+      // Check cookies for 'session' or 'jwt'
+      const match = document.cookie.match(/(?:^|;\s*)(session|jwt)=([^;]+)/);
+      if (match) {
+        token = decodeURIComponent(match[2]);
+      }
+    }
+    if (token) {
+      initJwtInspector(token);
+    }
+  });
+</script>
+{% endblock %}
