@@ -67,7 +67,7 @@ This setup uses the recommended unified `/data` directory structure for optimal 
     └── config/                           # Radarr configuration
 ```
 
-> **Why unified `~/data`?** Using a single `~/data:/data` mount point for all containers prevents path mapping issues. Multiple separate mounts like `/tv`, `/movies`, and `/downloads` can appear as different filesystems to Docker, causing hardlinking failures and wasted disk space.
+> **Why unified `/data`?** Using a single unified mount point `${DATA_DIR:-./data}:/data` for all containers prevents path mapping issues. Inside every container, the path is always `/data`, making the stack completely portable across different hosts, user accounts, and storage drives (USB drives, NAS mounts, or local disks) simply by setting `DATA_DIR` in `.env`. Multiple separate mounts like `/tv`, `/movies`, and `/downloads` can appear as different filesystems to Docker, causing hardlinking failures and wasted disk space.
 
 ## Prerequisites
 
