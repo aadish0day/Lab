@@ -27,9 +27,10 @@ This setup provides a fully automated media server that can:
 
 | Service         | Purpose                                              | Web UI Port                       |
 | --------------- | ---------------------------------------------------- | --------------------------------- |
-| **Gluetun**     | VPN client with killswitch protecting torrent & indexer traffic | `8080` (qBit), `9696` (Prowlarr) |
+| **Gluetun**     | VPN client with killswitch protecting torrent & indexer traffic | `8080` (qBit), `9696` (Prowlarr), `8191` (FlareSolverr) |
 | **qBittorrent** | Torrent download client (routed via Gluetun)        | Routed via Gluetun (`8080`)       |
 | **Prowlarr**    | Indexer manager (routed via Gluetun to bypass ISP blocks) | Routed via Gluetun (`9696`)  |
+| **FlareSolverr**| Cloudflare challenge proxy for indexers like 1337x   | Routed via Gluetun (`8191`)       |
 | **Jellyfin**    | Media server for streaming                           | `8096`                            |
 | **Sonarr**      | TV show management & automation                      | `8989`                            |
 | **Radarr**      | Movie management & automation                        | `7878`                            |
@@ -210,7 +211,15 @@ After deployment, access each service's web interface:
    - **Radarr**: <http://radarr:7878> or <http://172.17.0.1:7878>
    - **Prowlarr Server URL**: <http://gluetun:9696> (or <http://172.17.0.1:9696>) so Sonarr/Radarr can reach Prowlarr through Gluetun
    - Get API keys from Sonarr/Radarr (Settings → General)
-4. (Optional) Connect Download Client (Settings → Download Clients → Add → qBittorrent):
+4. **Configure FlareSolverr Proxy (for Cloudflare-protected indexers like 1337x)**:
+   - Go to **Settings** ➔ **Indexers**
+   - Under **Proxies**, click **+** and choose **FlareSolverr**
+   - **Name**: `FlareSolverr`
+   - **Tags**: `flaresolverr`
+   - **Host**: `http://localhost:8191` (or `http://127.0.0.1:8191`)
+   - Click **Test** and **Save**
+   - When adding or editing **1337x**, add the tag `flaresolverr` so Prowlarr routes its requests through FlareSolverr.
+5. (Optional) Connect Download Client (Settings → Download Clients → Add → qBittorrent):
    - **Host**: `127.0.0.1` or `gluetun` (since both qBittorrent and Prowlarr share Gluetun's network)
    - **Port**: `8080`
    - **Username/Password**: Your qBittorrent credentials

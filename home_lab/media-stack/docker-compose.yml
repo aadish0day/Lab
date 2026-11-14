@@ -34,6 +34,7 @@ services:
       - 6881:6881 # qBittorrent Torrenting TCP
       - 6881:6881/udp # qBittorrent Torrenting UDP
       - 9696:9696 # Prowlarr WebUI
+      - 8191:8191 # FlareSolverr
     environment:
       - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER:-protonvpn}
       - VPN_TYPE=${VPN_TYPE:-wireguard}
@@ -42,6 +43,7 @@ services:
       - SERVER_COUNTRIES=${VPN_SERVER_COUNTRIES:-Netherlands}
       - TZ=Asia/Kolkata
       - FIREWALL_OUTBOUND_SUBNETS=192.168.0.0/16,172.16.0.0/12,10.0.0.0/8
+      - BLOCK_MALICIOUS=off
     restart: unless-stopped
 
   # Download Client
@@ -77,6 +79,21 @@ services:
       - TZ=Asia/Kolkata
     volumes:
       - ./prowlarr/config:/config
+    restart: unless-stopped
+
+  # Cloudflare Challenge Solver for Prowlarr
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+      - TZ=Asia/Kolkata
     restart: unless-stopped
 
   # TV Show Automation
